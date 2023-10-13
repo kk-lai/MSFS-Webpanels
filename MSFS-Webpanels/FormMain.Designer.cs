@@ -32,18 +32,21 @@
             label1 = new Label();
             pictureQRcode = new PictureBox();
             linkPanel = new LinkLabel();
+            buttonTest = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
             // buttonStart
             // 
             buttonStart.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonStart.Enabled = false;
             buttonStart.Location = new Point(348, 294);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new Size(166, 59);
             buttonStart.TabIndex = 0;
             buttonStart.Text = "&Connect";
             buttonStart.UseVisualStyleBackColor = true;
+            buttonStart.Click += buttonStart_Click;
             // 
             // label1
             // 
@@ -64,6 +67,7 @@
             pictureQRcode.SizeMode = PictureBoxSizeMode.Zoom;
             pictureQRcode.TabIndex = 2;
             pictureQRcode.TabStop = false;
+            pictureQRcode.Visible = false;
             // 
             // linkPanel
             // 
@@ -71,16 +75,28 @@
             linkPanel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             linkPanel.Location = new Point(12, 63);
             linkPanel.Name = "linkPanel";
-            linkPanel.Size = new Size(154, 21);
+            linkPanel.Size = new Size(0, 21);
             linkPanel.TabIndex = 3;
-            linkPanel.TabStop = true;
-            linkPanel.Text = "http://localhost:5000";
+            linkPanel.Visible = false;
+            // 
+            // buttonTest
+            // 
+            buttonTest.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonTest.Location = new Point(345, 213);
+            buttonTest.Name = "buttonTest";
+            buttonTest.Size = new Size(166, 59);
+            buttonTest.TabIndex = 4;
+            buttonTest.Text = "&Test";
+            buttonTest.UseVisualStyleBackColor = true;
+            buttonTest.Visible = false;
+            buttonTest.Click += buttonTest_Click;
             // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(526, 367);
+            Controls.Add(buttonTest);
             Controls.Add(linkPanel);
             Controls.Add(pictureQRcode);
             Controls.Add(label1);
@@ -99,5 +115,6 @@
         private Label label1;
         private PictureBox pictureQRcode;
         private LinkLabel linkPanel;
+        private Button buttonTest;
     }
 }

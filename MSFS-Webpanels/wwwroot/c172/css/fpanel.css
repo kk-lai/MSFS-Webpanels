@@ -1,0 +1,1186 @@
+body
+{
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    touch-action: manipulation !important;
+
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #838b8d;
+    margin: 0px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    z-index:1;
+    position: fixed;
+    font-size:0;
+}
+
+img
+{
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+.hide
+{
+    display:none;
+}
+
+.invisible {
+    visibility:hidden;
+}
+
+.font-smaller
+{
+    font-size:65%;
+}
+
+.font-larger
+{
+    font-size:110%;
+}
+
+.font-larger2
+{
+    font-size:150%;
+}
+
+.font-xlarge
+{
+    font-size:200%;
+}
+
+.font-xxlarge
+{
+    font-size:250%;
+}
+
+.warning-red-on
+{
+    color: #ff6060;
+}
+
+.warning-yellow-on
+{
+    color: #f5ff47;
+}
+
+.center-div
+{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wrapper
+{
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.container
+{
+    overflow-y: hidden;
+    overflow-x: hidden;
+    z-index: 2;
+    margin: auto;
+    position: relative;
+    background-color:#c0c0c0;
+}
+
+.error-overlay
+{
+    background-color:white;
+    opacity:0.8;
+    z-index:5;
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    color:red;
+}
+
+#sys-message
+{    
+    font-size: 500%;
+    font-weight:bold;
+    font-style: italic;   
+    line-height: 0%;
+    height:100%;
+    transform: translate(0,50%);
+    text-align: center;
+}
+
+.panel {
+    display: inline-block;
+    vertical-align: text-top;
+    height: 86.46214467%;    
+}
+
+.left-panel {
+    width: 15.7894736842%;
+}
+
+.right-panel {
+    width: 84.2105263158%;
+}
+
+.top-panel,.bottom-panel {
+    position: relative;
+    width: 100%;
+    height: 6.768927665%;
+}
+
+.bottom-panel
+{
+    background-color: #434343;
+}
+
+.radio-panel
+{
+    vertical-align:top;
+    position:absolute;
+    right:0;
+    top:6.768927665%;
+    width:21.05263158%;
+    height: 54.4711511421%;
+    z-index:4;
+    background-color:white;
+}
+
+.registration-container
+{
+    position: relative;
+    width:11%;
+    height:100%;
+    background-color: white;
+    display:inline-block;
+}
+
+.warning-panel
+{
+    margin-left: 1%;
+    width:23%;
+    height:100%;
+    background-color:black;
+    display:inline-block;
+    vertical-align: top;
+}
+
+.warning-container
+{
+    padding-top:1%;
+    font-size: 150%;
+}
+
+.warning-vac-container
+{
+    padding-left: 5%;
+    display:inline-block;
+    color: #282a0c;
+}
+
+.warning-oil-press
+{
+    float:right;
+    padding-right:5%;
+    display:block;
+    color: #2a1010;
+}
+
+.warning-fuel-container
+{
+    padding-left: 5%;
+    display: inline-block;
+    color: #282a0c;
+}
+
+.warning-volts
+{
+    float:right;
+    padding-right:5%;
+    display:block;
+    color: #2a1010;
+}
+
+.ap-state
+{
+    vertical-align: top;
+    display:inline-block;
+    background-color:black;
+    height:100%;
+    width:6%;
+    margin-left:0.4%;
+    color:red;
+    position:relative;
+}
+
+.ap-state-text
+{
+    position:relative;
+    height:50%;
+    width:100%;
+    text-align:center;
+    font-size:150%;
+}
+
+.ap-button
+{
+    position:relative;
+    vertical-align: top;
+    display:inline-block;
+    background-color:white;
+    height:60%;
+    top:20%;
+    width:3.609022557%;
+    margin-left:0.45%;
+    margin-right:0.45%;
+    color:black;
+}
+
+.ap-altitude
+{
+    vertical-align: top;
+    display:inline-block;
+    background-color:black;
+    height:100%;
+    width:10%;    
+    color:#12e049;
+}
+
+.apvs-display 
+{
+    color:red;
+}
+
+.radio-info
+{
+    vertical-align: top;
+    display:inline-block;
+    padding-right:0.1%;
+    color:white;
+    background-color:black;
+    height:100%;
+    width:6%;
+    text-align:center;
+}
+
+.com1-radio-info
+{
+    margin-left:1.6%;
+}
+
+.radio-info div
+{
+    font-size:130%;
+}
+
+.radio-name
+{
+    height:33.33333333%;
+    color:#f0f00a;
+}
+
+.radio-active-freq
+{
+    height:33.33333333%;
+    color:white;
+    font-weight:bold;
+}
+
+.radio-standby-freq
+{
+    height:33.33333333%;
+    color:#12e049;
+}
+
+.dme-info
+{
+    vertical-align: top;
+    display:inline-block;
+    padding-right:0.1%;
+    color:white;
+    background-color:black;
+    height:100%;
+    width:4%;
+    text-align:center;
+}
+
+.dme-row
+{
+    position:relative;
+    width:100%;
+    height:50%;
+}
+
+.dme-distance
+{
+    color:#12e049;
+}
+
+.help-container
+{
+    height:6.768927665%;
+    position:absolute;   
+    bottom:0;
+    right:0;
+    z-index:6;
+}
+
+.reload-button
+{
+    display:inline-block;    
+}
+
+.help-container img
+{
+    height:100%;
+}
+
+.small-gauge
+{
+    width:100%;
+    height:25%;
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.gen-left-needle {
+    position: absolute;
+    width: 28.90625%;
+    height: 6.25%;
+    padding: 46.875% 22.265625% 46.875% 48.828125%;
+    left: -28.125%;
+}
+
+.gen-right-needle {
+    position: absolute;
+    width: 28.90625%;
+    height: 6.25%;
+    padding: 46.875% 22.265625% 46.875% 48.828125%;
+    left: 28.125%;
+}
+
+.egt-knob
+{
+    width:17.1875%;
+    position:absolute;
+    top:41.40625%;
+    left:13.28125%;
+}
+
+.gauge
+{
+    width:25%;
+    height:33.33333333%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.gauge-item
+{
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+}
+
+.ias-needle
+{
+    position: absolute;
+    width: 10.9375%;
+    height: 53.125%;
+    padding: 12.3046875% 44.53125% 34.5703125% 44.53125%;
+}
+
+.ias-knob
+{
+    position: absolute;
+    left:6%;
+    top:79%;
+    width:18.75%;
+    height:18.75%;
+}
+
+.ias-alt
+{
+    position: absolute;
+    width: 56.25%;
+    height: 34.375%;
+    padding: 13.671875% 13.671875% 51.953125% 30.078125%;
+}
+
+.ias-tas-speed
+{
+    position: absolute;
+    width: 59.375%;
+    height: 21.09375%;
+    padding: 75% 21.2890625% 3.90625% 19.3359375%;
+}
+
+.att-pitch
+{
+    position:absolute;
+    left:11.71875%;
+    top:25%;
+    width:76.5625%;
+    height:50%;
+}
+
+.att-roll
+{
+    position:absolute;
+    left:4.6875%;
+    top:4.6875%;
+    width:90.625%;
+    height:90.625%;
+    transform: rotate(0deg);
+}
+
+.att-plane
+{
+    position:absolute;
+    left:24.21875%;
+    top:48.2421875%;
+    width:51.5625%;
+    height:33.984375%;
+}
+
+.att-gyro
+{
+    position: absolute;
+    width:12.5%;
+    height:37.5%;
+    left:15.234375%;
+    top:13.1875%;
+}
+
+.att-knob
+{
+    position: absolute;
+    left:41.9921875%;
+    top:81.4453125%;
+    width:16.015625%;
+    height:16.015625%;
+}
+
+.alt-10k-needle
+{
+    width: 43.75%;
+    height: 50%;
+    padding: 25% 28.125% 25% 28.125%;
+    position: absolute;
+}
+
+.alt-1k-needle
+{
+    width: 11.71875%;
+    height: 50%;
+    padding: 18.75% 44.140625% 31.25% 44.140625%;
+    position: absolute;
+}
+
+.alt-needle
+{
+    width: 10.9375%;
+    height: 45.703125%;
+    padding: 16.796875% 44.53125% 37.5% 44.53125%;
+    position: absolute;
+}
+
+.alt-knob
+{
+    position: absolute;
+    left:4.296875%;
+    top:79.6875%;
+    width:16.015625%;
+    height:16.015625%;
+}
+
+.gen-backplate
+{
+    position: absolute;
+    width: 62.5%;
+    height: 62.5%;
+    top: 18.75%;
+    left: 18.75%;
+}
+
+.nav-vor-backplate
+{
+    position: absolute;
+    width: 47.65625%;
+    height: 46.875%;
+    top: 26.5625%;
+    left: 26.171875%;
+}
+
+.nav-to-from
+{
+    position: absolute;
+    width: 10.15625%;
+    height: 9.375%;
+    top: 63.28125%;
+    left: 44.921875%;
+}
+
+.nav-gs
+{
+    position: absolute;
+    width: 10.15625%;
+    height: 6.25%;
+    top: 41.9921875%;
+    left: 59.9609375%;
+}
+
+.nav-needle-motor
+{
+    position: absolute;
+    width: 14.84375%;
+    height: 14.84375%;
+}
+
+.nav-needle-motor-top
+{
+    top:11.1328125%;
+    left:42.578125%;
+}
+
+.nav-needle
+{
+    position: absolute;
+    width: 3.125%;
+    height: 42.1875%;
+    padding: 54.8828125% 48.4375% 2.9296875% 48.4375%;
+    top: -31.640625%;
+}
+
+.nav-needle-motor-gs
+{
+    top: 42.578125%;
+    left: 12.109375%;
+}
+
+.nav-gs-needle
+{
+    position: absolute;
+    width: 48.4375%;
+    height: 3.125%;
+    padding: 48.4375% 0% 48.4375% 54.296875%;
+    left:-30.46875%;
+}
+
+.nav-arrow-up
+{
+    position: absolute;
+    width: 7.8125%;
+    height: 8.59375%;
+    top: 19.3359375%;
+    left: 46.09375%;
+}
+
+.nav-arrow-down
+{
+    position: absolute;
+    width: 5.46875%;
+    height: 4.6875%;
+    top: 77.5390625%;
+    left: 47.265625%;
+}
+
+.nav-obs-knob
+{
+    position: absolute;
+    width: 19.53125%;
+    height: 19.53125%;
+    top: 77.734375%;
+    left: 4.8828125%;
+}
+
+
+.trn-tube-back
+{
+    position: absolute;
+    width: 59.375%;
+    height: 15.625%;
+    padding: 57.421875% 20.3125% 26.953125% 20.3125%;
+}
+
+.trn-ball
+{
+    position: absolute;
+    width: 12.5%;
+    height: 15.625%;
+    padding: 58.59375% 43.75% 25.78125% 43.75%;
+}
+
+.trn-ind
+{
+    position: absolute;
+    width: 10.9375%;
+    height: 12.5%;
+    top: 37.5%;
+    left: 67.7734375%;
+}
+
+.trn-plane
+{
+    position: absolute;
+    width: 17.1875%;
+    height: 62.5%;
+    padding: 18.75% 42.1875% 18.75% 40.625%;
+}
+
+.hdg-bug
+{
+    position: absolute;
+    width: 9.375%;
+    height: 9.375%;
+    padding: 8.203125% 45.3125% 82.421875% 45.3125%;
+}
+
+.hdg-knob
+{
+    position: absolute;
+    left:80.078125%;
+    top:81.25%;
+    width:17.1875%;
+    height:17.1875%;
+}
+
+.hdg-push-knob
+{
+    position: absolute;
+    left:0.9765625%;
+    top:81.25%;
+    width:17.1875%;
+    height:17.1875%;
+}
+
+.vsi-needle
+{
+    position: absolute;
+    width: 46.875%;
+    height: 9.375%;
+    padding: 45.3125% 37.5% 45.3125% 15.625%;
+}
+
+.rpm-needle
+{
+    position: absolute;
+    width: 51.5625%;
+    height: 10.9375%;
+    padding: 44.53125% 41.796875% 44.53125% 6.640625%;
+}
+
+.adf-needle
+{
+    position: absolute;
+    width: 8.59375%;
+    height: 60.15625%;
+    padding: 19.921875% 45.703125% 19.921875% 45.703125%;
+}
+
+.adf-hdg-knob
+{
+    position: absolute;
+    width: 19.53125%;
+    height: 19.53125%;
+    top: 77.734375%;
+    left: 4.8828125%;
+}
+
+.lower-panel
+{
+    width:50%;
+    height:33.33333333%;
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+    background-color: #434343;
+    line-height:1;
+    font-size:100%;
+}
+
+.switches-panel
+{
+    position: absolute;
+    left:0;
+    top:0%;
+    width: 75%;
+    height: 100%;
+}
+
+.flaps-panel
+{
+    position:relative;
+    width:25%;
+    height:100%;
+    left:75%;
+    top:0;
+}
+
+.eng-magneto-wrapper
+{
+    width:40%;
+    height:65%;
+    display:inline-block;
+    position: relative;
+}
+
+.eng-magneto
+{
+    width: 52%;
+    position:absolute;
+    top:45%;
+    left:24%;
+    transform: rotate(-65deg);
+}
+
+.eng-panel
+{
+    width:100%;
+    height:100%;
+    position:absolute;
+}
+
+.power-switch-container {
+    position: relative;
+    width:30%;
+    height:65%;
+    display: inline-block;
+    vertical-align:top;
+}
+
+.power-switch-left-wrapper
+{
+    position: absolute;
+    left: 12.82051282%;
+    top: 12.79620853%;
+    width: 35.384615385%;
+    height: 73.93364929%;
+}
+
+.power-switch-right-wrapper
+{
+    position: absolute;
+    left: 50%;
+    top: 12.79620853%;
+    width: 35.384615385%;
+    height: 73.93364929%;
+}
+
+.switch-label-left
+{
+    padding-left:10%;
+    width:40%;
+    text-align:center;
+    display:inline-block;
+    color:white;
+}
+
+.switch-label-right
+{
+    width:40%;
+    text-align:center;
+    display:inline-block;
+    color:white;
+}
+
+.power-switch-wrapper
+{
+    position:relative;
+    width:100%;
+    height:74.91124260%;
+}
+
+.gen-switch-case
+{
+    height:100%;
+}
+
+.power-switch
+{
+    position: absolute;
+    width:100%;
+    top:0;
+}
+
+.switch-label-wrapper
+{
+    height:20%;
+    position:relative;
+}
+
+.switch-label
+{
+    color:white;
+    text-align:center;
+}
+
+.toggle-switch-container
+{
+    position:relative;
+    width: 11.42857143%;
+    height: 35%;
+    padding-left: 2.857143%;
+    top:0%;
+    display: inline-block;
+    vertical-align:top;
+}
+
+.toggle-switch {
+    width: 100%;
+    height: 48.97959184%;
+}
+
+.toggle-switch-container img
+{
+    width: 100%;
+}
+
+.switch-label-top
+{
+    color:white;
+    position:absolute;
+    bottom:-30%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+
+
+.flaps-backplate
+{
+    position:absolute;
+    width:100%;
+}
+
+.flaps-lever-wrapper
+{
+    position: relative;
+    top: 9.47265625%;
+    left: 41.40625%;
+    width: 58.59375%;
+    height: 85.15625%;
+}
+
+.flaps-lever
+{
+    position: absolute;
+    width:100%;
+    height:17.20183486%;
+    top:0;
+    left:0;
+}
+
+.hbutton
+{
+    position:absolute;
+    width:50%;
+    height:100%;
+    top:0;
+}
+
+.button-right
+{
+    left:50%;
+}
+
+.vbutton
+{
+    position:absolute;
+    width:100%;
+    height:40%;
+}
+
+.button-top
+{
+    top:10%;
+}
+
+.button-bottom
+{
+    top:50%;
+}
+
+.bottom-control-container
+{
+    position:relative;
+    height: 100%;
+    display: inline-block;
+}
+
+.bottom-panel-label
+{
+    position:relative;
+    height:100%;
+    display: inline-block;
+    color:white;
+    text-align:center;
+}
+
+.fuel-selector-label
+{
+    width:53.79591558%;
+}
+
+.fuel-selector-container
+{
+    width: 18%;
+}
+
+.fuel-selector-switch-wrapper
+{
+    left:5%;
+    height:100%;
+    width: 41.20408442%;
+    position:relative;
+    display:inline-block;
+}
+
+.fuel-selector-switch-wrapper img
+{
+    width:100%;
+    height: 100%;
+}
+
+.fuel-valve-container
+{
+    width: 15%;
+}
+
+.fuel-valve-label
+{
+    width:62.03673246%;
+}
+
+.fuel-valve-switch-wrapper
+{
+    position:relative;
+    display:inline-block;
+    width: 32.96326754%;
+    height: 100%;
+}
+
+.fuel-valve-switch-wrapper img {
+    height: 72.99079302%;
+    width: 72.99079302%;
+    padding-bottom:13.50460349%;
+}
+
+.parking-brake-container
+{
+    width: 15%;
+}
+
+.parking-brake-label
+{
+    width:62.03673246%;
+}
+
+.parking-brake-switch-wrapper
+{
+    position:relative;
+    display:inline-block;
+    width: 32.96326754%;
+    height: 100%;
+}
+
+.parking-brake-switch-wrapper img
+{
+    width:100%;
+    height:100%;
+}
+
+.ui-button, .ui-switch, .ui-popup, .ui-slider
+{
+    z-index:3;
+}
+
+.ui-slider
+{
+    position: absolute;
+    width:50%;
+    height:100%;
+}
+
+.ui-right-slider
+{
+    right:0;
+    top:0;
+}
+
+.ui-left-slider
+{
+    left:0;
+    top:0;
+}
+
+.ui-bottom-slider
+{
+    position: absolute;
+    width:100%;
+    height:50%;
+    top:50%;
+    left:0;
+}
+
+.num-pad-container
+{
+    width:100%;
+    height:70.54673721%;
+    position:absolute;
+    bottom:0;
+}
+
+.num-pad-digit-wrapper
+{
+    position:relative;
+    width: 29.999999997%;
+    height: 22.5%;
+    margin: 1.6666666665% 1.6666666665% 1.6666666665% 1.6666666665%;
+    display:inline-block;
+    background-color:#e0e0e0;
+    vertical-align:top;
+}
+
+
+
+.freq-name-container
+{
+    position:relative;
+    width:100%;
+    height:15%;
+    margin-bottom:5%;
+}
+
+.freq-number-container
+{
+    position:relative;
+    width:100%;
+    margin-bottom:2%;
+}
+
+.freq-number-row
+{
+    position:relative;
+    margin-bottom:2%;
+}
+
+.freq-number-left
+{
+    width:85%;
+    display:inline-block;
+}
+
+.freq-number-right
+{
+    width:15%;
+    height:100%;
+    display:inline-block;
+    position:relative;
+    vertical-align:top;
+}
+
+.freq-type
+{
+    display: inline-block;
+    width:50%;
+    text-align: right;
+    padding-right:10%;
+}
+
+.freq-number
+{
+    display: inline-block;
+    width: 40%;
+    color: green;
+}
+
+.freq-standby
+{
+    color:black;
+}
+
+.freq-digit-active
+{
+    background-color:black;
+    color:white;
+}
+
+.button-swap
+{
+    text-align:center;
+    width:100%;
+}
+
+.radio-panel-close
+{
+    width:10%;
+    height:8%;
+    position:absolute;
+    top:0;
+    right:0;
+}
+
+.xpdr-panel
+{
+    position:relative;
+    height:100%;
+    width:13%;
+    display:inline-block;
+    background : black;
+    vertical-align: top;
+}
+
+.xpdr-info
+{
+    width:60%;
+    height:100%;
+    display:inline-block;
+    vertical-align:top;
+}
+
+.xpdr-row
+{
+    width:100%;
+    height:50%;
+    display:block;
+    position:relative;    
+}
+
+.xpdr-name
+{
+    color:yellow;
+    text-align:center;
+}
+
+.xpdr-code
+{
+    font-weight:bold;
+    color:white;
+    text-align:center;
+}
+
+.xpdr-switch-container
+{
+    position:relative;
+    width:40%;
+    height:100%;
+    display:inline-block;
+    color:white;
+}
+
+

@@ -1,0 +1,219 @@
+﻿using System;
+using System.Runtime.InteropServices;
+
+public class C172SimData : SimData
+{
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct C172Data
+	{
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        private String atcId;
+
+        private float fuelLeftQuantity;
+		private float fuelRightQuantity;
+
+		private float engineEGT;
+		private float engineFuelFlow;
+
+		private float engineOilTemp;
+		private float engineOilPressure;
+
+		private float vac;
+		private float batteryAmp;
+
+		private float ias;
+		private float tasAdj;
+
+		private float atitudePitch;
+		private float atitudeBank;
+		private float atitudeBarPosition;
+
+		private float altitude;
+        private float qnh;
+
+		private Int32 nav1Obs;
+		private Int32 nav1ToFrom;
+		private Int32 nav1GSFlag;
+		private Int32 nav1CDI;
+		private Int32 nav1GSI;
+
+		private Int32 tcBallPos;
+		private Int32 electricalBusVoltage;
+		private float tcRate;
+
+		private Int32 heading;
+		private Int32 headingBug;
+        private Int32 gyroDriftError;
+
+        private float vsi;
+
+		private Int32 nav2Obs;
+        private Int32 nav2ToFrom;
+        private Int32 nav2GSFlag;
+        private Int32 nav2CDI;
+        private Int32 nav2GSI;
+
+        private Int32 engineRPM;
+
+		private Int32 adfCard;
+		private Int32 adfRadial;
+
+        private Int32 switchFuelPump;
+        private Int32 switchBCN;
+        private Int32 switchLAND;
+        private Int32 switchTAXI;
+        private Int32 switchNAV;
+        private Int32 switchSTROBE;
+        private Int32 switchPitotHeat;
+
+        private Int32 switchAlternator;
+        private Int32 switchBatteryMaster;
+
+        private Int32 switchAvionics1;
+        private Int32 switchAvionics2;
+
+        private Int32 engineStarter;
+        private Int32 leftMagnetoState;
+        private Int32 rightMagnetoState;
+
+        private Int32 flapsPosition;
+
+        private Int32 fuelSelector;
+        private Int32 fuelValve;
+        private Int32 parkingBrake;
+
+        private Int32 warningVACLeft;
+        private Int32 warningVACRight;
+        private Int32 warningVAC;
+        private Int32 warningVoltage;
+        private Int32 warningOilPressure;
+        private Int32 warningFuelLeft;
+        private Int32 warningFuelRight;
+        private Int32 warningFuel;
+
+        private Int32 com1ActiveFreq;
+        private Int32 com1StandbyFreq;
+        private Int32 com2ActiveFreq;
+        private Int32 com2StandbyFreq;
+
+        private Int32 nav1ActiveFreq;
+        private Int32 nav1StandbyFreq;
+        private Int32 nav2ActiveFreq;
+        private Int32 nav2StandbyFreq;
+
+        private Int32 adfActiveFreq;
+        private Int32 adfStandbyFreq;
+
+        private Int32 apAltitude;
+        private Int32 apMaster;
+        private Int32 apHeadingLock;
+        private Int32 apNavLock;
+        private Int32 apAltitudeLock;
+        private Int32 apVerticalHold;
+        private Int32 apVerticalHoldSpeed;
+        private Int32 apApproachHold;
+        private Int32 apRevHold;
+        private Int32 apGSHold;
+        private Int32 dmeDistance;
+        private Int32 xpdr;
+        private Int32 xpdrSwitch;
+
+
+        public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
+        public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
+        public float EngineEGT { get => engineEGT; set => engineEGT = value; }
+        public float EngineFuelFlow { get => engineFuelFlow; set => engineFuelFlow = value; }
+        public float EngineOilTemp { get => engineOilTemp; set => engineOilTemp = value; }
+        public float EngineOilPressure { get => engineOilPressure; set => engineOilPressure = value; }
+        public float Vac { get => vac; set => vac = value; }
+        public float BatteryAmp { get => batteryAmp; set => batteryAmp = value; }
+        public float Ias { get => ias; set => ias = value; }
+        public float TasAdj { get => tasAdj; set => tasAdj = value; }
+        public float AtitudePitch { get => atitudePitch; set => atitudePitch = value; }
+        public float AtitudeBank { get => atitudeBank; set => atitudeBank = value; }
+        public float AtitudeBarPosition { get => atitudeBarPosition; set => atitudeBarPosition = value; }
+        public float Altitude { get => altitude; set => altitude = value; }
+        public int Nav1Obs { get => nav1Obs; set => nav1Obs = value; }
+        public int Nav1ToFrom { get => nav1ToFrom; set => nav1ToFrom = value; }
+        public int Nav1GSFlag { get => nav1GSFlag; set => nav1GSFlag = value; }
+        public int Nav1CDI { get => nav1CDI; set => nav1CDI = value; }
+        public int Nav1GSI { get => nav1GSI; set => nav1GSI = value; }
+        public int TcBallPos { get => tcBallPos; set => tcBallPos = value; }
+        public float TcRate { get => tcRate; set => tcRate = value; }
+        public int Heading { get => heading; set => heading = value; }
+        public int HeadingBug { get => headingBug; set => headingBug = value; }
+        public float Vsi { get => vsi; set => vsi = value; }
+        public int Nav2Obs { get => nav2Obs; set => nav2Obs = value; }
+        public int Nav2ToFrom { get => nav2ToFrom; set => nav2ToFrom = value; }
+        public int Nav2GSFlag { get => nav2GSFlag; set => nav2GSFlag = value; }
+        public int Nav2CDI { get => nav2CDI; set => nav2CDI = value; }
+        public int Nav2GSI { get => nav2GSI; set => nav2GSI = value; }
+        public int EngineRPM { get => engineRPM; set => engineRPM = value; }
+        public int AdfCard { get => adfCard; set => adfCard = value; }
+        public int AdfRadial { get => adfRadial; set => adfRadial = value; }
+        public int SwitchBCN { get => switchBCN; set => switchBCN = value; }
+        public int SwitchLAND { get => switchLAND; set => switchLAND = value; }
+        public int SwitchTAXI { get => switchTAXI; set => switchTAXI = value; }
+        public int SwitchNAV { get => switchNAV; set => switchNAV = value; }
+        public int SwitchSTROBE { get => switchSTROBE; set => switchSTROBE = value; }
+        public int SwitchPitotHeat { get => switchPitotHeat; set => switchPitotHeat = value; }
+        public int SwitchAlternator { get => switchAlternator; set => switchAlternator = value; }
+        public int SwitchBatteryMaster { get => switchBatteryMaster; set => switchBatteryMaster = value; }
+        public int SwitchAvionics1 { get => switchAvionics1; set => switchAvionics1 = value; }
+        public int SwitchAvionics2 { get => switchAvionics2; set => switchAvionics2 = value; }
+        public int LeftMagnetoState { get => leftMagnetoState; set => leftMagnetoState = value; }
+        public int RightMagnetoState { get => rightMagnetoState; set => rightMagnetoState = value; }
+        public int FlapsPosition { get => flapsPosition; set => flapsPosition = value; }
+        public int SwitchFuelPump { get => switchFuelPump; set => switchFuelPump = value; }
+        public int GyroDriftError { get => gyroDriftError; set => gyroDriftError = value; }
+        public float Qnh { get => qnh; set => qnh = value; }
+        public int EngineStarter { get => engineStarter; set => engineStarter = value; }
+        public int ElectricalBusVoltage { get => electricalBusVoltage; set => electricalBusVoltage = value; }
+        public int FuelSelector { get => fuelSelector; set => fuelSelector = value; }
+        public int ParkingBrake { get => parkingBrake; set => parkingBrake = value; }
+        public int FuelValve { get => fuelValve; set => fuelValve = value; }
+        public int WarningVACLeft { get => warningVACLeft; set => warningVACLeft = value; }
+        public int WarningVACRight { get => warningVACRight; set => warningVACRight = value; }
+        public int WarningVAC { get => warningVAC; set => warningVAC = value; }
+        public int WarningVoltage { get => warningVoltage; set => warningVoltage = value; }
+        public int WarningOilPressure { get => warningOilPressure; set => warningOilPressure = value; }
+        public int WarningFuelLeft { get => warningFuelLeft; set => warningFuelLeft = value; }
+        public int WarningFuelRight { get => warningFuelRight; set => warningFuelRight = value; }
+        public int WarningFuel { get => warningFuel; set => warningFuel = value; }
+        public string AtcId { get => atcId; set => atcId = value; }
+        public int Com1ActiveFreq { get => com1ActiveFreq; set => com1ActiveFreq = value; }
+        public int Com1StandbyFreq { get => com1StandbyFreq; set => com1StandbyFreq = value; }
+        public int Com2ActiveFreq { get => com2ActiveFreq; set => com2ActiveFreq = value; }
+        public int Com2StandbyFreq { get => com2StandbyFreq; set => com2StandbyFreq = value; }
+        public int Nav1ActiveFreq { get => nav1ActiveFreq; set => nav1ActiveFreq = value; }
+        public int Nav1StandbyFreq { get => nav1StandbyFreq; set => nav1StandbyFreq = value; }
+        public int Nav2ActiveFreq { get => nav2ActiveFreq; set => nav2ActiveFreq = value; }
+        public int Nav2StandbyFreq { get => nav2StandbyFreq; set => nav2StandbyFreq = value; }
+        public int AdfActiveFreq { get => adfActiveFreq; set => adfActiveFreq = value; }
+        public int AdfStandbyFreq { get => adfStandbyFreq; set => adfStandbyFreq = value; }
+        public int ApAltitude { get => apAltitude; set => apAltitude = value; }
+        public int ApMaster { get => apMaster; set => apMaster = value; }
+        public int ApHeadingLock { get => apHeadingLock; set => apHeadingLock = value; }
+        public int ApNavLock { get => apNavLock; set => apNavLock = value; }
+        public int ApAltitudeLock { get => apAltitudeLock; set => apAltitudeLock = value; }
+        public int ApVerticalHold { get => apVerticalHold; set => apVerticalHold = value; }
+        public int ApVerticalHoldSpeed { get => apVerticalHoldSpeed; set => apVerticalHoldSpeed = value; }
+        public int ApApproachHold { get => apApproachHold; set => apApproachHold = value; }
+        public int ApRevHold { get => apRevHold; set => apRevHold = value; }
+        public int ApGSHold { get => apGSHold; set => apGSHold = value; }
+        public int DmeDistance { get => dmeDistance; set => dmeDistance = value; }
+        public int XpdrSwitch { get => xpdrSwitch; set => xpdrSwitch = value; }
+        public int Xpdr { get => xpdr; set => xpdr = value; }
+    }
+    private C172Data c172data = new C172Data();
+
+
+    public C172Data simData { get => c172data; set => c172data = value; }
+
+    public C172SimData(SimData data)
+	{
+		IsSimConnected = data.IsSimConnected;
+		IsSimRunning = data.IsSimRunning;
+		IsPaused = data.IsPaused;
+	}
+}
