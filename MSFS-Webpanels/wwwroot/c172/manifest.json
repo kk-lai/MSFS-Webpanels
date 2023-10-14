@@ -1,0 +1,6 @@
+{
+  "name": "Flight Simulator Webpanels",  
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "landscape"
+}

@@ -47,7 +47,7 @@ namespace MSFS_Webpanels
                 }
             }
 
-
+            this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion +")";
         }
 
         protected override void DefWndProc(ref Message m)
@@ -109,5 +109,6 @@ namespace MSFS_Webpanels
         {
             simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SWAP_COM1_FREQ, 0);
         }
+
     }
 }

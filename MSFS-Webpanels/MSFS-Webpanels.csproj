@@ -8,6 +8,13 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
+    <ApplicationIcon>panel-icon.ico</ApplicationIcon>
+    <Copyright>© 2023 Kevin King</Copyright>
+    <RepositoryUrl>https://github.com/kk-lai/MSFS-Webpanels</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>1.0.0</Version>
+    <Authors>Kevin King</Authors>
+    <FileVersion>1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,6 +49,10 @@
         <Link>wwwroot\%(RecursiveDir)\%(Filename)%(Extension)</Link>
     </Content>
 </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="panel-icon.ico" />
+  </ItemGroup>
   
   <ItemGroup>
     <Reference Include="Microsoft.FlightSimulator.SimConnect">

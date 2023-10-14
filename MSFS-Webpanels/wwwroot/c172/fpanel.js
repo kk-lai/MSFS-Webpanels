@@ -107,7 +107,7 @@ function(jquery,util,sysconst) {
         }
         jsonData.simData.qnhmb = Math.round(jsonData.simData.qnh*16);
         jsonData.simData.dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
-        jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16);
+        jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
 
         var apStatus1="";
         var apStatus2="";

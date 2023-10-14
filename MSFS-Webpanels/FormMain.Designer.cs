@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             buttonStart = new Button();
             label1 = new Label();
             pictureQRcode = new PictureBox();
             linkPanel = new LinkLabel();
             buttonTest = new Button();
+            label3 = new Label();
+            linkGit = new LinkLabel();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
@@ -40,7 +43,7 @@
             // 
             buttonStart.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonStart.Enabled = false;
-            buttonStart.Location = new Point(348, 294);
+            buttonStart.Location = new Point(348, 259);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new Size(166, 59);
             buttonStart.TabIndex = 0;
@@ -61,9 +64,9 @@
             // pictureQRcode
             // 
             pictureQRcode.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pictureQRcode.Location = new Point(12, 97);
+            pictureQRcode.Location = new Point(12, 66);
             pictureQRcode.Name = "pictureQRcode";
-            pictureQRcode.Size = new Size(256, 256);
+            pictureQRcode.Size = new Size(264, 252);
             pictureQRcode.SizeMode = PictureBoxSizeMode.Zoom;
             pictureQRcode.TabIndex = 2;
             pictureQRcode.TabStop = false;
@@ -82,7 +85,7 @@
             // buttonTest
             // 
             buttonTest.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonTest.Location = new Point(345, 213);
+            buttonTest.Location = new Point(348, 157);
             buttonTest.Name = "buttonTest";
             buttonTest.Size = new Size(166, 59);
             buttonTest.TabIndex = 4;
@@ -91,16 +94,42 @@
             buttonTest.Visible = false;
             buttonTest.Click += buttonTest_Click;
             // 
+            // label3
+            // 
+            label3.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Location = new Point(407, 330);
+            label3.Name = "label3";
+            label3.Size = new Size(107, 21);
+            label3.TabIndex = 6;
+            label3.Text = "By: Kevin King";
+            // 
+            // linkGit
+            // 
+            linkGit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            linkGit.AutoSize = true;
+            linkGit.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            linkGit.Location = new Point(12, 330);
+            linkGit.Name = "linkGit";
+            linkGit.Size = new Size(310, 21);
+            linkGit.TabIndex = 7;
+            linkGit.TabStop = true;
+            linkGit.Text = "https://github.com/kk-lai/MSFS-Webpanels";
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(526, 367);
+            Controls.Add(linkGit);
+            Controls.Add(label3);
             Controls.Add(buttonTest);
             Controls.Add(linkPanel);
             Controls.Add(pictureQRcode);
             Controls.Add(label1);
             Controls.Add(buttonStart);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(542, 406);
             Name = "FormMain";
             Text = "MSFS-Webpanels";
@@ -116,5 +145,7 @@
         private PictureBox pictureQRcode;
         private LinkLabel linkPanel;
         private Button buttonTest;
+        private Label label3;
+        private LinkLabel linkGit;
     }
 }
