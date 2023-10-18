@@ -9,7 +9,10 @@ using System.Configuration;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using Zen.Barcode;
+
+
 
 
 namespace MSFS_Webpanels
@@ -47,8 +50,10 @@ namespace MSFS_Webpanels
                 }
             }
 
-            this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion +")";
+            this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion + ")";
         }
+
+
 
         protected override void DefWndProc(ref Message m)
         {
@@ -62,7 +67,7 @@ namespace MSFS_Webpanels
                 else
                 {
                     buttonStart.Text = "&Connect";
-                }
+                }                
             }
             else
             {

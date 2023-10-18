@@ -116,13 +116,13 @@
                 <img src="img/att-foreground.png" class="gauge-item att-foreground" alt="att-foreground"  />
                 <img src="img/gen-knob-01.png" class="att-knob" alt="gen-knob-01" />
             </div><div class="gauge alt-guage">            
-                <img src="img/alt-pressure.png" class="gauge-item alt-pressure simvar-qnhmb" alt="alt-pressure" func="generic" rotateScaleFactor="-0.1845617765" rotateOffset="112" max="17013.216" min="15116.8384" />
+                <img src="img/alt-pressure.png" class="gauge-item alt-pressure simvar-qnhmb" alt="alt-pressure" func="generic" rotateScaleFactor="-0.1845617765" rotateOffset="112" max="17104" min="15168" />
                 <img src="img/alt-backplate.png" class="gauge-item alt-backplate" alt="alt-backplate" />
                 <img src="img/alt-10k-needle.png" class="alt-10k-needle simvar-altitude" alt="alt-10k-needle" func="generic" rotateScaleFactor="0.0036"  />
                 <img src="img/alt-1k-needle.png" class="alt-1k-needle simvar-altitude" alt="alt-1k-needle" func="generic" rotateScaleFactor="0.036" />
                 <img src="img/alt-needle.png" class="alt-needle simvar-altitude" alt="alt-needle" func="generic" rotateScaleFactor="0.36"   />
                 <img src="img/gen-knob-01.png" class="alt-knob" alt="gen-knob-01" />
-                <div class="ui-slider ui-left-slider ctl-qnhmb" target="simvar-qnhmb" vartype="int" min="15120" max="17008" sensitivity="1" ></div>
+                <div class="ui-rose ctl-qnhmb" target="simvar-qnhmb" min="15168" max="17104" sensitivity="1" ></div>
             </div><div class="gauge nav1-guage">
                 <img src="img/gen-backplate.png" class="gen-backplate" alt="gen-backplate" />
                 <img src="img/nav-vor-backplate.png" class="nav-vor-backplate " alt="nav-vor-backplate" />
@@ -138,7 +138,7 @@
                 <img src="img/nav-arrow-down.png" class="nav-arrow-down" alt="nav-arrow-down" />
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/nav-obs-knob.png" class="nav-obs-knob simvar-nav1obs" alt="nav-obs-knob" func="generic" rotateScaleFactor="20" />
-                <div class="ui-slider ui-left-slider ctl-nav1obs" target="simvar-nav1obs" vartype="degree" ></div>
+                <div class="ui-rose ctl-nav1obs" target="simvar-nav1obs" ></div>
             </div><div class="gauge trn-guage">
                 <img src="img/trn-tube-back.png" class="trn-tube-back" alt="trn-tube-back" />
                 <img src="img/trn-ball.png" class="trn-ball simvar-tcballpos" alt="trn-ball" func="turnBall" />
@@ -152,8 +152,7 @@
                 <img src="img/hdg-foreground.png" class="gauge-item" alt="hdg-foreground" />
                 <img src="img/hdg-knob.png" class="hdg-knob simvar-headingbug" alt="hdg-knob" func="generic"  />
                 <img src="img/hdg-push-knob.png" class="hdg-push-knob simvar-gyrodrifterror" alt="hdg-push-knob"  func="generic" rotateScaleFactor="-1" />
-                <div class="ui-slider ui-right-slider ctl-headingbug" target="simvar-headingbug" vartype="degree" ></div>
-                <div class="ui-slider ui-left-slider ctl-gyrodrifterror" target="simvar-gyrodrifterror" vartype="degree" sensitivity="1" ></div>
+                <div class="ui-rose ctl-headingbug" target="simvar-headingbug" targetLeft="simvar-gyrodrifterror" sensitivity="-0.36" sensitivityLeft="1" ></div>                
             </div><div class="gauge vsi-guage">
                 <img src="img/vsi-backplate.png" class="gauge-item vsi-backplate" alt="vsi-backplate" />
                 <img src="img/vsi-needle.png" class="vsi-needle simvar-vsi" alt="vsi-needle" func="rotateInterpolate" tbl="vsiPositions" />
@@ -172,7 +171,7 @@
                 <img src="img/nav-arrow-down.png" class="nav-arrow-down" alt="nav-arrow-down" />
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/nav-obs-knob.png" class="nav-obs-knob simvar-nav2obs" alt="nav-obs-knob" func="generic" rotateScaleFactor="20" />
-                <div class="ui-slider ui-left-slider ctl-nav2obs" target="simvar-nav2obs" vartype="degree" ></div>
+                <div class="ui-rose ctl-nav2obs" target="simvar-nav2obs" ></div>
             </div><div class="lower-panel">
                 <div class="switches-panel">
                     <div class="eng-magneto-wrapper ctl-magneto" min="0" max="4" >
@@ -288,7 +287,7 @@
                 <img src="img/adf-star.png" class="gauge-item adf-star" alt="adf-star" />
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/adf-hdg-knob.png" class="adf-hdg-knob simvar-adfcard" alt="adf-hdg-knob" func="generic" rotateScaleFactor="20" />
-                <div class="ui-slider ui-left-slider ctl-adfcard" target="simvar-adfcard" vartype="degree" ></div>
+                <div class="ui-rose ctl-adfcard" target="simvar-adfcard" ></div>
             </div>
         </div><div class="bottom-panel">
             <div class="bottom-control-container fuel-selector-container">
@@ -332,10 +331,10 @@
                     OIL PRESS
                 </div>
                 <div class="warning-container warning-fuel-container">
-                    <span class="warning-fuel-l">L&nbsp;</span>
-                    <span class="warning-fuel-l warning-fuel-r">LOW&nbsp;FUEL&nbsp;</span>
-                    <span class="warning-fuel-r">R</span>
-                </div><div class="warning-container warning-volts">
+                    <span class="warning-fuel-l simvar-warningfuelleft" warning="yellow" func="showHideWarning">L&nbsp;</span>
+                    <span class="warning-fuel-l warning-fuel-r simvar-warningfuel" warning="yellow" func="showHideWarning">LOW&nbsp;FUEL&nbsp;</span>
+                    <span class="warning-fuel-r simvar-warningfuelright" warning="yellow" func="showHideWarning">R</span>
+                </div><div class="warning-container warning-volts simvar-warningvoltage" warning="red" func="showHideWarning">
                     VOLTS
                 </div>
             </div><div class="xpdr-panel">

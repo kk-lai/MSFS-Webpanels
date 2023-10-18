@@ -3,9 +3,27 @@ using Microsoft.FlightSimulator.SimConnect;
 using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
 using Microsoft.VisualBasic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Diagnostics;
+using System.Collections.Concurrent;
 
 public class SimConnectClient
 {
+    class QueueItem
+    {
+        EVENT evt;
+        uint val;
+
+        public QueueItem(EVENT evt, uint val)
+        {
+            this.evt = evt;
+            this.val = val;
+        }
+
+        public uint Val { get => val; set => val = value; }
+        public EVENT Evt { get => evt; set => evt = value; }
+    }
+
     enum REQUEST
     {
         AIRCRAFT_LOADED,
@@ -100,6 +118,8 @@ public class SimConnectClient
     private SimConnect simConnect = null;
     private SimData simData = new SimData();
     public const int WM_USER_SIMCONNECT = 0x0402;
+    private ConcurrentQueue<QueueItem> updateQueue = new ConcurrentQueue<QueueItem>();
+
 
     private static SimConnectClient? simClient =  null;
 
@@ -113,6 +133,7 @@ public class SimConnectClient
     }
 
     public SimData SimData { get => simData; set => simData = value; }
+
 
     public SimConnectClient()
     {
@@ -146,8 +167,8 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ENG EXHAUST GAS TEMPERATURE:1", "Rankine", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ENG FUEL FLOW GPH:1", "Gallons per hour", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ENG OIL TEMPERATURE:1", "Rankine", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ENG OIL PRESSURE:1", "psi", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GENERAL ENG OIL TEMPERATURE:1", "Rankine", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GENERAL ENG OIL PRESSURE:1", "psi", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "SUCTION PRESSURE", "inHg", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ELECTRICAL BATTERY LOAD", "Amperes", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
@@ -212,15 +233,6 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL TANK SELECTOR:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GENERAL ENG FUEL VALVE:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "BRAKE PARKING POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING VACUUM LEFT", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING VACUUM RIGHT", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING VACUUM", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING VOLTAGE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING OIL PRESSURE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING FUEL LEFT", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING FUEL RIGHT", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "WARNING FUEL", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM ACTIVE FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM STANDBY FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
@@ -335,7 +347,7 @@ public class SimConnectClient
         }
         catch (COMException ex)
         {
-
+            Debug.WriteLine(ex.ToString());
         }
     }
 
@@ -357,16 +369,17 @@ public class SimConnectClient
             try
             {
                 simConnect.ReceiveMessage();
+
             } catch (Exception e)
             {
-
-            }
-            
+                Debug.WriteLine(e.ToString());
+            }            
         }
     }
     
     private void OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
     {
+        Debug.WriteLine("OnRecvOpen");
         simData.IsSimConnected = true;
     }
 
@@ -377,12 +390,11 @@ public class SimConnectClient
 
     private void OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
     {
-        Console.WriteLine(data.ToString);
+        Debug.WriteLine(data.ToString());        
     }
     
     private void OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
-    {
-        Console.WriteLine("OnRecvSimobjectData");
+    {        
         if (data.dwDefineID==(uint)DEFINITION.C172_FPANEL)
         {
             C172SimData ndata;
@@ -396,6 +408,15 @@ public class SimConnectClient
             ndata.simData = (C172SimData.C172Data)data.dwData[0];
             simData = ndata;
         }
+        while (updateQueue.Count > 0)
+        {
+            QueueItem itm;
+            if (updateQueue.TryDequeue(out itm))
+            {
+                simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
+                    itm.Val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+            }
+        }
     }
 
     private void OnRecvEvent(SimConnect sender, SIMCONNECT_RECV_EVENT data)
@@ -403,11 +424,11 @@ public class SimConnectClient
         switch ((EVENT)data.uEventID)
         {
             case EVENT.SIM_RUNNING:
-                Console.WriteLine("Sim Running");
+                Debug.WriteLine("Sim Running");
                 simData.IsSimRunning = (data.dwData == 1); ;
                 break;
             case EVENT.SIM_PAUSE:
-                Console.WriteLine("Sim Paused");
+                Debug.WriteLine("Sim Paused");
                 simData.IsPaused = (data.dwData == 1);
                 break;
         }
@@ -423,20 +444,30 @@ public class SimConnectClient
 
     public void setSimpleVar(uint vidx, uint val)
     {
-        try { 
         uint evt = (uint)EVENT.SET_GYRO_DRIFT_ERROR + vidx;
-            simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, (EVENT)evt,
-               val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        QueueItem itm = new QueueItem((EVENT)evt, val);
+        updateQueue.Enqueue(itm);
+        /*
+        try { 
+            uint evt = (uint)EVENT.SET_GYRO_DRIFT_ERROR + vidx;
+                simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, (EVENT)evt,
+                    val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
         } catch (Exception e)
         {
-
+            Debug.WriteLine(e.ToString());
         }
+        */
     }
 
     public void sendEventToSimulator(SimConnectClient.EVENT evt, uint val)
     {
+        //uint evt = (uint)firstEvent + idx;
+        QueueItem itm = new QueueItem((EVENT)evt, val);
+        updateQueue.Enqueue(itm);
+        /*
         simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, evt,
                val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        */
     }
 
     public void setMagneto(uint pos)
@@ -456,14 +487,19 @@ public class SimConnectClient
 
     private void transmitEventOffset(EVENT firstEvent, uint idx)
     {
+        uint evt = (uint)firstEvent + idx;
+        QueueItem itm = new QueueItem((EVENT)evt, 0);
+        updateQueue.Enqueue(itm);
+        /*
         try { 
             uint evt = (uint)firstEvent + idx;
             simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, (EVENT)evt,
                0, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
         } catch (Exception e)
         {
-
+            Debug.WriteLine(e.ToString());
         }
+        */
     }
 
     public void setTransponderSwitch(uint pos)

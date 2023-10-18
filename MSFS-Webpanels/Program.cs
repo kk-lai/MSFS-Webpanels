@@ -2,12 +2,19 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System.Net;
+using System.Runtime.InteropServices;
+
+
 
 namespace MSFS_Webpanels
 {
     internal static class Program
     {
         public static IWebHost webHost;
+        [DllImport("kernel32.dll")]
+        static extern bool AttachConsole(int dwProcessId);
+        private const int ATTACH_PARENT_PROCESS = -1;
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -15,6 +22,7 @@ namespace MSFS_Webpanels
         [STAThread]
         static void Main(string[] args)
         {
+            AttachConsole(ATTACH_PARENT_PROCESS);
             Task.Run(() => StartWebServer(args));
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.

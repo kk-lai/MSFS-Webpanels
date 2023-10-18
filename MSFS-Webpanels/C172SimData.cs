@@ -82,15 +82,6 @@ public class C172SimData : SimData
         private Int32 fuelValve;
         private Int32 parkingBrake;
 
-        private Int32 warningVACLeft;
-        private Int32 warningVACRight;
-        private Int32 warningVAC;
-        private Int32 warningVoltage;
-        private Int32 warningOilPressure;
-        private Int32 warningFuelLeft;
-        private Int32 warningFuelRight;
-        private Int32 warningFuel;
-
         private Int32 com1ActiveFreq;
         private Int32 com1StandbyFreq;
         private Int32 com2ActiveFreq;
@@ -172,14 +163,6 @@ public class C172SimData : SimData
         public int FuelSelector { get => fuelSelector; set => fuelSelector = value; }
         public int ParkingBrake { get => parkingBrake; set => parkingBrake = value; }
         public int FuelValve { get => fuelValve; set => fuelValve = value; }
-        public int WarningVACLeft { get => warningVACLeft; set => warningVACLeft = value; }
-        public int WarningVACRight { get => warningVACRight; set => warningVACRight = value; }
-        public int WarningVAC { get => warningVAC; set => warningVAC = value; }
-        public int WarningVoltage { get => warningVoltage; set => warningVoltage = value; }
-        public int WarningOilPressure { get => warningOilPressure; set => warningOilPressure = value; }
-        public int WarningFuelLeft { get => warningFuelLeft; set => warningFuelLeft = value; }
-        public int WarningFuelRight { get => warningFuelRight; set => warningFuelRight = value; }
-        public int WarningFuel { get => warningFuel; set => warningFuel = value; }
         public string AtcId { get => atcId; set => atcId = value; }
         public int Com1ActiveFreq { get => com1ActiveFreq; set => com1ActiveFreq = value; }
         public int Com1StandbyFreq { get => com1StandbyFreq; set => com1StandbyFreq = value; }

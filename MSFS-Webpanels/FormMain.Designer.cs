@@ -36,6 +36,7 @@
             buttonTest = new Button();
             label3 = new Label();
             linkGit = new LinkLabel();
+            labelErrorMessage = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
@@ -117,11 +118,25 @@
             linkGit.TabStop = true;
             linkGit.Text = "https://github.com/kk-lai/MSFS-Webpanels";
             // 
+            // labelErrorMessage
+            // 
+            labelErrorMessage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            labelErrorMessage.AutoSize = true;
+            labelErrorMessage.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            labelErrorMessage.ForeColor = Color.Red;
+            labelErrorMessage.Location = new Point(348, 66);
+            labelErrorMessage.Name = "labelErrorMessage";
+            labelErrorMessage.Size = new Size(70, 21);
+            labelErrorMessage.TabIndex = 8;
+            labelErrorMessage.Text = "No Error";
+            labelErrorMessage.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(526, 367);
+            Controls.Add(labelErrorMessage);
             Controls.Add(linkGit);
             Controls.Add(label3);
             Controls.Add(buttonTest);
@@ -147,5 +162,6 @@
         private Button buttonTest;
         private Label label3;
         private LinkLabel linkGit;
+        private Label labelErrorMessage;
     }
 }

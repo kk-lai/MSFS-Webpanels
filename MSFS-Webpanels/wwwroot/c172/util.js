@@ -226,6 +226,95 @@ define(['jquery','const'],function(jquery, sysconst) {
             }
             return deg;
         },
+        postProcessSimData: function (jsonData) {
+            jsonData.simData.warningVACLeft = 0;
+            jsonData.simData.warningVACRight = 0;
+            jsonData.simData.warningVAC = 0;
+            jsonData.simData.warningVoltage = 0;
+            jsonData.simData.warningOilPressure = 0;
+            jsonData.simData.warningFuelLeft = 0;
+            jsonData.simData.warningFuelRight = 0;
+            jsonData.simData.warningFuel = 0;
+
+            if (jsonData.simData.engineOilPressure < 50) {
+                jsonData.simData.warningOilPressure = 1;
+            }
+
+            if (jsonData.simData.electricalBusVoltage < 25.5) {
+                jsonData.simData.warningVoltage = 1;
+            }
+
+            if (jsonData.simData.vac < 3) {
+                jsonData.simData.warningVACLeft = 1;
+                jsonData.simData.warningVACRight = 1;
+                jsonData.simData.warningVAC = 1;
+            }
+
+            if (jsonData.simData.fuelLeftQuantity<8) {
+                jsonData.simData.warningFuelLeft = 1;
+                jsonData.simData.warningFuel = 1;
+            }
+            if (jsonData.simData.fuelRightQuantity < 8) {
+                jsonData.simData.warningFuelRight = 1;
+                jsonData.simData.warningFuel = 1;
+            }
+
+            if (jsonData.simData.electricalBusVoltage >= 20) {
+                jsonData.simData.tconoff = 1;
+            } else {
+                jsonData.simData.tconoff = 0;
+            }
+            jsonData.simData.magneto = 0;
+            if (jsonData.simData.engineStarter == 1) {
+                jsonData.simData.magneto = 4;
+            } else {
+                if (jsonData.simData.leftMagnetoState == 1) {
+                    jsonData.simData.magneto += 2;
+                }
+                if (jsonData.simData.rightMagnetoState == 1) {
+                    jsonData.simData.magneto++;
+                }
+            }
+            jsonData.simData.attitudeGyroOff = 1;
+            if (jsonData.simData.vac > 4.0) {
+                jsonData.simData.attitudeGyroOff = 0;
+            }
+            jsonData.simData.qnhmb = Math.round(jsonData.simData.qnh * 16);
+            jsonData.simData.dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
+            jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
+
+
+            var apStatus1 = "";
+            var apStatus2 = "";
+
+            if (jsonData.simData.apMaster != 0) {
+                apStatus1 = "ROL";
+                if (jsonData.simData.apHeadingLock != 0) {
+                    apStatus1 = "HDG";
+                } else if (jsonData.simData.apNavLock != 0) {
+                    apStatus1 = "NAV";
+                } else if (jsonData.simData.apApproachHold != 0) {
+                    apStatus1 = "APR";
+                } else if (jsonData.simData.apRevHold != 0) {
+                    apStatus1 = "REV";
+                }
+                apStatus2 = "PIT";
+                if (jsonData.simData.apVerticalHold != 0) {
+                    apStatus2 = "VS";
+                } else if (jsonData.simData.apAltitudeLock != 0) {
+                    apStatus2 = "ALT";
+                } else if (jsonData.simData.apGSHold != 0) {
+                    apStatus2 = "GS";
+                }
+            }
+
+            jsonData.simData.apStatus1 = apStatus1;
+            jsonData.simData.apStatus2 = apStatus2;
+
+            jsonData.simData.fuelSelectorUI = this.fuelSelectorStates[jsonData.simData.fuelSelector - 1];
+
+            return jsonData;
+        },
         asiPositions: [
             [   0,  0.0],
             [  10,  3.0],
@@ -379,14 +468,6 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "fuelSelector": 1,
                 "parkingBrake": 0,
                 "fuelValve": 0,
-                "warningVACLeft": 0,
-                "warningVACRight": 0,
-                "warningVAC": 0,
-                "warningVoltage": 0,
-                "warningOilPressure": 0,
-                "warningFuelLeft": 0,
-                "warningFuelRight": 0,
-                "warningFuel": 0,
                 "atcId": "",
                 "com1ActiveFreq": 124850,
                 "com1StandbyFreq": 124850,
