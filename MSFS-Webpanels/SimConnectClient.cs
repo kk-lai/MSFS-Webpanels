@@ -121,11 +121,11 @@ public class SimConnectClient
     private ConcurrentQueue<QueueItem> updateQueue = new ConcurrentQueue<QueueItem>();
 
 
-    private static SimConnectClient? simClient =  null;
+    private static SimConnectClient? simClient = null;
 
     public static SimConnectClient getSimConnectClient()
     {
-        if (simClient==null)
+        if (simClient == null)
         {
             simClient = new SimConnectClient();
         }
@@ -141,7 +141,7 @@ public class SimConnectClient
 
     public void Connect(IntPtr whnd)
     {
-        if (simConnect!=null)
+        if (simConnect != null)
         {
             return;
         }
@@ -160,7 +160,7 @@ public class SimConnectClient
             simConnect.SubscribeToSystemEvent(EVENT.SIM_RUNNING, "Sim");
             uint fieldId = 0;
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ATC ID", null, SIMCONNECT_DATATYPE.STRING256, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL LEFT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32 ,0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL LEFT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL RIGHT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
             // todo: ref egt
@@ -178,10 +178,10 @@ public class SimConnectClient
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ATTITUDE INDICATOR PITCH DEGREES", "degree", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ATTITUDE INDICATOR BANK DEGREES", "degree", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ATTITUDE BARS POSITION", "percent over 100", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);           
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ATTITUDE BARS POSITION", "percent", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "INDICATED ALTITUDE", "ft", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "KOHLSMAN SETTING MB", "Millibars", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "KOHLSMAN SETTING MB", "millibar scaler 16", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV OBS:1", "Degrees", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV TOFROM:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
@@ -282,7 +282,7 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.SET_HEADING_BUG, "HEADING_BUG_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_QNH, "KOHLSMAN_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_OBS, "VOR1_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_OBS, "VOR2_SET");    
+            simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_OBS, "VOR2_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_CARD, "ADF_CARD_SET");
             /*
             simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_OFF, "MAGNETO_OFF");
@@ -359,12 +359,12 @@ public class SimConnectClient
         }
         simConnect.Dispose();
         simData.IsSimConnected = false;
-        simConnect = null;        
+        simConnect = null;
     }
 
     public void SimConnectMsgHandler()
     {
-        if (simConnect!=null)
+        if (simConnect != null)
         {
             try
             {
@@ -373,10 +373,10 @@ public class SimConnectClient
             } catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
-            }            
+            }
         }
     }
-    
+
     private void OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
     {
         Debug.WriteLine("OnRecvOpen");
@@ -390,12 +390,12 @@ public class SimConnectClient
 
     private void OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
     {
-        Debug.WriteLine(data.ToString());        
+        Debug.WriteLine(data.ToString());
     }
-    
+
     private void OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
-    {        
-        if (data.dwDefineID==(uint)DEFINITION.C172_FPANEL)
+    {
+        if (data.dwDefineID == (uint)DEFINITION.C172_FPANEL)
         {
             C172SimData ndata;
             if (simData is C172SimData)
@@ -403,7 +403,7 @@ public class SimConnectClient
                 ndata = (C172SimData)simData;
             } else
             {
-                ndata = new C172SimData(simData);                
+                ndata = new C172SimData(simData);
             }
             ndata.simData = (C172SimData.C172Data)data.dwData[0];
             simData = ndata;
@@ -436,7 +436,7 @@ public class SimConnectClient
 
     private void OnRecvFilenameEvent(SimConnect sender, SIMCONNECT_RECV_EVENT_FILENAME data)
     {
-        if (data.uEventID==(uint)EVENT.AIRCRAFT_LOADED)
+        if (data.uEventID == (uint)EVENT.AIRCRAFT_LOADED)
         {
             simData.AircraftCFGPath = data.szFileName;
         }
@@ -447,27 +447,18 @@ public class SimConnectClient
         uint evt = (uint)EVENT.SET_GYRO_DRIFT_ERROR + vidx;
         QueueItem itm = new QueueItem((EVENT)evt, val);
         updateQueue.Enqueue(itm);
-        /*
-        try { 
-            uint evt = (uint)EVENT.SET_GYRO_DRIFT_ERROR + vidx;
-                simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, (EVENT)evt,
-                    val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-        } catch (Exception e)
-        {
-            Debug.WriteLine(e.ToString());
-        }
-        */
     }
 
     public void sendEventToSimulator(SimConnectClient.EVENT evt, uint val)
     {
-        //uint evt = (uint)firstEvent + idx;
-        QueueItem itm = new QueueItem((EVENT)evt, val);
-        updateQueue.Enqueue(itm);
-        /*
         simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, evt,
-               val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-        */
+            val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+    }
+
+    public void sendEventToSimulator(SimConnectClient.EVENT evt, uint param1, uint param2)
+    {
+        simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, evt,
+            NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, param1, param2, 0,0,0);
     }
 
     public void setMagneto(uint pos)
@@ -490,22 +481,12 @@ public class SimConnectClient
         uint evt = (uint)firstEvent + idx;
         QueueItem itm = new QueueItem((EVENT)evt, 0);
         updateQueue.Enqueue(itm);
-        /*
-        try { 
-            uint evt = (uint)firstEvent + idx;
-            simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, (EVENT)evt,
-               0, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-        } catch (Exception e)
-        {
-            Debug.WriteLine(e.ToString());
-        }
-        */
     }
 
     public void setTransponderSwitch(uint pos)
     {
-        simConnect.SetDataOnSimObject(DEFINITION.TRANSPONDER_STATE, 
-            SimConnect.SIMCONNECT_OBJECT_ID_USER, 
+        simConnect.SetDataOnSimObject(DEFINITION.TRANSPONDER_STATE,
+            SimConnect.SIMCONNECT_OBJECT_ID_USER,
             SIMCONNECT_DATA_SET_FLAG.DEFAULT,
             new TransponderState { state = pos }
         );

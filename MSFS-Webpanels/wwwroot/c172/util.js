@@ -279,7 +279,6 @@ define(['jquery','const'],function(jquery, sysconst) {
             if (jsonData.simData.vac > 4.0) {
                 jsonData.simData.attitudeGyroOff = 0;
             }
-            jsonData.simData.qnhmb = Math.round(jsonData.simData.qnh * 16);
             jsonData.simData.dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
             jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
 
@@ -396,12 +395,12 @@ define(['jquery','const'],function(jquery, sysconst) {
             [120,239.5]
         ],
         attittudePlanePositions: [
-            [-1, 19],
-            [-0.65999997, 13.5],
-            [-0.049999997, 0],
-            [0.47, -13.5],
-            [0.93, -27],
-            [1.0, -32.5]
+            [-100, 19],
+            [-66, 13.5],
+            [-5, 0],
+            [47, -13.5],
+            [93, -27],
+            [100, -32.5]
         ],
         magnetoPositions : [-65,-35,0,35,65],
         fuelSelectorStates: [1,0,2],
@@ -462,7 +461,7 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "flapsPosition": 0,
                 "switchFuelPump": 0,
                 "gyroDriftError": 0,
-                "qnh": 1013.25,
+                "qnh": 16212,
                 "engineStarter": 0,
                 "electricalBusVoltage": 0,
                 "fuelSelector": 1,

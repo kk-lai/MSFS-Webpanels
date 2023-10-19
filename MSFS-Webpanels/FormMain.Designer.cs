@@ -37,6 +37,7 @@
             label3 = new Label();
             linkGit = new LinkLabel();
             labelErrorMessage = new Label();
+            textboxInput = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
@@ -92,7 +93,6 @@
             buttonTest.TabIndex = 4;
             buttonTest.Text = "&Test";
             buttonTest.UseVisualStyleBackColor = true;
-            buttonTest.Visible = false;
             buttonTest.Click += buttonTest_Click;
             // 
             // label3
@@ -131,11 +131,19 @@
             labelErrorMessage.Text = "No Error";
             labelErrorMessage.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // textboxInput
+            // 
+            textboxInput.Location = new Point(348, 104);
+            textboxInput.Name = "textboxInput";
+            textboxInput.Size = new Size(100, 23);
+            textboxInput.TabIndex = 9;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(526, 367);
+            Controls.Add(textboxInput);
             Controls.Add(labelErrorMessage);
             Controls.Add(linkGit);
             Controls.Add(label3);
@@ -163,5 +171,6 @@
         private Label label3;
         private LinkLabel linkGit;
         private Label labelErrorMessage;
+        private TextBox textboxInput;
     }
 }

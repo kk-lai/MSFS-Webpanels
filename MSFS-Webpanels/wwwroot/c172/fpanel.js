@@ -319,7 +319,7 @@ function(jquery,util,sysconst) {
                     newState = latestSimData.simData.gyroDriftError + param;
                 } else {
                     newfState = (oldfState + dif);
-                    if (target!="simvar-qnhmb") {
+                    if (target!="simvar-qnh") {
                         newfState = (newfState % 360);
                         newState = util.boundDegree(Math.floor(newfState));
                     } else {
@@ -723,17 +723,11 @@ function(jquery,util,sysconst) {
                     break;
                 }
             }
-            if (simvar=="simvar-qnhmb") {
-                offlineData.simData.qnh=val/16;
-            }
             if (simvar=="simvar-gyrodrifterror") {
                 offlineData.simData.gyroDriftError=offlineData.simData.gyroDriftError + val;
                 offlineData.simData.heading=offlineData.simData.heading + val;
             }
         } else {
-            if (simvar=="simvar-qnhmb") {
-                simvar="simvar-qnh";
-            }
             var param = encodeURIComponent(val);
             updateQueue.push(simvar+"/"+param);
             processUpdateQueue();

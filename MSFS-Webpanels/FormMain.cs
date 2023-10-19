@@ -67,7 +67,7 @@ namespace MSFS_Webpanels
                 else
                 {
                     buttonStart.Text = "&Connect";
-                }                
+                }
             }
             else
             {
@@ -112,7 +112,12 @@ namespace MSFS_Webpanels
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SWAP_COM1_FREQ, 0);
+            uint val = 0;
+            if (textboxInput.Text.Trim().Length>0)
+            {
+                val = uint.Parse(textboxInput.Text.Trim());
+            }
+            simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SET_ATTITUDE_BAR_POSITION, 0, val);
         }
 
     }
