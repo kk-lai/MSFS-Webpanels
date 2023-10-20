@@ -163,7 +163,7 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL LEFT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL RIGHT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
-            // todo: ref egt
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ENG EXHAUST GAS TEMPERATURE GES:1", "percent scaler 32k", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ENG EXHAUST GAS TEMPERATURE:1", "Rankine", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ENG FUEL FLOW GPH:1", "Gallons per hour", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
@@ -275,7 +275,7 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "", "", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             */
 
-            simConnect.MapClientEventToSimEvent(EVENT.SET_EGT_REF, "EGT_SET");
+            simConnect.MapClientEventToSimEvent(EVENT.SET_EGT_REF, "EGT1_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_TAS_ADJ, "TRUE_AIRSPEED_CAL_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_ATTITUDE_BAR_POSITION, "ATTITUDE_BARS_POSITION_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_GYRO_DRIFT_ERROR, "GYRO_DRIFT_SET");
@@ -413,8 +413,16 @@ public class SimConnectClient
             QueueItem itm;
             if (updateQueue.TryDequeue(out itm))
             {
-                simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
-                    itm.Val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+                if (itm.Evt == EVENT.SET_ATTITUDE_BAR_POSITION)
+                {
+                    simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
+                         NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, 0, itm.Val,0,0,0);
+                } else
+                {
+                    simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
+                        itm.Val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+                }
+
             }
         }
     }
@@ -444,7 +452,7 @@ public class SimConnectClient
 
     public void setSimpleVar(uint vidx, uint val)
     {
-        uint evt = (uint)EVENT.SET_GYRO_DRIFT_ERROR + vidx;
+        uint evt = (uint)EVENT.SET_EGT_REF + vidx;
         QueueItem itm = new QueueItem((EVENT)evt, val);
         updateQueue.Enqueue(itm);
     }

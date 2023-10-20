@@ -10,6 +10,9 @@ public class SimDataController: ControllerBase
 {
     private readonly string[] SIMPLE_VAR =
     {
+        "simvar-refegt",
+        "simvar-tasadj",
+        "simvar-atitudebarposition",
         "simvar-gyrodrifterror",
         "simvar-headingbug",
         "simvar-nav1obs",

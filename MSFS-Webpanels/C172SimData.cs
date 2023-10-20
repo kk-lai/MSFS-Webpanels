@@ -12,6 +12,7 @@ public class C172SimData : SimData
         private float fuelLeftQuantity;
 		private float fuelRightQuantity;
 
+        private Int32 refEGT;
 		private float engineEGT;
 		private float engineFuelFlow;
 
@@ -187,6 +188,7 @@ public class C172SimData : SimData
         public int DmeDistance { get => dmeDistance; set => dmeDistance = value; }
         public int XpdrSwitch { get => xpdrSwitch; set => xpdrSwitch = value; }
         public int Xpdr { get => xpdr; set => xpdr = value; }
+        public int RefEGT { get => refEGT; set => refEGT = value; }
     }
     private C172Data c172data = new C172Data();
 

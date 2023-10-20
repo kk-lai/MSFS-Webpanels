@@ -1,5 +1,13 @@
 # MSFS-Webpanels
 
+To Do
+=====
+1. Fix Magneto from R to off revert
+2. Radio frequency input validation
+3. Help highlight
+4. Annunciation incorrect status
+5. REF EGT needle
+
 
 Image Credits
 =============
