@@ -317,8 +317,21 @@ function(jquery,util,sysconst) {
                     }
                     oldState = latestSimData.simData.gyroDriftError;
                     newState = latestSimData.simData.gyroDriftError + param;
-                } else {
+                } else if (target=="simvar-tasadj") {
                     newfState = (oldfState + dif);
+                    var min = util.getAttrFloat(this, "min");
+                    var max = util.getAttrFloat(this, "max");
+                    
+                    if (newfState > max) {
+                        newfState = max;
+                    } 
+                    if (newfState < min) {
+                        newfState = min;
+                    }
+                    newState = Math.round(newfState);
+                    param=newState;
+                } else {
+                    newfState = (oldfState + dif);                    
                     if (target!="simvar-qnh") {
                         newfState = (newfState % 360);
                         newState = util.boundDegree(Math.floor(newfState));
@@ -334,11 +347,11 @@ function(jquery,util,sysconst) {
                         newState = Math.round(newfState);
                     }
                     param=newState;
-                    jquery(this).attr("state", newState);
-                    jquery(this).attr("fstate", newfState);
                 }
                 
                 if (oldState!=newState) {
+                    jquery(this).attr("state", newState);
+                    jquery(this).attr("fstate", newfState);
                     util.setVariableCooldown(this);
                     util.setVariableCooldown("."+target);
                     if (target=="simvar-gyrodrifterror") {
@@ -361,44 +374,37 @@ function(jquery,util,sysconst) {
                         purgeQueue(target);
                     }
                     updateSimVar(target,param);
+                } else {
+                    if (jquery(this).hasClass("ui-touched")) {
+                        jquery(this).attr("pos", oldAng);
+                    }
                 }
             }
 
             e.preventDefault();
         });
-
-        jquery(".ui-slider").on(evMove,function(e) {
-            var sf = util.getAttrFloat(this, "sensitivity", 0.36);
-            var ctldir = "y";
+        
+        jquery(".ui-vshifter").on(evMove,function(e) {
+            var sf = util.getAttrFloat(this, "sensitivity", -1);
             var target=util.getAttrText(this,"target");
-
-            if (jquery(this).hasClass("ui-hslider")) {
-                ctldir= "x";
-            }
+            var newPos;
             if ('offsetX' in e) {
-                touchPos={
-                    x:e.offsetX,
-                    y:e.offsetY
-                };
+                newPos=e.offsetY;
             } else {
                 var pos=e.currentTarget.getBoundingClientRect();
                 var prop="touches";
                 if (e.type=="touchend") {
                     prop="changedTouches";
                 }
-                touchPos={
-                    x:e.originalEvent[prop][0].clientX-pos.left,
-                    y:e.originalEvent[prop][0].clientY-pos.top
-                };
+                newPos=e.originalEvent[prop][0].clientY-pos.top;
             }
-
-            var newPos = touchPos[ctldir];
+            
             var oldPos = newPos;
             var oldState = util.getAttrFloat(this,"state");
             var oldfState = util.getAttrFloat(this,"fstate"); // state in float
             var newState = oldState;
             var newfState = oldfState;
-
+            
             if (e.type=="mousedown" || e.type=="touchstart") {
                 jquery(this).addClass("ui-touched");
                 jquery(this).attr("fstate", newState);
@@ -411,59 +417,37 @@ function(jquery,util,sysconst) {
                 jquery(this).removeAttr("pos");
                 jquery(this).removeClass("ui-touched");
             }
-
-            if (newPos!=oldPos) {
-                var vartype=jquery(this).attr("vartype");
-                var dif = newPos-oldPos;
-                var difVal = dif * sf;
-
-                var param;
-                if (target=="simvar-gyrodrifterror") {
-                    param = Math.sign(difVal)*Math.floor(Math.abs(difVal));
-                    newState = oldState + param;
-                    param=util.boundDegree(param);
+            
+            if (oldPos!=newPos) {
+                var dif = (newPos - oldPos)*sf;
+                newfState = newfState + dif;
+                newState = Math.round(newfState);
+                var min = util.getAttrInt(this, "min");
+                var max = util.getAttrInt(this, "max");
+                
+                if (min!=null && newState<min) {
+                    newState=min;
+                    newfState=min;
+                }
+                
+                if (max!=null && newState>max) {
+                    newState=max;
+                    newfState=max;
+                }
+                
+                if (newState!=oldState) {
+                    jquery(this).attr("state", newState);
+                    jquery(this).attr("fstate", newfState);
+                    util.setVariableCooldown(this);
+                    util.setVariableCooldown("."+target);
+                    displaySimVar(target, newState);
+                    updateSimVar(target,newState);
                 } else {
-                    newfState = oldfState + difVal;
-                    newState = Math.round(newfState);
-                    if (vartype=="degree") {
-                        newfState=util.boundDegree(newfState);
-                        newState=util.boundDegree(newState);
+                    if (jquery(this).hasClass("ui-touched")) {
+                        jquery(this).attr("pos", oldPos);
                     }
-                    param = newState;
-                }
-
-                jquery(this).attr("state", newState);
-                jquery(this).attr("fstate", newfState);
-
-                util.setVariableCooldown(this);
-                util.setVariableCooldown("."+target);
-
-
-                if (target=="simvar-headingbug") {
-                    util.setVariableCooldown(".simvar-hdgbug");
-                    displaySimVar("simvar-hdgbug", {
-                        heading: latestSimData.simData.heading,
-                        headingBug : newState
-                    });
-                }
-                displaySimVar(target, newState);
-
-                if (oldState!=newState) {
-                    if (target!="simvar-gyrodrifterror") {
-                        purgeQueue(target);
-                    }
-                    updateSimVar(target,param);
-                }
-
-                if (jquery(this).hasClass("ui-touched")) {
-                    if (target=="simvar-gyrodrifterror") {
-                        var adj = (param-difVal)/sf;
-                        newPos=newPos-adj;
-                    }
-                    jquery(this).attr("pos",newPos);
                 }
             }
-
             e.preventDefault();
         });
 
@@ -654,6 +638,16 @@ function(jquery,util,sysconst) {
         jquery(".ui-reload").on(ev, function(e) {
             location.reload(true);
         });
+        
+        jquery(".ui-help").on(ev, function(e) {
+            if (jquery("#help-screen-overlay").hasClass("hide")) {
+                jquery("#help-screen-overlay").removeClass("hide");
+                jquery(".help-overlay").removeClass("hide");
+            } else {
+                jquery("#help-screen-overlay").addClass("hide");
+                jquery(".help-overlay").addClass("hide");
+            }
+        });
 
         // disable safari save image pop-up
         jquery("img").on(evMove, function(e) {
@@ -728,6 +722,9 @@ function(jquery,util,sysconst) {
                 offlineData.simData.heading=offlineData.simData.heading + val;
             }
         } else {
+            if (val < 0) {
+                val = Math.pow(2,32) + val;
+            }
             var param = encodeURIComponent(val);
             updateQueue.push(simvar+"/"+param);
             processUpdateQueue();

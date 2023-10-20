@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <head>
 <meta charset="utf-8" />
 <title>C172 Webpanel</title>
@@ -14,8 +13,10 @@
 <link rel="apple-touch-icon" href="img/panel-icon.png" />
 <link rel="icon" type="image/x-icon" href="img/panel-icon.png" />
 <link id="ui-theme" rel="stylesheet" href="../3rdparty/jquery-ui-themes-1.11.2/themes/smoothness/jquery-ui.min.css" />
+<link href="../3rdparty/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../3rdparty/fontawesome/css/brands.min.css" rel="stylesheet">
+<link href="../3rdparty/fontawesome/css/solid.min.css" rel="stylesheet">
 <link href="css/fpanel.css" rel="stylesheet" />
-
 </head>
 <body>
 <div class="wrapper">
@@ -23,7 +24,9 @@
         <div class="error-overlay text-container">
             <div class="font-xxlarge" id="sys-message" >Webpanel is not started</div>
         </div>
-        <div class="top-panel">        
+        <div id="help-screen-overlay" class="help-screen-overlay hide">
+        </div>
+        <div class="top-panel">
             <div class="registration-container text-container">
                 <div class="center-div font-xlarge simvar-atcid" func="showText" >
                     &nbsp;
@@ -33,29 +36,33 @@
             </div><div class="ap-state-text">
                 <p class="center-div simvar-apstatus2" func="showText"></p>
             </div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnap"><div class="center-div font-larger">AP</div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnhdg"><div class="center-div font-larger">HDG</div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnnav"><div class="center-div font-larger">NAV</div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnapr"><div class="center-div font-larger">APR</div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnrev"><div class="center-div font-larger">REV</div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnalt"><div class="center-div font-larger">ALT</div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnap"><div class="center-div font-larger">AP</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnhdg"><div class="center-div font-larger">HDG</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnnav"><div class="center-div font-larger">NAV</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnapr"><div class="center-div font-larger">APR</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnrev"><div class="center-div font-larger">REV</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnalt"><div class="center-div font-larger">ALT</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup ap-altitude text-container" target="altitude">
                 <div class="center-div numeric-input-target apaltitude-display font-xxlarge simvar-apaltitude ctl-apaltitude" func="showAltitude" ></div>
-                <div class="center-div numeric-input-target apvs-display font-xxlarge simvar-apverticalholdspeed ctl-apverticalholdspeed hide" func="showText" ></div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnvsinc"><div class="center-div font-larger">VS+</div>
-            </div><div class="ap-button ui-pbutton text-container" target="btnvsdec"><div class="center-div font-larger">VS-</div>          
+                <div class="center-div numeric-input-target apvs-display font-xxlarge simvar-apverticalholdspeed ctl-apverticalholdspeed hide" func="showText" ></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnvsinc"><div class="center-div font-larger">VS+</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ap-button ui-pbutton text-container" target="btnvsdec"><div class="center-div font-larger">VS-</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup com1-radio-info radio-info text-container" target="com1" >
                 <div class="radio-name">COM1</div>
                 <div class="radio-active-freq simvar-com1activefreq ctl-com1activefreq" func="showFreq" type="com"></div>
-                <div class="radio-standby-freq numeric-input-target simvar-com1standbyfreq ctl-com1standbyfreq" func="showFreq" type="com"></div>
+                <div class="radio-standby-freq numeric-input-target simvar-com1standbyfreq ctl-com1standbyfreq" func="showFreq" type="com"></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup radio-info text-container" target="com2" >
                 <div class="radio-name">COM2</div>
                 <div class="radio-active-freq simvar-com2activefreq ctl-com2activefreq" func="showFreq" type="com"></div>
-                <div class="radio-standby-freq numeric-input-target simvar-com2standbyfreq ctl-com2standbyfreq" func="showFreq" type="com"></div>
+                <div class="radio-standby-freq numeric-input-target simvar-com2standbyfreq ctl-com2standbyfreq" func="showFreq" type="com"></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup radio-info text-container" target="nav1" >
                 <div class="radio-name">NAV1</div>
                 <div class="radio-active-freq simvar-nav1activefreq ctl-nav1activefreq" func="showFreq" type="nav"></div>
-                <div class="radio-standby-freq numeric-input-target simvar-nav1standbyfreq ctl-nav1standbyfreq" func="showFreq" type="nav"></div>
+                <div class="radio-standby-freq numeric-input-target simvar-nav1standbyfreq ctl-nav1standbyfreq" func="showFreq" type="nav"></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="dme-info text-container">
                 <div class="dme-row">
                     <div class="center-div dme-label font-larger2">DME</div>
@@ -65,12 +72,14 @@
             </div><div class="ui-popup radio-info text-container" target="nav2" >
                 <div class="radio-name">NAV2</div>
                 <div class="radio-active-freq simvar-nav2activefreq ctl-nav2activefreq" func="showFreq" type="nav"></div>
-                <div class="radio-standby-freq numeric-input-target simvar-nav2standbyfreq ctl-nav2standbyfreq" func="showFreq" type="nav"></div>
+                <div class="radio-standby-freq numeric-input-target simvar-nav2standbyfreq ctl-nav2standbyfreq" func="showFreq" type="nav"></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup radio-info text-container" target="adf" >
                 <div class="radio-name">ADF</div>
                 <div class="radio-active-freq simvar-adfactivefreq ctl-adfactivefreq" func="showFreq" type="adf"></div>
-                <div class="radio-standby-freq numeric-input-target simvar-adfstandbyfreq ctl-adfstandbyfreq" func="showFreq" type="adf"></div>
-            </div>            
+                <div class="radio-standby-freq numeric-input-target simvar-adfstandbyfreq ctl-adfstandbyfreq" func="showFreq" type="adf"></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div>
         </div><div class="left-panel panel">
             <div class="small-gauge fuel-guage">
                 <img src="img/fuel-backplate.png" class="gauge-item fuel-backplate" alt="fuel-backplate" />
@@ -82,10 +91,15 @@
                 <img src="img/egt-backplate.png" class="gauge-item egt-backplate" alt="egt-backplate" />
                 <img src="img/gen-needle-01.png" class="gen-left-needle egt-needle simvar-engineegt" alt="gen-needle-01" func="generic" rotateScaleFactor="-0.27" rotateOffset="526.5" min="1750" max="2150" />
                 <img src="img/gen-needle-01.png" class="gen-right-needle egt-flow-fuel-needle simvar-enginefuelflow" alt="gen-needle-01" func="rotateInterpolate" tbl="fuelFlowPositions" />
-                <img src="img/egt-ref-needle.png" class="gen-left-needle egt-ref-needle" alt="egt-ref-needle" style="transform:rotate(60deg)" />
+                <img src="img/egt-ref-needle.png" class="gen-left-needle egt-ref-needle simvar-refegt" alt="egt-ref-needle" func="generic" rotateScaleFactor="-0.003326517533" rotateOffset="56.0" />
                 <img src="img/gen-foreground-02.png" class="gauge-item gen-foreground-02" alt="gen-foreground-02" />
                 <img src="img/egt-knob.png" class="egt-knob" alt="egt-knob" />
                 <img src="img/egt-label.png" class="gauge-item egt-label" alt="egt-label" />
+                <div class="ui-vshifter ui-refegt ctl-refegt" min="0" max="32767" target="simvar-refegt" sensitivity="-500" /></div>
+                <div class="help-refegt">
+                    <div class="help-overlay text-container hide"><!--
+                        --><div class="help-egt-up-down-arrow"><i class="center-div fa-regular fa-arrows-up-down"></i></div></div>
+                </div>
             </div><div class="small-gauge oil-guage">
                 <img src="img/oil-backplate.png" class="gauge-item oil-backplate" alt="oil-backplate" />
                 <img src="img/gen-needle-01.png" class="gen-left-needle oil-temp-needle simvar-engineoiltemp" alt="gen-needle-01" func="rotateInterpolate" tbl="oilTempPositions" valOffset="-460" />
@@ -104,9 +118,12 @@
                 <img src="img/ias-alt.png" class="ias-alt simvar-tasadj" alt="ias-alt" func="generic"  rotateScaleFactor="-3.8" rotateOffset="5" />
                 <img src="img/ias-backplate.png" class="gauge-item ias-backplate" alt="ias-backplate" />
                 <img src="img/ias-tas-speed.png" class="ias-tas-speed simvar-tasadj" alt="ias-tas-speed" func="generic" rotateScaleFactor="-3.8" rotateOffset="-2.5" />
-                <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />            
+                <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/ias-needle.png" class="ias-needle simvar-ias" alt="ias-needle" func="rotateInterpolate" tbl="asiPositions" />
                 <img src="img/gen-knob-01.png" class="ias-knob" alt="gen-knob-01.png" />
+                <div class="ui-rose ctl-tasadj" target="simvar-tasadj" min="0" max="30" sensitivity="0.12" ></div>
+                <div class="help-overlay text-container hide"><!--
+                    --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="gauge att-guage">
                 <img src="img/att-background.png" class="gauge-item att-background simvar-atitudebank" alt="att-background" func="generic" scaleFactor="-1" />
                 <img src="img/att-pitch.png" class="att-pitch simvar-pitch" alt="att-pitch" func="atitudePitch" />
@@ -115,7 +132,12 @@
                 <img src="img/att-gyro.png" class="att-gyro simvar-attitudegyrooff" alt="att-gyro" func="showHide" params="1" />
                 <img src="img/att-foreground.png" class="gauge-item att-foreground" alt="att-foreground"  />
                 <img src="img/gen-knob-01.png" class="att-knob" alt="gen-knob-01" />
-            </div><div class="gauge alt-guage">            
+                <div class="ui-vshifter ui-att-plane ctl-atitudebarposition" min="-100" max="100" target="simvar-atitudebarposition" /></div>
+                <div class="help-att-plane">
+                    <div class="help-overlay text-container hide"><!--
+                        --><div class="help-up-down-arrow"><i class="center-div fa-regular fa-arrows-up-down"></i></div></div>
+                </div>
+            </div><div class="gauge alt-guage">
                 <img src="img/alt-pressure.png" class="gauge-item alt-pressure simvar-qnh" alt="alt-pressure" func="generic" rotateScaleFactor="-0.1845617765" rotateOffset="112" max="17104" min="15168" />
                 <img src="img/alt-backplate.png" class="gauge-item alt-backplate" alt="alt-backplate" />
                 <img src="img/alt-10k-needle.png" class="alt-10k-needle simvar-altitude" alt="alt-10k-needle" func="generic" rotateScaleFactor="0.0036"  />
@@ -123,6 +145,8 @@
                 <img src="img/alt-needle.png" class="alt-needle simvar-altitude" alt="alt-needle" func="generic" rotateScaleFactor="0.36"   />
                 <img src="img/gen-knob-01.png" class="alt-knob" alt="gen-knob-01" />
                 <div class="ui-rose ctl-qnh" target="simvar-qnh" min="15168" max="17104" sensitivity="1" ></div>
+                <div class="help-overlay text-container hide"><!--
+                    --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="gauge nav1-guage">
                 <img src="img/gen-backplate.png" class="gen-backplate" alt="gen-backplate" />
                 <img src="img/nav-vor-backplate.png" class="nav-vor-backplate " alt="nav-vor-backplate" />
@@ -130,7 +154,7 @@
                 <img src="img/nav-to.png" class="nav-to-from simvar-nav1tofrom" alt="nav-to" func="showHide" param="1" />
                 <img src="img/nav-gs.png" class="nav-gs simvar-nav1gsflag" alt="nav-gs" func="showHide" param="1" />
                 <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-top simvar-nav1cdi" alt="nav-needle-motor" func="generic" rotateScaleFactor="-0.2519685039" rotateOffset="90" />
-                <img src="img/nav-needle.png" class="nav-needle simvar-nav1cdi" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />            
+                <img src="img/nav-needle.png" class="nav-needle simvar-nav1cdi" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />
                 <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-gs simvar-nav1gsi" alt="nav-needle-motor" func="generic" rotateScaleFactor="0.2941176470" />
                 <img src="img/nav-gs-needle.png" class="nav-gs-needle simvar-nav1gsi" alt="nav-gs-needle" func="generic" rotateScaleFactor="0.2941176470" />
                 <img src="img/gen-radial.png" class="gauge-item nav-radial simvar-nav1obs" alt="gen-radial" func="generic" rotateScaleFactor="-1" />
@@ -139,20 +163,29 @@
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/nav-obs-knob.png" class="nav-obs-knob simvar-nav1obs" alt="nav-obs-knob" func="generic" rotateScaleFactor="20" />
                 <div class="ui-rose ctl-nav1obs" target="simvar-nav1obs" ></div>
+                <div class="help-overlay text-container hide"><!--
+                    --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="gauge trn-guage">
                 <img src="img/trn-tube-back.png" class="trn-tube-back" alt="trn-tube-back" />
                 <img src="img/trn-ball.png" class="trn-ball simvar-tcballpos" alt="trn-ball" func="turnBall" />
                 <img src="img/trn-on-ind.png" class="trn-ind trn-off-ind simvar-tconoff" alt="trn-on-ind" func="showHide" param="1" />
                 <img src="img/trn-off-ind.png" class="trn-ind trn-on-ind simvar-tconoff" alt="trn-off-ind" func="showHide" param="0" />
                 <img src="img/trn-foreground.png" class="gauge-item trn-foreground" alt="trn-foreground" />
-                <img src="img/trn-plane.png" class="trn-plane simvar-tcrate" alt="trn-plane" func="generic" rotateOffset="-90" rotateScaleFactor="7.188244489" max="2.5" min="-2.5" /> 
+                <img src="img/trn-plane.png" class="trn-plane simvar-tcrate" alt="trn-plane" func="generic" rotateOffset="-90" rotateScaleFactor="7.188244489" max="2.5" min="-2.5" />
             </div><div class="gauge hdg-guage">
                 <img src="img/hdg-backplate.png" class="gauge-item hdg-backplate simvar-heading" alt="hdg-backplate" func="generic" rotateScaleFactor="-1" />
                 <img src="img/hdg-bug.png" class="hdg-bug simvar-hdgbug" alt="hdg-bug" func="hdgBug" />
                 <img src="img/hdg-foreground.png" class="gauge-item" alt="hdg-foreground" />
                 <img src="img/hdg-knob.png" class="hdg-knob simvar-headingbug" alt="hdg-knob" func="generic"  />
                 <img src="img/hdg-push-knob.png" class="hdg-push-knob simvar-gyrodrifterror" alt="hdg-push-knob"  func="generic" rotateScaleFactor="-1" />
-                <div class="ui-rose ctl-headingbug" target="simvar-headingbug" targetLeft="simvar-gyrodrifterror" sensitivity="-0.36" sensitivityLeft="1" ></div>                
+                <div class="ui-rose ctl-headingbug" target="simvar-headingbug" targetLeft="simvar-gyrodrifterror" sensitivity="-0.36" sensitivityLeft="1" ></div>
+                <div class="help-rose-left">
+                    <div class="help-overlay text-container hide"><!--
+                        --><div class="help-up-down-arrow"><i class="center-div fa-regular fa-arrows-up-down"></i></div></div>
+                </div><div class="help-rose-right">
+                    <div class="help-overlay text-container hide"><!--
+                        --><div class="help-up-down-arrow"><i class="center-div fa-regular fa-arrows-up-down"></i></div></div>
+                </div>
             </div><div class="gauge vsi-guage">
                 <img src="img/vsi-backplate.png" class="gauge-item vsi-backplate" alt="vsi-backplate" />
                 <img src="img/vsi-needle.png" class="vsi-needle simvar-vsi" alt="vsi-needle" func="rotateInterpolate" tbl="vsiPositions" />
@@ -163,7 +196,7 @@
                 <img src="img/nav-to.png" class="nav-to-from simvar-nav2tofrom" alt="nav-to" func="showHide" param="1" />
                 <img src="img/nav-gs.png" class="nav-gs simvar-nav2gsflag" alt="nav-gs" func="showHide" param="1" />
                 <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-top simvar-nav2cdi" alt="nav-needle-motor"  func="generic" rotateScaleFactor="-0.2519685039" rotateOffset="90" />
-                <img src="img/nav-needle.png" class="nav-needle simvar-nav2cdi" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />            
+                <img src="img/nav-needle.png" class="nav-needle simvar-nav2cdi" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />
                 <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-gs simvar-nav2gsi" alt="nav-needle-motor" func="generic" rotateScaleFactor="0.2941176470" />
                 <img src="img/nav-gs-needle.png" class="nav-gs-needle simvar-nav2gsi" alt="nav-gs-needle" func="generic" rotateScaleFactor="0.2941176470" />
                 <img src="img/gen-radial.png" class="gauge-item nav-radial simvar-nav2obs" alt="gen-radial" func="generic" rotateScaleFactor="-1" />
@@ -172,6 +205,8 @@
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/nav-obs-knob.png" class="nav-obs-knob simvar-nav2obs" alt="nav-obs-knob" func="generic" rotateScaleFactor="20" />
                 <div class="ui-rose ctl-nav2obs" target="simvar-nav2obs" ></div>
+                <div class="help-overlay text-container hide"><!--
+                    --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="lower-panel">
                 <div class="switches-panel">
                     <div class="eng-magneto-wrapper ctl-magneto" min="0" max="4" >
@@ -179,39 +214,70 @@
                         <img src="img/eng-magneto.png" class="eng-magneto simvar-magneto" alt="eng-magneto" func="rotateLookup" tbl="magnetoPositions" />
                         <div class="hbutton ui-button button-left button-dec" target="simvar-magneto"></div>
                         <div class="hbutton ui-button button-right button-inc" target="simvar-magneto"></div>
+                        <div class="help-left-button text-container">
+                            <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                        </div>
+                        <div class="help-right-button text-container">
+                            <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                        </div>
                     </div><div class="power-switch-container text-container main-switch">
                         <div class="switch-label font-larger">MASTER</div>
                         <div class="power-switch-wrapper">
                             <img src="img/gen-switch-case.png" class="gen-switch-case" alt="gen-switch-case" />
                             <div class="power-switch-left-wrapper ui-switch ctl-switchalternator simvar-switchalternator" target="simvar-switchalternator" func="ctlSwitch">
                                 <img src="img/pwr-switch-off.png" class="power-switch switch-state-0" alt="pwr-switch-off" />
-                                <img src="img/pwr-switch-on.png" class="power-switch switch-state-1 hide" alt="pwr-switch-on" />   
+                                <img src="img/pwr-switch-on.png" class="power-switch switch-state-1 hide" alt="pwr-switch-on" />
+                                <div class="help-top-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
+                                <div class="help-bottom-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
                             </div><div class="power-switch-right-wrapper ui-switch ctl-switchbatterymaster simvar-switchbatterymaster" target="simvar-switchbatterymaster" func="ctlSwitch">
                                 <img src="img/pwr-switch-off.png" class="power-switch switch-state-0" alt="pwr-switch-off" />
-                                <img src="img/pwr-switch-on.png" class="power-switch switch-state-1 hide" alt="pwr-switch-on" />  
+                                <img src="img/pwr-switch-on.png" class="power-switch switch-state-1 hide" alt="pwr-switch-on" />
+                                <div class="help-top-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
+                                <div class="help-bottom-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="switch-label-left" >ALT</div><div class="switch-label-right" >BAT</div>                    
+                        <div class="switch-label-left" >ALT</div><div class="switch-label-right" >BAT</div>
                     </div><div class="power-switch-container text-container radio-switch">
-                        <div class="switch-label font-larger">AVONICS</div>                    
+                        <div class="switch-label font-larger">AVONICS</div>
                         <div class="power-switch-wrapper">
                             <img src="img/gen-switch-case.png" class="gen-switch-case" alt="gen-switch-case" />
                             <div class="power-switch-left-wrapper ui-switch ctl-switchavionics1 simvar-switchavionics1" target="simvar-switchavionics1" func="ctlSwitch">
                                 <img src="img/avr-switch-off.png" class="power-switch switch-state-0" alt="avr-switch-off" />
                                 <img src="img/avr-switch-on.png" class="power-switch switch-state-1 hide" alt="avr-switch-on" />
+                                <div class="help-top-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
+                                <div class="help-bottom-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
                             </div><div class="power-switch-right-wrapper ui-switch ctl-switchavionics2 simvar-switchavionics2" target="simvar-switchavionics2" func="ctlSwitch">
                                 <img src="img/avr-switch-off.png" class="power-switch switch-state-0" alt="avr-switch-off" />
                                 <img src="img/avr-switch-on.png" class="power-switch switch-state-1 hide" alt="avr-switch-on" />
+                                <div class="help-top-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
+                                <div class="help-bottom-button text-container">
+                                    <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="switch-label-left" >1</div><div class="switch-label-right" >2</div>                    
+                        <div class="switch-label-left" >1</div><div class="switch-label-right" >2</div>
                     </div><br/><div class="toggle-switch-container text-container">
                         <div class="switch-label-wrapper">
                             <div class="switch-label-top font-smaller">FUEL<br/>PUMP</div>
-                        </div>                    
+                        </div>
                         <div class="toggle-switch ui-switch ctl-switchfuelpump simvar-switchfuelpump" target="simvar-switchfuelpump" func="ctlSwitch">
                             <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                        
+                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
                         <div class="switch-label" >OFF</div>
                     </div><div class="toggle-switch-container text-container">
@@ -219,7 +285,8 @@
                             <div class="switch-label-top">BCN</div>
                         </div><div class="toggle-switch ui-switch ctl-switchbcn simvar-switchbcn" target="simvar-switchbcn" func="ctlSwitch">
                             <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                        
+                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
                         <div class="switch-label switch-label-bottom" >OFF</div>
                     </div><div class="toggle-switch-container text-container">
@@ -228,7 +295,8 @@
                         </div>
                         <div class="toggle-switch ui-switch ctl-switchland simvar-switchland" target="simvar-switchland" func="ctlSwitch">
                             <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                        
+                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
                         <div class="switch-label" >OFF</div>
                     </div><div class="toggle-switch-container text-container">
@@ -237,7 +305,8 @@
                         </div>
                         <div class="toggle-switch ui-switch ctl-switchtaxi simvar-switchtaxi" target="simvar-switchtaxi" func="ctlSwitch">
                             <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                        
+                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
                         <div class="switch-label" >OFF</div>
                     </div><div class="toggle-switch-container text-container">
@@ -246,36 +315,46 @@
                         </div>
                         <div class="toggle-switch ui-switch ctl-switchnav simvar-switchnav" target="simvar-switchnav" func="ctlSwitch">
                             <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                        
+                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
                         <div class="switch-label" >OFF</div>
                     </div><div class="toggle-switch-container text-container">
                         <div class="switch-label-wrapper">
                             <div class="switch-label-top" >STROBE</div>
-                        </div>                    
+                        </div>
                         <div class="toggle-switch ui-switch ctl-switchstrobe simvar-switchstrobe" target="simvar-switchstrobe" func="ctlSwitch">
                             <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                        
+                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
                         <div class="switch-label" >OFF</div>
                     </div><div class="toggle-switch-container text-container">
                         <div class="switch-label-wrapper">
                             <div class="switch-label-top font-smaller">PITOT<br/>HEAT</div>
-                        </div>    
+                        </div>
                         <div class="toggle-switch ui-switch ctl-switchpitotheat simvar-switchpitotheat" target="simvar-switchpitotheat" func="ctlSwitch">
                             <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                        
+                            <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
                         <div class="switch-label" >OFF</div>
-                    </div>                    
+                    </div>
                 </div><div class="flaps-panel ctl-flapsposition" min="0" max="3"  >
                     <img src="img/flaps-backplate.png" class="flaps-backplate" alt="flaps-backplate" />
-                    <div class="flaps-lever-wrapper" >  
+                    <div class="flaps-lever-wrapper" >
                         <img src="img/flaps-lever.png" class="flaps-lever simvar-flapsposition" alt="flaps-lever" func="generic" rotateScaleFactor="0" vtranslateScaleFactor="160.4444444" />
+                        <div class="help-top-button text-container">
+                            <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                        </div>
+                        <div class="help-bottom-button text-container">
+                            <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                        </div>
+
                     </div>
                     <div class="vbutton ui-button button-top button-dec" target="simvar-flapsposition"></div>
                     <div class="vbutton ui-button button-bottom button-inc" target="simvar-flapsposition"></div>
-                </div>                
+                </div>
             </div><div class="gauge rpm-guage">
                 <img src="img/rpm-backplate.png" class="gauge-item rpm-backplate" alt="rpm-backplate" />
                 <img src="img/rpm-needle.png" class="rpm-needle simvar-enginerpm" alt="rpm-needle" func="rotateInterpolate" tbl="rpmPositions" />
@@ -288,6 +367,8 @@
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/adf-hdg-knob.png" class="adf-hdg-knob simvar-adfcard" alt="adf-hdg-knob" func="generic" rotateScaleFactor="20" />
                 <div class="ui-rose ctl-adfcard" target="simvar-adfcard" ></div>
+                <div class="help-overlay text-container hide"><!--
+                    --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div>
         </div><div class="bottom-panel">
             <div class="bottom-control-container fuel-selector-container">
@@ -298,8 +379,9 @@
                 </div>
                 <div class="fuel-selector-switch-wrapper simvar-fuelselectorui ui-rotaryswitch ctl-fuelselectorui" max="3" func="fuelSelector" target="simvar-fuelselectorui" >
                     <img src="img/fuel-selector-left.png" class="switch-state-0 " alt="fuel-selector-left" />
-                    <img src="img/fuel-selector-both.png" class="switch-state-1 hide" alt="fuel-selector-both" />         
-                    <img src="img/fuel-selector-right.png" class="switch-state-2 hide" alt="fuel-selector-right" /> 
+                    <img src="img/fuel-selector-both.png" class="switch-state-1 hide" alt="fuel-selector-both" />
+                    <img src="img/fuel-selector-right.png" class="switch-state-2 hide" alt="fuel-selector-right" /><!--
+                --><div class="help-overlay text-container hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                 </div>
             </div><div class="bottom-control-container fuel-valve-container">
                 <div class="bottom-panel-label fuel-valve-label text-container ">
@@ -309,7 +391,8 @@
                 </div>
                 <div class="fuel-valve-switch-wrapper ui-switch ctl-fuelvalve simvar-fuelvalve" target="simvar-fuelvalve" func="ctlSwitch">
                     <img src="img/gen-toggle-switch-off.png" class="switch-state-0" alt="toggle-switch-off" />
-                    <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" />                     
+                    <img src="img/gen-toggle-switch-on.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                --><div class="help-overlay text-container hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                 </div>
             </div><div class="bottom-control-container parking-brake-container">
                 <div class="bottom-panel-label text-container parking-brake-label ">
@@ -319,7 +402,8 @@
                 </div>
                 <div class="parking-brake-switch-wrapper ui-switch ctl-parkingbrake simvar-parkingbrake" target="simvar-parkingbrake" func="ctlSwitch">
                     <img src="img/parking-brake-off.png" class="switch-state-0 hide" alt="toggle-switch-off" />
-                    <img src="img/parking-brake-on.png" class="switch-state-1 " alt="toggle-switch-on" />            
+                    <img src="img/parking-brake-on.png" class="switch-state-1 " alt="toggle-switch-on" /><!--
+                --><div class="help-overlay text-container hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                 </div>
             </div><div class="warning-panel text-container">
                 <div class="warning-container warning-vac-container">
@@ -340,9 +424,11 @@
             </div><div class="xpdr-panel">
                 <div class="ui-popup xpdr-info text-container" target="xpdr" >
                     <div class="xpdr-row"><div class="xpdr-name center-div font-xlarge">XPDR</div></div>
-                    <div class="xpdr-row"><div class="xpdr-code center-div font-xlarge numeric-input-target ctl-xpdr simvar-xpdr" func="showText" ></div></div>     
+                    <div class="xpdr-row"><div class="xpdr-code center-div font-xlarge numeric-input-target ctl-xpdr simvar-xpdr" func="showText" ></div></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                 </div><div class="xpdr-switch-container text-container">
-                    <div class="ui-xpdrswitch center-div font-xlarge simvar-xpdrswitch ctl-xpdrswitch" func="showLookupText" tbl="xpdrSwitchText"></div>
+                    <div class="ui-xpdrswitch center-div font-xlarge simvar-xpdrswitch ctl-xpdrswitch" func="showLookupText" tbl="xpdrSwitchText"></div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                 </div>
             </div>
         </div>
@@ -353,7 +439,7 @@
             <div class="freq-number-container">
                 <div class="freq-number-left text-container">
                     <div class="active-freq-row freq-number-row center-div font-larger2" >
-                        <div class="freq-type">ACTIVE</div><div class="freq-number freq-active">000.000</div>   
+                        <div class="freq-type">ACTIVE</div><div class="freq-number freq-active">000.000</div>
                     </div><!--
                     --><div class="freq-number-row center-div font-larger2" >
                         <div class="freq-type freq-standby-label">STANDBY</div><div class="freq-number freq-standby">
@@ -363,11 +449,11 @@
                             --><span class="freq-digit digit-decimal">.</span><!--
                             --><span class="freq-digit" id="digit-pos-4">0</span><!--
                             --><span class="freq-digit" id="digit-pos-5">0</span><!--
-                            --><span class="freq-digit" id="digit-pos-6">0</span></div>   
+                            --><span class="freq-digit" id="digit-pos-6">0</span></div>
                     </div>
                 </div><div class="freq-number-right text-container">
                     <div class="button-swap font-xlarge">&#x2195;</div>
-                </div>                
+                </div>
             </div>
             <div class="num-pad-container">
                 <div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide" val="7"><div class="num-pad-digit center-div font-xlarge">7</div></div><!--
@@ -387,14 +473,12 @@
                 <p>&#10683;</p>
             </div>
         </div>
-        <div class="help-container">            
-            <img class="ui-reload" src="img/refresh-icon.png" alt="refresh-icon" />            
+        <div class="help-container">
+            <img class="ui-reload" src="img/refresh-icon.png" alt="refresh-icon" />
             <img class="ui-help" src="img/information-icon.png" alt="help-icon" />
         </div>
     </div>
 </div>
 </body>
-
 <script type="text/javascript" async="async" data-main="./fpanel" src="../3rdparty/require/require.js"></script>
-
 </html>

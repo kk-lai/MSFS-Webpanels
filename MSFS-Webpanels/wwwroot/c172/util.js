@@ -77,8 +77,8 @@ define(['jquery','const'],function(jquery, sysconst) {
         showLookupText: function (elm, val) {
             var tbl =jquery(elm).attr("tbl");
             var txt = this[tbl][val];
-            
-            jquery(elm).text(txt);            
+
+            jquery(elm).text(txt);
         },
         getFreqText: function (val, type) {
             if (type=="adf") {
@@ -180,7 +180,7 @@ define(['jquery','const'],function(jquery, sysconst) {
         },
         turnBall: function (elm, val) {
             var htranslate=val*0.1827017717;
-            var vtranslate=-val*0.02199187992;
+            var vtranslate=-Math.abs(val)*0.02199187992;
 
             jquery(elm).css("transform","translate("+htranslate+"%,"+vtranslate+"%)");
         },
@@ -216,7 +216,7 @@ define(['jquery','const'],function(jquery, sysconst) {
                 val = val + jquery("#digit-pos-"+i).text();
             }
             return val;
-        },    
+        },
         boundDegree: function(deg) {
             if (deg<0) {
                 return 360+deg;
@@ -281,7 +281,6 @@ define(['jquery','const'],function(jquery, sysconst) {
             }
             jsonData.simData.dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
             jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
-
 
             var apStatus1 = "";
             var apStatus2 = "";
@@ -416,6 +415,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             "simData": {
                 "fuelLeftQuantity": 0,
                 "fuelRightQuantity": 0,
+                "refEGT": 0,
                 "engineEGT": 1.4278486,
                 "engineFuelFlow": 0,
                 "engineOilTemp": 527.7012,
@@ -423,7 +423,7 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "vac": 0,
                 "batteryAmp": 0,
                 "ias": 0,
-                "tasAdj": 0,
+                "tasAdj": 0, // min = 0, max=30
                 "atitudePitch": 0,
                 "atitudeBank": 0,
                 "atitudeBarPosition": 0,
@@ -433,7 +433,7 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "nav1GSFlag": 0,
                 "nav1CDI": 0,
                 "nav1GSI": 0,
-                "tcBallPos": -1,
+                "tcBallPos": 0,
                 "tcRate": 0,
                 "heading": 0,
                 "headingBug": 0,
