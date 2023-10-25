@@ -152,7 +152,8 @@ img
     right:0;
     top:6.768927665%;
     width:21.05263158%;
-    height: 54.4711511421%;
+    height: 60%;
+    
     z-index:4;
     background-color:white;
 }
@@ -1040,9 +1041,9 @@ img
 .num-pad-container
 {
     width:100%;
-    height:70.54673721%;
+    height:54.47115114%;
     position:absolute;
-    bottom:0;
+    bottom:1.2%;
 }
 
 .num-pad-digit-wrapper
@@ -1056,40 +1057,55 @@ img
     vertical-align:top;
 }
 
-.freq-name-container
+.radio-freq-container 
 {
     position:relative;
-    width:100%;
-    height:15%;
-    margin-bottom:5%;
+    width: 100%;
+}
+
+.freq-name-container
+{
+    height:15%;   
 }
 
 .freq-number-container
-{
-    position:relative;
-    width:100%;
-    margin-bottom:2%;
+{   
+    height: 10%;
+    margin-bottom: 2%;
 }
 
 .freq-number-row
 {
-    position:relative;
+    position:relative;    
     margin-bottom:2%;
 }
 
 .freq-number-left
 {
     width:85%;
+    height:100%;
     display:inline-block;
 }
 
 .freq-number-right
 {
+    position:relative;
     width:15%;
     height:100%;
     display:inline-block;
-    position:relative;
     vertical-align:top;
+}
+
+.freq-input-container
+{
+    height: 10%;
+    margin-bottom:2%;
+}
+
+.freq-error-container
+{
+    height: 5%;
+    color:red;
 }
 
 .freq-type
@@ -1130,7 +1146,7 @@ img
     height:8%;
     position:absolute;
     top:0;
-    right:0;
+    right:2%;
 }
 
 .xpdr-panel

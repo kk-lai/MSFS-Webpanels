@@ -484,13 +484,25 @@ function(jquery,util,sysconst) {
                 } else if (type=="xpd") {
                     vname="xpdr";
                 }
-                // TODO check value validity
+
+                jquery("#freq-error").addClass("invisible");
+                var freq=parseInt(v);
+                if ((type=="com" && (freq<118000 || freq>=137000)) ||
+                    (type=="nav" && (freq<108000 || freq>=118000)) ||
+                    (type=="adf" && (freq<100 || freq>=1800))) {
+                    jquery("#freq-error").removeClass("invisible");
+                    return;
+                }
+                
                 jquery(".ctl-"+vname).attr("state", v);
                 util.setVariableCooldown(".simvar-"+vname);
                 updateSimVarFreq(vname, v);
                 displaySimVar("simvar-"+vname, v);
                 if (type=="alt" || type=="xpd") {
                     jquery(".radio-panel").addClass("hide");
+                } else {
+                    var freq = jquery(".simvar-"+vname).first().text();
+                    jquery(".radio-panel").first().find(".freq-standby").text(freq);
                 }
             }
             highlightActiveDigit();
@@ -544,8 +556,6 @@ function(jquery,util,sysconst) {
             var isShowDecimal = true;
             var isShowActiveFreq = true;
 
-            jquery(".xpdr-invisible").removeClass("invisible");
-
             if (type=="nav") {
                 maxDigit=5;
             } else if (type=="adf") {
@@ -558,8 +568,7 @@ function(jquery,util,sysconst) {
             } else if (type=="xpd") {
                 isShowActiveFreq=false;
                 isShowDecimal=false;
-                maxDigit=4;
-                jquery(".xpdr-invisible").addClass("invisible");
+                maxDigit=4;               
             }
 
             if (isShowDecimal) {
@@ -568,18 +577,21 @@ function(jquery,util,sysconst) {
                 jquery(".digit-decimal").addClass("hide");
             }
 
-            if (isShowActiveFreq) {
-                var freq1 = util.getAttrInt(jquery(this).find(".radio-active-freq").first(), "state");
-                var val1 = util.getFreqText(freq1, type);
-                jquery(radioPanel).find(".freq-active").text(tval);
-                jquery(".button-swap").removeClass("invisible");
-                jquery(".active-freq-row").removeClass("invisible");
-                jquery(".freq-standby-label").removeClass("invisible");
+            if (isShowActiveFreq) {                
+                var freq1 = jquery(this).find(".radio-active-freq").first().text();
+                var freq2 = jquery(this).find(".numeric-input-target").first().text();
+                
+                jquery(radioPanel).find(".freq-active").text(freq1);
+                jquery(radioPanel).find(".freq-standby").text(freq2);
+                jquery(".button-swap").removeClass("invisible");                
+                jquery(".freq-standby-row").removeClass("invisible");
             } else {
-                jquery(".button-swap").addClass("invisible");
-                jquery(".active-freq-row").addClass("invisible");
-                jquery(".freq-standby-label").addClass("invisible");
+                var freq1 = jquery(this).find(".numeric-input-target").first().text();
+                jquery(radioPanel).find(".freq-active").text(freq1);
+                jquery(".button-swap").addClass("invisible");                
+                jquery(".freq-standby-row").addClass("invisible");
             }
+            
             var val2 = util.getAttrText(jquery(this).find(".numeric-input-target").first(), "state");
 
             while (val2.length<maxDigit) {
@@ -604,6 +616,7 @@ function(jquery,util,sysconst) {
                 maxDigit=3;
             }
             hideNumPadDigits(type);
+            jquery("#freq-error").addClass("invisible");
             radioPanel.removeClass("hide");
         });
 
@@ -713,6 +726,15 @@ function(jquery,util,sysconst) {
             for(var key in offlineData.simData) {
                 var v = "simvar-" + key.toLowerCase();
                 if (v==simvar) {
+                    if (simvar.endsWith("freq")) {
+                        var s = val.toString(16);
+                        var nv = parseInt(s);
+                        if (simvar.includes("nav") || simvar.includes("com")) {
+                            val=nv*10+100000;
+                        } else {
+                            val=nv/10000;
+                        }
+                    }
                     offlineData.simData[key]=val;
                     break;
                 }
@@ -748,8 +770,14 @@ function(jquery,util,sysconst) {
         if (digitPosition==6) {
             jquery(".com-last-digit-hide").addClass("invisible");
         }
+        if (digitPosition==5 && type=="nav") {
+            jquery(".nav-last-digit-hide").addClass("invisible");
+        }
         if (digitPosition==1 && (type=="nav" || type=="com")) {
             jquery(".comnav-first-digit-hide").addClass("invisible");
+        }
+        if (type=="xpd") {
+            jquery(".xpdr-invisible").addClass("invisible");
         }
     }
 

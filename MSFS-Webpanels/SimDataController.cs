@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using MSFS_Webpanels;
 using System;
 
 [Route("api/[controller]")]
@@ -8,52 +9,67 @@ using System;
 [EnableCors("MyPolicy")]
 public class SimDataController: ControllerBase
 {
-    private readonly string[] SIMPLE_VAR =
+    private readonly string[] SIMEVENTS =
     {
-        "simvar-refegt",
-        "simvar-tasadj",
-        "simvar-atitudebarposition",
-        "simvar-gyrodrifterror",
-        "simvar-headingbug",
-        "simvar-nav1obs",
-        "simvar-nav2obs",
-        "simvar-adfcard",
-        "simvar-qnh",
-        "simvar-switchfuelpump",
-        "simvar-switchbcn",
-        "simvar-switchland",
-        "simvar-switchtaxi",
-        "simvar-switchnav",
-        "simvar-switchstrobe",
-        "simvar-switchpitotheat",
-        "simvar-switchalternator",
-        "simvar-switchbatterymaster",
-        "simvar-switchavionics1",
-        "simvar-switchavionics2",
-        "simvar-parkingbrake",
-        "simvar-fuelvalve",
-        "simvar-com1standbyfreq",
-        "simvar-com2standbyfreq",
-        "simvar-nav1standbyfreq",
-        "simvar-nav2standbyfreq",
-        "simvar-adfstandbyfreq",
-        "simvar-apaltitude",
-        "simvar-com1freqswap",
-        "simvar-com2freqswap",
-        "simvar-nav1freqswap",
-        "simvar-nav2freqswap",
-        "simvar-adffreqswap",
-        "simvar-com1standbyfreqinc",
-        "simvar-com2standbyfreqinc",
-        "simvar-btnap",
-        "simvar-btnhdg",
-        "simvar-btnnav",
-        "simvar-btnapr",
-        "simvar-btnrev",
-        "simvar-btnalt",
-        "simvar-btnvsinc",
-        "simvar-btnvsdec",
-        "simvar-xpdr"
+        "simvar-refegt", //SET_EGT_REF,
+        "simvar-tasadj", //SET_TAS_ADJ,
+        "simvar-attitudebarposition", //SET_ATTITUDE_BAR_POSITION,
+        
+        "simvar-gyrodrifterror", //SET_GYRO_DRIFT_ERROR,
+        "simvar-headingbug", //SET_HEADING_BUG,
+        "simvar-nav1obs", //SET_NAV1_OBS,
+        "simvar-nav2obs", //SET_NAV2_OBS,
+        "simvar-adfcard", //SET_ADF_CARD,
+        "simvar-qnh", //SET_QNH,
+
+        "simvar-switchfuelpump", //SET_SWITCH_FUELPUMP,
+        "simvar-switchbcn", //SET_SWITCH_BCN,
+        "simvar-switchland", //SET_SWITCH_LAND,
+        "simvar-switchtaxi", //SET_SWITCH_TAXI,
+        "simvar-switchnav", //SET_SWITCH_NAV,
+        "simvar-switchstrobe", //SET_SWITCH_STROBE,
+        "simvar-switchpitotheat", //SET_SWITCH_PITOT_HEAT,
+        "simvar-switchalternator", //SET_SWITCH_ALTERNATOR,
+        "simvar-switchbatterymaster", //SET_SWITCH_BATTERY_MASTER,
+        "simvar-switchavionics1", //SET_SWITCH_AVIONICS1,
+        "simvar-switchavionics2", //SET_SWITCH_AVIONICS2,
+        "simvar-parkingbrake",  //SET_SWITCH_PARKING_BRAKE,
+        "simvar-fuelvalve", //SET_FUEL_VALVE_ENG1,                
+        
+        "simvar-com1standbyfreq", //SET_COM1_STANDBY,
+        "simvar-com2standbyfreq", //SET_COM2_STANDBY,
+        "simvar-nav1standbyfreq", //SET_NAV1_STANDBY,
+        "simvar-nav2standbyfreq", //SET_NAV2_STANDBY,
+        "simvar-adfstandbyfreq", //SET_ADF_STANDBY,
+        "simvar-apaltitude", //SET_AP_ALTITUDE,
+        "simvar-com1freqswap", //SWAP_COM1_FREQ,
+        "simvar-com2freqswap", //SWAP_COM2_FREQ,
+        "simvar-nav1freqswap", //SWAP_NAV1_FREQ,
+        "simvar-nav2freqswap", //SWAP_NAV2_FREQ,
+        "simvar-adffreqswap", //SWAP_ADF_FREQ,
+
+        "simvar-btnap", //BTN_AP,
+        "simvar-btnhdg", //BTN_HDG,
+        "simvar-btnnav", //BTN_NAV,
+        "simvar-btnapr", //BTN_APR,
+        "simvar-btnrev", //BTN_REV,
+        "simvar-btnalt", //BTN_ALT,
+        "simvar-btnvsinc", //BTN_VS_INC,
+        "simvar-btnvsdec", //BTN_VS_DEC,
+        "simvar-xpdr", //SET_XPDR_CODE,       
+        
+        "simvar-fuelselectorleft", //SET_FUEL_SELECTOR_LEFT,
+        "simvar-fuelselectorall", //SET_FUEL_SELECTOR_ALL,
+        "simvar-fuelselectorright", //SET_FUEL_SELECTOR_RIGHT,        
+
+        "simvar-magnetooff", //SET_MAGNETO_OFF,
+        "simvar-magnetoright", //SET_MAGNETO_RIGHT,
+        "simvar-magnetoleft", //SET_MAGNETO_LEFT,
+        "simvar-magnetoboth", //SET_MAGNETO_BOTH,
+        "simvar-magnetostart", //SET_MAGNETO_START,
+
+        "simvar-flapup", //FLAPS_DECR,
+        "simvar-flapdown" //FLAPS_INCR
     };
 
 
@@ -69,44 +85,22 @@ public class SimDataController: ControllerBase
 		return Ok(simData);
     }
 
-    [Route("set/{var}/{val}")]
-    [HttpGet]
-    public IActionResult SetVar(string var, uint val)
+    [HttpPost]
+    public IActionResult SendEvent([FromBody]SimEventMessage msg)
     {
-        int idx = Array.IndexOf(SIMPLE_VAR, var);
-        if (idx >= 0)
-        {   
-            SimConnectClient.getSimConnectClient().setSimpleVar((uint)idx, val);
-            return Ok();
-        }
-
-        if (var.Equals("simvar-magneto"))
+        if (msg.EventName.Equals("simvar-xpdrswitch"))
         {
-            SimConnectClient.getSimConnectClient().setMagneto(val);
-            return Ok();
+            SimConnectClient.getSimConnectClient().setTransponderSwitch(msg.IParams[0]);
         }
-
-        if (var.Equals("simvar-flapsposition"))
+        else
         {
-            SimConnectClient.getSimConnectClient().setFlaps(val);
-            return Ok();
+            int idx = Array.IndexOf(SIMEVENTS, msg.EventName);
+            if (idx >= 0)
+            {
+                SimConnectClient.getSimConnectClient().transmitEvent((uint)idx, msg.IParams);
+            }
         }
-
-        if (var.Equals("simvar-fuelselectorui"))
-        {
-            SimConnectClient.getSimConnectClient().setFuelSelector(val);
-            return Ok();
-        }
-
-        if (var.Equals("simvar-xpdrswitch"))
-        {
-            SimConnectClient.getSimConnectClient().setTransponderSwitch(val);
-            return Ok();
-        }
-
-
         return (IActionResult)BadRequest();
-
     }
 
 }

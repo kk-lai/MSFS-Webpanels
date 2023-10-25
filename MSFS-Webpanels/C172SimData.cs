@@ -25,9 +25,9 @@ public class C172SimData : SimData
 		private float ias;
 		private float tasAdj;
 
-		private float atitudePitch;
-		private float atitudeBank;
-		private float atitudeBarPosition;
+		private float attitudePitch;
+		private float attitudeBank;
+		private float attitudeBarPosition;
 
 		private float altitude;
         private float qnh;
@@ -41,6 +41,7 @@ public class C172SimData : SimData
 		private Int32 tcBallPos;
 		private Int32 electricalBusVoltage;
 		private float tcRate;
+        private Int32 generalPanelOn;
 
 		private Int32 heading;
 		private Int32 headingBug;
@@ -110,7 +111,6 @@ public class C172SimData : SimData
         private Int32 xpdr;
         private Int32 xpdrSwitch;
 
-
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
         public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
         public float EngineEGT { get => engineEGT; set => engineEGT = value; }
@@ -121,9 +121,9 @@ public class C172SimData : SimData
         public float BatteryAmp { get => batteryAmp; set => batteryAmp = value; }
         public float Ias { get => ias; set => ias = value; }
         public float TasAdj { get => tasAdj; set => tasAdj = value; }
-        public float AtitudePitch { get => atitudePitch; set => atitudePitch = value; }
-        public float AtitudeBank { get => atitudeBank; set => atitudeBank = value; }
-        public float AtitudeBarPosition { get => atitudeBarPosition; set => atitudeBarPosition = value; }
+        public float AttitudePitch { get => attitudePitch; set => attitudePitch = value; }
+        public float AttitudeBank { get => attitudeBank; set => attitudeBank = value; }
+        public float AttitudeBarPosition { get => attitudeBarPosition; set => attitudeBarPosition = value; }
         public float Altitude { get => altitude; set => altitude = value; }
         public int Nav1Obs { get => nav1Obs; set => nav1Obs = value; }
         public int Nav1ToFrom { get => nav1ToFrom; set => nav1ToFrom = value; }
@@ -189,6 +189,7 @@ public class C172SimData : SimData
         public int XpdrSwitch { get => xpdrSwitch; set => xpdrSwitch = value; }
         public int Xpdr { get => xpdr; set => xpdr = value; }
         public int RefEGT { get => refEGT; set => refEGT = value; }
+        public int GeneralPanelOn { get => generalPanelOn; set => generalPanelOn = value; }
     }
     private C172Data c172data = new C172Data();
 
@@ -200,5 +201,6 @@ public class C172SimData : SimData
 		IsSimConnected = data.IsSimConnected;
 		IsSimRunning = data.IsSimRunning;
 		IsPaused = data.IsPaused;
+        AircraftType = data.AircraftType;
 	}
 }

@@ -235,31 +235,33 @@ define(['jquery','const'],function(jquery, sysconst) {
             jsonData.simData.warningFuelLeft = 0;
             jsonData.simData.warningFuelRight = 0;
             jsonData.simData.warningFuel = 0;
+            
+            if (jsonData.simData.electricalBusVoltage>0) {
+                if (jsonData.simData.fuelLeftQuantity<8) {
+                    jsonData.simData.warningFuelLeft = 1;
+                    jsonData.simData.warningFuel = 1;
+                }
+                if (jsonData.simData.fuelRightQuantity < 8) {
+                    jsonData.simData.warningFuelRight = 1;
+                    jsonData.simData.warningFuel = 1;
+                }
+                
+                if (jsonData.simData.engineOilPressure*144 < 2880) {
+                    jsonData.simData.warningOilPressure = 1;
+                }
 
-            if (jsonData.simData.engineOilPressure < 50) {
-                jsonData.simData.warningOilPressure = 1;
+                if (jsonData.simData.electricalBusVoltage < 25.5) {
+                    jsonData.simData.warningVoltage = 1;
+                }
+
+                if (jsonData.simData.vac < 3) {
+                    jsonData.simData.warningVACLeft = 1;
+                    jsonData.simData.warningVACRight = 1;
+                    jsonData.simData.warningVAC = 1;
+                }
             }
 
-            if (jsonData.simData.electricalBusVoltage < 25.5) {
-                jsonData.simData.warningVoltage = 1;
-            }
-
-            if (jsonData.simData.vac < 3) {
-                jsonData.simData.warningVACLeft = 1;
-                jsonData.simData.warningVACRight = 1;
-                jsonData.simData.warningVAC = 1;
-            }
-
-            if (jsonData.simData.fuelLeftQuantity<8) {
-                jsonData.simData.warningFuelLeft = 1;
-                jsonData.simData.warningFuel = 1;
-            }
-            if (jsonData.simData.fuelRightQuantity < 8) {
-                jsonData.simData.warningFuelRight = 1;
-                jsonData.simData.warningFuel = 1;
-            }
-
-            if (jsonData.simData.electricalBusVoltage >= 20) {
+            if (jsonData.simData.generalPanelOn) {
                 jsonData.simData.tconoff = 1;
             } else {
                 jsonData.simData.tconoff = 0;
@@ -276,9 +278,10 @@ define(['jquery','const'],function(jquery, sysconst) {
                 }
             }
             jsonData.simData.attitudeGyroOff = 1;
-            if (jsonData.simData.vac > 4.0) {
+            if (jsonData.simData.vac > 2.3) {
                 jsonData.simData.attitudeGyroOff = 0;
             }
+
             jsonData.simData.dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
             jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
 
@@ -435,6 +438,7 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "nav1GSI": 0,
                 "tcBallPos": 0,
                 "tcRate": 0,
+                "generalPanelOn": 0,
                 "heading": 0,
                 "headingBug": 0,
                 "vsi": 0,

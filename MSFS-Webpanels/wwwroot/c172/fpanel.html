@@ -129,7 +129,7 @@
                 <img src="img/att-pitch.png" class="att-pitch simvar-pitch" alt="att-pitch" func="atitudePitch" />
                 <img src="img/att-roll.png" class="att-roll simvar-atitudebank" alt="att-roll" func="generic" scaleFactor="-1" />
                 <img src="img/att-plane.png" class="att-plane simvar-atitudebarposition" alt="att-plane" func="vtranslateInterpolate" tbl="attittudePlanePositions" />
-                <img src="img/att-gyro.png" class="att-gyro simvar-attitudegyrooff" alt="att-gyro" func="showHide" params="1" />
+                <img src="img/att-gyro.png" class="att-gyro simvar-attitudegyrooff" alt="att-gyro" func="showHide" param="1" />
                 <img src="img/att-foreground.png" class="gauge-item att-foreground" alt="att-foreground"  />
                 <img src="img/gen-knob-01.png" class="att-knob" alt="gen-knob-01" />
                 <div class="ui-vshifter ui-att-plane ctl-atitudebarposition" min="-100" max="100" target="simvar-atitudebarposition" /></div>
@@ -171,7 +171,7 @@
                 <img src="img/trn-on-ind.png" class="trn-ind trn-off-ind simvar-tconoff" alt="trn-on-ind" func="showHide" param="1" />
                 <img src="img/trn-off-ind.png" class="trn-ind trn-on-ind simvar-tconoff" alt="trn-off-ind" func="showHide" param="0" />
                 <img src="img/trn-foreground.png" class="gauge-item trn-foreground" alt="trn-foreground" />
-                <img src="img/trn-plane.png" class="trn-plane simvar-tcrate" alt="trn-plane" func="generic" rotateOffset="-90" rotateScaleFactor="7.188244489" max="2.5" min="-2.5" />
+                <img src="img/trn-plane.png" class="trn-plane simvar-tcrate" alt="trn-plane" func="generic" rotateOffset="-90" rotateScaleFactor="6.666666666666667" max="7.5" min="-7.5" />                 
             </div><div class="gauge hdg-guage">
                 <img src="img/hdg-backplate.png" class="gauge-item hdg-backplate simvar-heading" alt="hdg-backplate" func="generic" rotateScaleFactor="-1" />
                 <img src="img/hdg-bug.png" class="hdg-bug simvar-hdgbug" alt="hdg-bug" func="hdgBug" />
@@ -433,44 +433,54 @@
             </div>
         </div>
         <div class="radio-panel hide">
-            <div class="freq-name-container text-container">
-                <div class="freq-name center-div font-xlarge">NAV1</div>
+            <div class="radio-freq-container freq-name-container text-container">
+                <div class="center-div font-xlarge freq-name">COM1</div>
             </div>
-            <div class="freq-number-container">
-                <div class="freq-number-left text-container">
-                    <div class="active-freq-row freq-number-row center-div font-larger2" >
-                        <div class="freq-type">ACTIVE</div><div class="freq-number freq-active">000.000</div>
-                    </div><!--
-                    --><div class="freq-number-row center-div font-larger2" >
-                        <div class="freq-type freq-standby-label">STANDBY</div><div class="freq-number freq-standby">
-                            <span class="freq-digit" id="digit-pos-1">0</span><!--
-                            --><span class="freq-digit" id="digit-pos-2">0</span><!--
-                            --><span class="freq-digit" id="digit-pos-3">0</span><!--
-                            --><span class="freq-digit digit-decimal">.</span><!--
-                            --><span class="freq-digit" id="digit-pos-4">0</span><!--
-                            --><span class="freq-digit" id="digit-pos-5">0</span><!--
-                            --><span class="freq-digit" id="digit-pos-6">0</span></div>
+            <div class="radio-freq-container freq-number-container text-container">
+                <div class="freq-number-left">
+                    <div class="freq-number-row">
+                        <div class="freq-type font-larger2">ACTIVE</div><div class="freq-number font-larger2 freq-active">000.000</div>
                     </div>
-                </div><div class="freq-number-right text-container">
-                    <div class="button-swap font-xlarge">&#x2195;</div>
+                    <div class="freq-number-row freq-standby-row">
+                        <div class="freq-type font-larger2">STANDBY</div><div class="freq-number freq-standby font-larger2">000.000</div>                    
+                    </div>
+                </div><!--
+                --><div class="freq-number-right">
+                    <div class="center-div button-swap">
+                    <i class="fa-solid fa-arrows-up-down font-xlarge"></i>
+                    </div>
                 </div>
             </div>
+            <div class="radio-freq-container freq-input-container text-container">
+                <div class="center-div font-larger2">
+                    <span class="freq-digit" id="digit-pos-1">0</span><!--
+                                --><span class="freq-digit" id="digit-pos-2">0</span><!--
+                                --><span class="freq-digit" id="digit-pos-3">0</span><!--
+                                --><span class="freq-digit digit-decimal">.</span><!--
+                                --><span class="freq-digit" id="digit-pos-4">0</span><!--
+                                --><span class="freq-digit" id="digit-pos-5">0</span><!--
+                                --><span class="freq-digit" id="digit-pos-6">0</span>
+                </div>
+            </div>
+            <div class="radio-freq-container freq-error-container text-container">
+                <div class="center-div font-larger invisible" id="freq-error">Invalid frequency</div>
+            </div>
             <div class="num-pad-container">
-                <div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide" val="7"><div class="num-pad-digit center-div font-xlarge">7</div></div><!--
-                --><div class="num-pad-digit-wrapper text-container xpdr-invisible comnav-first-digit-hide com-last-digit-hide" val="8"><div class="num-pad-digit center-div font-xlarge">8</div></div><!--
-                --><div class="num-pad-digit-wrapper text-container xpdr-invisible comnav-first-digit-hide com-last-digit-hide" val="9"><div class="num-pad-digit center-div font-xlarge">9</div></div><!--
-                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide" val="4"><div class="num-pad-digit center-div font-xlarge">4</div></div><!--
+                <div class="num-pad-digit-wrapper text-container comnav-first-digit-hide nav-last-digit-hide com-last-digit-hide" val="7"><div class="num-pad-digit center-div font-xlarge">7</div></div><!--
+                --><div class="num-pad-digit-wrapper text-container xpdr-invisible comnav-first-digit-hide nav-last-digit-hide com-last-digit-hide" val="8"><div class="num-pad-digit center-div font-xlarge">8</div></div><!--
+                --><div class="num-pad-digit-wrapper text-container xpdr-invisible comnav-first-digit-hide nav-last-digit-hide com-last-digit-hide" val="9"><div class="num-pad-digit center-div font-xlarge">9</div></div><!--
+                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide nav-last-digit-hide com-last-digit-hide" val="4"><div class="num-pad-digit center-div font-xlarge">4</div></div><!--
                 --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide" val="5"><div class="num-pad-digit center-div font-xlarge">5</div></div><!--
-                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide" val="6"><div class="num-pad-digit center-div font-xlarge">6</div></div><!--
-                --><div class="num-pad-digit-wrapper text-container com-last-digit-hide" val="1"><div class="num-pad-digit center-div font-xlarge">1</div></div><!--
-                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide" val="2"><div class="num-pad-digit center-div font-xlarge">2</div></div><!--
-                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide" val="3"><div class="num-pad-digit center-div font-xlarge">3</div></div><!--
+                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide nav-last-digit-hide com-last-digit-hide" val="6"><div class="num-pad-digit center-div font-xlarge">6</div></div><!--
+                --><div class="num-pad-digit-wrapper text-container com-last-digit-hide nav-last-digit-hide" val="1"><div class="num-pad-digit center-div font-xlarge">1</div></div><!--
+                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide nav-last-digit-hide" val="2"><div class="num-pad-digit center-div font-xlarge">2</div></div><!--
+                --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide com-last-digit-hide nav-last-digit-hide" val="3"><div class="num-pad-digit center-div font-xlarge">3</div></div><!--
                 --><div class="num-pad-digit-wrapper text-container" val="b"><div class="num-pad-digit center-div font-xlarge">&#8592;</div></div><!--
                 --><div class="num-pad-digit-wrapper text-container comnav-first-digit-hide" val="0"><div class="num-pad-digit center-div font-xlarge">0</div></div><!--
                 --><div class="num-pad-digit-wrapper text-container" val="s"><div class="num-pad-digit center-div font-xlarge">&#8629;</div></div>
             </div>
             <div class="radio-panel-close text-container">
-                <p>&#10683;</p>
+                <p class="font-larger2"><i class="fa-solid fa-circle-xmark"></i></p>
             </div>
         </div>
         <div class="help-container">

@@ -3,10 +3,17 @@
 To Do
 =====
 1. Fix Magneto from R to off revert
-2. Radio frequency input validation
-3. Help highlight
-4. Annunciation incorrect status
-5. REF EGT needle
+2. Radio frequency input validation (done)
+3. Help highlight (done)
+4. Annunciation incorrect status  (done)
+5. REF EGT needle (done)
+6. Display standby freq in radio (done)
+7. Turn coordinator angle (done)
+8. Wrong Gyro Indicator warning in Attitude Indicator (done)
+
+
+Test
+GYRO_DRIFT_SET_EX1
 
 
 Image Credits

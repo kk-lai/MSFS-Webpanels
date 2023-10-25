@@ -6,22 +6,31 @@ using Microsoft.VisualBasic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+using Microsoft.Extensions.Configuration.Ini;
+using Microsoft.Extensions.FileProviders;
+using System.Collections;
 
 public class SimConnectClient
 {
     class QueueItem
     {
         EVENT evt;
-        uint val;
+        uint[] iParams;
 
-        public QueueItem(EVENT evt, uint val)
-        {
-            this.evt = evt;
-            this.val = val;
-        }
-
-        public uint Val { get => val; set => val = value; }
         public EVENT Evt { get => evt; set => evt = value; }
+        public uint[] IParams
+        {
+            get => iParams; set
+            {
+                this.IParams = new uint[5];
+                uint[] ip = value;
+
+                for(int i=0;i<ip.Length;i++)
+                {
+                    IParams[i] = ip[i];
+                }
+            }
+        }
     }
 
     enum REQUEST
@@ -45,7 +54,6 @@ public class SimConnectClient
         SET_EGT_REF,
         SET_TAS_ADJ,
         SET_ATTITUDE_BAR_POSITION,
-
 
         SET_GYRO_DRIFT_ERROR,
         SET_HEADING_BUG,
@@ -80,9 +88,6 @@ public class SimConnectClient
         SWAP_NAV2_FREQ,
         SWAP_ADF_FREQ,
 
-        INC_COM1_25K,
-        INC_COM2_25K,
-
         BTN_AP,
         BTN_HDG,
         BTN_NAV,
@@ -99,8 +104,13 @@ public class SimConnectClient
         SET_FUEL_SELECTOR_ALL,
         SET_FUEL_SELECTOR_RIGHT,
 
-        MAGNETO_DECR,
-        MAGNETO_INCR,
+        SET_MAGNETO_OFF,
+        SET_MAGNETO_RIGHT,
+        SET_MAGNETO_LEFT,
+        SET_MAGNETO_BOTH,
+        SET_MAGNETO_START,
+
+
         FLAPS_DECR,
         FLAPS_INCR
     };
@@ -119,7 +129,7 @@ public class SimConnectClient
     private SimData simData = new SimData();
     public const int WM_USER_SIMCONNECT = 0x0402;
     private ConcurrentQueue<QueueItem> updateQueue = new ConcurrentQueue<QueueItem>();
-
+    private ArrayList aircraftConfigPaths = new ArrayList();
 
     private static SimConnectClient? simClient = null;
 
@@ -137,6 +147,7 @@ public class SimConnectClient
 
     public SimConnectClient()
     {
+        detectMSFSFileLocation();
     }
 
     public void Connect(IntPtr whnd)
@@ -146,16 +157,18 @@ public class SimConnectClient
             return;
         }
         try
-        {
+        {            
             simConnect = new SimConnect("MSFS Webpanels data request", whnd, WM_USER_SIMCONNECT, null, 0);
             simConnect.OnRecvOpen += new SimConnect.RecvOpenEventHandler(OnRecvOpen);
             simConnect.OnRecvQuit += new SimConnect.RecvQuitEventHandler(OnRecvQuit);
             simConnect.OnRecvException += new SimConnect.RecvExceptionEventHandler(OnRecvException);
             simConnect.OnRecvEvent += new SimConnect.RecvEventEventHandler(OnRecvEvent);
             simConnect.OnRecvEventFilename += new SimConnect.RecvEventFilenameEventHandler(OnRecvFilenameEvent);
+            simConnect.OnRecvSystemState += new SimConnect.RecvSystemStateEventHandler(OnRecvSystemStateHandler);
 
             simConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(OnRecvSimobjectData);
             simConnect.SubscribeToSystemEvent(EVENT.AIRCRAFT_LOADED, "AircraftLoaded");
+            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_PAUSE, "Pause");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_RUNNING, "Sim");
             uint fieldId = 0;
@@ -190,8 +203,9 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV GSI:1", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "TURN COORDINATOR BALL", "Position 128", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ELECTRICAL MAIN BUS VOLTAGE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ELECTRICAL MAIN BUS VOLTAGE:1", "volts", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "TURN INDICATOR RATE", "degrees per second", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "CIRCUIT GENERAL PANEL ON", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HEADING INDICATOR", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "AUTOPILOT HEADING LOCK DIR", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
@@ -284,15 +298,12 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_OBS, "VOR1_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_OBS, "VOR2_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_CARD, "ADF_CARD_SET");
-            /*
+           
             simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_OFF, "MAGNETO_OFF");
             simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_RIGHT, "MAGNETO_RIGHT");
             simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_LEFT, "MAGNETO_LEFT");
             simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_BOTH, "MAGNETO_BOTH");
             simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_START, "MAGNETO_START");
-            */
-            simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_DECR, "MAGNETO_DECR");
-            simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_INCR, "MAGNETO_INCR");
 
             simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_ALTERNATOR, "ALTERNATOR_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_BATTERY_MASTER, "MASTER_BATTERY_SET");
@@ -338,9 +349,6 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.BTN_ALT, "AP_PANEL_ALTITUDE_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_INC, "AP_VS_VAR_INC");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_DEC, "AP_VS_VAR_DEC");
-
-            simConnect.MapClientEventToSimEvent(EVENT.INC_COM1_25K, "COM_RADIO_FRACT_INC");
-            simConnect.MapClientEventToSimEvent(EVENT.INC_COM2_25K, "COM2_RADIO_FRACT_INC");
 
             simConnect.MapClientEventToSimEvent(EVENT.SET_XPDR_CODE, "XPNDR_SET");
 
@@ -413,16 +421,8 @@ public class SimConnectClient
             QueueItem itm;
             if (updateQueue.TryDequeue(out itm))
             {
-                if (itm.Evt == EVENT.SET_ATTITUDE_BAR_POSITION)
-                {
-                    simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
-                         NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, 0, itm.Val,0,0,0);
-                } else
-                {
-                    simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
-                        itm.Val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-                }
-
+                simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
+                     NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, itm.IParams[0], itm.IParams[1], itm.IParams[2], itm.IParams[3], itm.IParams[4]);
             }
         }
     }
@@ -446,48 +446,96 @@ public class SimConnectClient
     {
         if (data.uEventID == (uint)EVENT.AIRCRAFT_LOADED)
         {
-            simData.AircraftCFGPath = data.szFileName;
+            simData.AircraftType = getAircraftType(data.szFileName);
         }
     }
 
-    public void setSimpleVar(uint vidx, uint val)
+    private void OnRecvSystemStateHandler(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
     {
-        uint evt = (uint)EVENT.SET_EGT_REF + vidx;
-        QueueItem itm = new QueueItem((EVENT)evt, val);
-        updateQueue.Enqueue(itm);
+        if (data.dwRequestID==(uint)REQUEST.AIRCRAFT_LOADED)
+        {
+            string fpath = aircraftConfigPaths.ToArray().Where(s => s.ToString().EndsWith(data.szString)).First().ToString();
+            simData.AircraftType = getAircraftType(fpath);
+        }
     }
 
-    public void sendEventToSimulator(SimConnectClient.EVENT evt, uint val)
+    private void detectMSFSFileLocation()
     {
-        simConnect.TransmitClientEvent(SimConnect.SIMCONNECT_OBJECT_ID_USER, evt,
-            val, NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        aircraftConfigPaths.Clear();
+        string msfsPkgPath = null;
+        string[] msfsPaths =
+        {
+            "%APPDATA%\\Microsoft Flight Simulator\\UserCfg.opt",
+            "%LOCALAPPDATA%\\MSFSPackages\\UserCfg.opt",
+            "%LOCALAPPDATA%\\Packages\\Microsoft.FlightSimulator_8wekyb3d8bbwe\\LocalCache\\UserCfg.opt"
+        };
+        for(int i=0; i< msfsPaths.Length;i++)
+        {
+            string msfsPath = Environment.ExpandEnvironmentVariables(msfsPaths[i]);
+            if (File.Exists(msfsPath))
+            {
+                string[] lines = File.ReadAllLines(msfsPath);
+                msfsPkgPath = lines.Where(s => s.StartsWith("InstalledPackagesPath")).First();
+                if (msfsPkgPath!=null)
+                {
+                    msfsPkgPath = msfsPkgPath.Substring(21).Trim();
+                    msfsPkgPath = msfsPkgPath.Substring(1, msfsPkgPath.Length - 2);
+                    break;
+                }
+            }
+        }
+        if (msfsPkgPath!=null)
+        {
+            findAircraftCfg(msfsPkgPath + "\\Official");
+            findAircraftCfg(msfsPkgPath + "\\Community");
+        }
     }
 
-    public void sendEventToSimulator(SimConnectClient.EVENT evt, uint param1, uint param2)
+    private void findAircraftCfg(string path)
     {
-        simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, evt,
-            NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, param1, param2, 0,0,0);
+        if (File.Exists(path+"\\aircraft.CFG"))
+        {
+            aircraftConfigPaths.Add(path + "\\aircraft.CFG");
+        }
+        string[] folders = Directory.GetDirectories(path);
+        foreach (string fdr in folders)
+        {
+            findAircraftCfg(fdr);
+        }
     }
 
-    public void setMagneto(uint pos)
+    private string getAircraftType(string aircraftCfg)
     {
-        transmitEventOffset(EVENT.MAGNETO_DECR, pos);
-    }
+        //aircraftCfg = "D:\\FS2020\\Community\\asobo-aircraft-c172sp-classic\\SimObjects\\Airplanes\\Asobo_C172sp_classic\\aircraft.cfg";
+        string actype = "";
+        try
+        {
+            IniConfigurationSource src = new IniConfigurationSource();
+            src.Path = Path.GetFileName(aircraftCfg);
+            src.Optional = false;
+            src.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(aircraftCfg));
 
-    public void setFlaps(uint pos)
-    {
-        transmitEventOffset(EVENT.FLAPS_DECR, pos);
-    }
+            IniConfigurationProvider provider = new IniConfigurationProvider(src);
+            provider.Load();
+            string? prop;
+            if (provider.TryGet("GENERAL:icao_type_designator", out prop))
+            {
+                actype = prop;
+            }
+        } catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
 
-    public void setFuelSelector(uint pos)
-    {
-        transmitEventOffset(EVENT.SET_FUEL_SELECTOR_LEFT, pos);
-    }
+        return actype;
 
-    private void transmitEventOffset(EVENT firstEvent, uint idx)
+    }
+    public void transmitEvent(uint eventOffset,  uint[] iparams)
     {
-        uint evt = (uint)firstEvent + idx;
-        QueueItem itm = new QueueItem((EVENT)evt, 0);
+        uint evt = (uint)EVENT.SET_EGT_REF + eventOffset;
+        QueueItem itm = new QueueItem();
+        itm.Evt = (EVENT)evt;
+        itm.IParams = iparams;
         updateQueue.Enqueue(itm);
     }
 

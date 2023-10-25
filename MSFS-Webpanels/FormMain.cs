@@ -112,12 +112,14 @@ namespace MSFS_Webpanels
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
+            /*
             uint val = 0;
-            if (textboxInput.Text.Trim().Length>0)
+            if (textboxInput.Text.Trim().Length > 0)
             {
                 val = uint.Parse(textboxInput.Text.Trim());
             }
             simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SET_ATTITUDE_BAR_POSITION, 0, val);
+            */
         }
 
     }
