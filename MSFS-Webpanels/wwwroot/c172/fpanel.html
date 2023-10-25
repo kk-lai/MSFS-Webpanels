@@ -121,18 +121,18 @@
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/ias-needle.png" class="ias-needle simvar-ias" alt="ias-needle" func="rotateInterpolate" tbl="asiPositions" />
                 <img src="img/gen-knob-01.png" class="ias-knob" alt="gen-knob-01.png" />
-                <div class="ui-rose ctl-tasadj" target="simvar-tasadj" min="0" max="30" sensitivity="0.12" ></div>
+                <div class="ui-dial ctl-tasadj" target="simvar-tasadj" min="0" max="30" sensitivity="0.12" ></div>
                 <div class="help-overlay text-container hide"><!--
                     --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="gauge att-guage">
-                <img src="img/att-background.png" class="gauge-item att-background simvar-atitudebank" alt="att-background" func="generic" scaleFactor="-1" />
-                <img src="img/att-pitch.png" class="att-pitch simvar-pitch" alt="att-pitch" func="atitudePitch" />
-                <img src="img/att-roll.png" class="att-roll simvar-atitudebank" alt="att-roll" func="generic" scaleFactor="-1" />
-                <img src="img/att-plane.png" class="att-plane simvar-atitudebarposition" alt="att-plane" func="vtranslateInterpolate" tbl="attittudePlanePositions" />
+                <img src="img/att-background.png" class="gauge-item att-background simvar-attitudebank" alt="att-background" func="generic" scaleFactor="-1" />
+                <img src="img/att-pitch.png" class="att-pitch simvar-pitch" alt="att-pitch" func="attitudePitch" />
+                <img src="img/att-roll.png" class="att-roll simvar-attitudebank" alt="att-roll" func="generic" scaleFactor="-1" />
+                <img src="img/att-plane.png" class="att-plane simvar-attitudebarposition" alt="att-plane" func="vtranslateInterpolate" tbl="attittudePlanePositions" />
                 <img src="img/att-gyro.png" class="att-gyro simvar-attitudegyrooff" alt="att-gyro" func="showHide" param="1" />
                 <img src="img/att-foreground.png" class="gauge-item att-foreground" alt="att-foreground"  />
                 <img src="img/gen-knob-01.png" class="att-knob" alt="gen-knob-01" />
-                <div class="ui-vshifter ui-att-plane ctl-atitudebarposition" min="-100" max="100" target="simvar-atitudebarposition" /></div>
+                <div class="ui-vshifter ui-att-plane ctl-attitudebarposition" min="-100" max="100" target="simvar-attitudebarposition" /></div>
                 <div class="help-att-plane">
                     <div class="help-overlay text-container hide"><!--
                         --><div class="help-up-down-arrow"><i class="center-div fa-regular fa-arrows-up-down"></i></div></div>
@@ -144,7 +144,7 @@
                 <img src="img/alt-1k-needle.png" class="alt-1k-needle simvar-altitude" alt="alt-1k-needle" func="generic" rotateScaleFactor="0.036" />
                 <img src="img/alt-needle.png" class="alt-needle simvar-altitude" alt="alt-needle" func="generic" rotateScaleFactor="0.36"   />
                 <img src="img/gen-knob-01.png" class="alt-knob" alt="gen-knob-01" />
-                <div class="ui-rose ctl-qnh" target="simvar-qnh" min="15168" max="17104" sensitivity="1" ></div>
+                <div class="ui-dial ctl-qnh" target="simvar-qnh" min="15168" max="17104" sensitivity="1" ></div>
                 <div class="help-overlay text-container hide"><!--
                     --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="gauge nav1-guage">
@@ -162,7 +162,7 @@
                 <img src="img/nav-arrow-down.png" class="nav-arrow-down" alt="nav-arrow-down" />
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/nav-obs-knob.png" class="nav-obs-knob simvar-nav1obs" alt="nav-obs-knob" func="generic" rotateScaleFactor="20" />
-                <div class="ui-rose ctl-nav1obs" target="simvar-nav1obs" ></div>
+                <div class="ui-dial ctl-nav1obs" target="simvar-nav1obs" ></div>
                 <div class="help-overlay text-container hide"><!--
                     --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="gauge trn-guage">
@@ -178,7 +178,7 @@
                 <img src="img/hdg-foreground.png" class="gauge-item" alt="hdg-foreground" />
                 <img src="img/hdg-knob.png" class="hdg-knob simvar-headingbug" alt="hdg-knob" func="generic"  />
                 <img src="img/hdg-push-knob.png" class="hdg-push-knob simvar-gyrodrifterror" alt="hdg-push-knob"  func="generic" rotateScaleFactor="-1" />
-                <div class="ui-rose ctl-headingbug" target="simvar-headingbug" targetLeft="simvar-gyrodrifterror" sensitivity="-0.36" sensitivityLeft="1" ></div>
+                <div class="ui-dial ctl-headingbug" target="simvar-headingbug" targetLeft="simvar-gyrodrifterror" sensitivity="-0.36" sensitivityLeft="1" ></div>
                 <div class="help-rose-left">
                     <div class="help-overlay text-container hide"><!--
                         --><div class="help-up-down-arrow"><i class="center-div fa-regular fa-arrows-up-down"></i></div></div>
@@ -204,7 +204,7 @@
                 <img src="img/nav-arrow-down.png" class="nav-arrow-down" alt="nav-arrow-down" />
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/nav-obs-knob.png" class="nav-obs-knob simvar-nav2obs" alt="nav-obs-knob" func="generic" rotateScaleFactor="20" />
-                <div class="ui-rose ctl-nav2obs" target="simvar-nav2obs" ></div>
+                <div class="ui-dial ctl-nav2obs" target="simvar-nav2obs" ></div>
                 <div class="help-overlay text-container hide"><!--
                     --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="lower-panel">
@@ -366,7 +366,7 @@
                 <img src="img/adf-star.png" class="gauge-item adf-star" alt="adf-star" />
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
                 <img src="img/adf-hdg-knob.png" class="adf-hdg-knob simvar-adfcard" alt="adf-hdg-knob" func="generic" rotateScaleFactor="20" />
-                <div class="ui-rose ctl-adfcard" target="simvar-adfcard" ></div>
+                <div class="ui-dial ctl-adfcard" target="simvar-adfcard" ></div>
                 <div class="help-overlay text-container hide"><!--
                     --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div>
@@ -377,7 +377,7 @@
                         FUEL<br/>SELECTOR
                     </div>
                 </div>
-                <div class="fuel-selector-switch-wrapper simvar-fuelselectorui ui-rotaryswitch ctl-fuelselectorui" max="3" func="fuelSelector" target="simvar-fuelselectorui" >
+                <div class="fuel-selector-switch-wrapper simvar-fuelselector ui-rotaryswitch ctl-fuelselector" max="3" func="fuelSelector" target="simvar-fuelselector" >
                     <img src="img/fuel-selector-left.png" class="switch-state-0 " alt="fuel-selector-left" />
                     <img src="img/fuel-selector-both.png" class="switch-state-1 hide" alt="fuel-selector-both" />
                     <img src="img/fuel-selector-right.png" class="switch-state-2 hide" alt="fuel-selector-right" /><!--

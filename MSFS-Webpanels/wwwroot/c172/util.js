@@ -155,10 +155,10 @@ define(['jquery','const'],function(jquery, sysconst) {
             }
             return (val-tbl[idx][0])*(tbl[idx+1][1]-tbl[idx][1])/(tbl[idx+1][0]-tbl[idx][0]) + tbl[idx][1];
         },
-        atitudePitch : function (elm, val)
+        attitudePitch : function (elm, val)
         {
-            var rotate = val.atitudeBank;
-            var pitch = val.atitudePitch;
+            var rotate = val.attitudeBank;
+            var pitch = val.attitudePitch;
 
             if (pitch < -20) {
                 pitch = -20;
@@ -312,7 +312,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             jsonData.simData.apStatus1 = apStatus1;
             jsonData.simData.apStatus2 = apStatus2;
 
-            jsonData.simData.fuelSelectorUI = this.fuelSelectorStates[jsonData.simData.fuelSelector - 1];
+            jsonData.simData.fuelSelector = this.fuelSelectorStates[jsonData.simData.fuelSelector - 1];
 
             return jsonData;
         },
@@ -427,9 +427,9 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "batteryAmp": 0,
                 "ias": 0,
                 "tasAdj": 0, // min = 0, max=30
-                "atitudePitch": 0,
-                "atitudeBank": 0,
-                "atitudeBarPosition": 0,
+                "attitudePitch": 0,
+                "attitudeBank": 0,
+                "attitudeBarPosition": 0,
                 "altitude": 0,
                 "nav1Obs": 0,
                 "nav1ToFrom": 0,
@@ -499,7 +499,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             "isPaused": false,
             "isSimRunning": true,
             "isSimConnected": true,
-            "aircraftCFGPath": null
+            "aircraftType": "C172"
         }
     };
 });

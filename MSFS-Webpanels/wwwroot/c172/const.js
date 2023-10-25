@@ -4,7 +4,6 @@ define(function() {
         defaultCoolDown : 500, // ms
         refreshPeriod : 50, // ms;
         serverUpdateCooldown :20, // ms  
-        getSimVarUrl: '/api/SimData',
-        setSimVarUrl: "/api/SimData/set/"
+        simVarUrl: '/api/SimData'
     }
 });

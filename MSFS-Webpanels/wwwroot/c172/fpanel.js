@@ -127,7 +127,7 @@ function(jquery,util,sysconst) {
             return;
         }
         isPoolingSimVars=true;
-        jQuery.get(sysconst.getSimVarUrl,function(jsonData) {
+        jQuery.get(sysconst.simVarUrl,function(jsonData) {
             isServerAppRunning=true;
             refreshDisplay(jsonData);
             isPoolingSimVars=false;
@@ -188,7 +188,9 @@ function(jquery,util,sysconst) {
             jquery(this).attr("state",nextState);
             util.setVariableCooldown("."+target);
             displaySimVar(target, nextState);
-            updateSimVar(target,nextState);
+            // only used in fuel selector
+            var fuelSelectorStates = ["left", "all", "right"];
+            updateSimVar(target+fuelSelectorStates[nextState],0);
             e.preventDefault();
         });
 
@@ -213,16 +215,18 @@ function(jquery,util,sysconst) {
                 jquery(ctl).attr("state",newVal);
                 util.setVariableCooldown(ctl);
                 util.setVariableCooldown("."+target);
-                displaySimVar(target, newVal);
+                displaySimVar(target, newVal);                
                 if (adj<0) {
-                    adj=0;
-                }
-                updateSimVar(target,adj);
+                    target=target+"dec";
+                } else {
+                    target=target+"inc";
+                }                                    
+                updateSimVar(target,0);
             }
             e.preventDefault();
         });
 
-        jquery(".ui-rose").on(evMove,function(e) {
+        jquery(".ui-dial").on(evMove,function(e) {
             var target=util.getAttrText(this,"target");
             var touchPos;
             var sf = util.getAttrFloat(this, "sensitivity", 0.36);
@@ -441,6 +445,7 @@ function(jquery,util,sysconst) {
                     util.setVariableCooldown(this);
                     util.setVariableCooldown("."+target);
                     displaySimVar(target, newState);
+                    purgeQueue(target);
                     updateSimVar(target,newState);
                 } else {
                     if (jquery(this).hasClass("ui-touched")) {
@@ -652,7 +657,7 @@ function(jquery,util,sysconst) {
             location.reload(true);
         });
         
-        jquery(".ui-help").on(ev, function(e) {
+        jquery(".ui-help").on(ev, function(e) {            
             if (jquery("#help-screen-overlay").hasClass("hide")) {
                 jquery("#help-screen-overlay").removeClass("hide");
                 jquery(".help-overlay").removeClass("hide");
@@ -701,12 +706,27 @@ function(jquery,util,sysconst) {
             if (isServerAppRunning && latestSimData.isSimConnected) {
                 nextUpdateTime=now + sysconst.serverUpdateCooldown;
                 var itm = updateQueue.shift();
-                //console.log(now+":"+sysconst.setSimVarUrl+itm+", nextUpdateTime="+nextUpdateTime);
-                jQuery.get(sysconst.setSimVarUrl+itm, function(data) {
-                    // success
-                }).fail(function() {
-                    isServerAppRunning=false;
-                });
+                
+                var evt = itm.split("/");                
+                var arg1 = parseInt(evt[1]);
+                var obj={
+                    "eventName": evt[0],
+                    "iparams": [ arg1 ]                    
+                };
+                
+                if (evt[0]=="simvar-attitudebarposition") {
+                    obj.iparams= [0, arg1 ];
+                }
+                var jsonText=JSON.stringify(obj);
+                jquery.ajax(sysconst.simVarUrl,
+                {
+                    data: jsonText,
+                    contentType : "application/json",
+                    type: "POST",
+                    error: function(jqXHR, textStatus, errorThrown ) {
+                        isServerAppRunning=false;
+                    }
+                });                
             }
         }
         if (updateQueue.length>0) {

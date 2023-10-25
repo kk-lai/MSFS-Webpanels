@@ -1024,12 +1024,12 @@ img
     height:100%;
 }
 
-.ui-button, .ui-switch, .ui-popup, .ui-rose, .ui-vshifter
+.ui-button, .ui-switch, .ui-popup, .ui-dial, .ui-vshifter
 {
     z-index:3;
 }
 
-.ui-rose
+.ui-dial
 {
     position: absolute;
     width:100%;
