@@ -18,19 +18,7 @@ public class SimConnectClient
         uint[] iParams;
 
         public EVENT Evt { get => evt; set => evt = value; }
-        public uint[] IParams
-        {
-            get => iParams; set
-            {
-                this.IParams = new uint[5];
-                uint[] ip = value;
-
-                for(int i=0;i<ip.Length;i++)
-                {
-                    IParams[i] = ip[i];
-                }
-            }
-        }
+        public uint[] IParams { get => iParams; set => iParams = value; }
     }
 
     enum REQUEST
@@ -104,12 +92,8 @@ public class SimConnectClient
         SET_FUEL_SELECTOR_ALL,
         SET_FUEL_SELECTOR_RIGHT,
 
-        SET_MAGNETO_OFF,
-        SET_MAGNETO_RIGHT,
-        SET_MAGNETO_LEFT,
-        SET_MAGNETO_BOTH,
-        SET_MAGNETO_START,
-
+        MAGNETO_DECR,
+        MAGNETO_INCR,
 
         FLAPS_DECR,
         FLAPS_INCR
@@ -125,7 +109,7 @@ public class SimConnectClient
         public uint state;
     }
 
-    private SimConnect simConnect = null;
+    private static SimConnect simConnect = null;
     private SimData simData = new SimData();
     public const int WM_USER_SIMCONNECT = 0x0402;
     private ConcurrentQueue<QueueItem> updateQueue = new ConcurrentQueue<QueueItem>();
@@ -298,13 +282,7 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_OBS, "VOR1_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_OBS, "VOR2_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_CARD, "ADF_CARD_SET");
-           
-            simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_OFF, "MAGNETO_OFF");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_RIGHT, "MAGNETO_RIGHT");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_LEFT, "MAGNETO_LEFT");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_BOTH, "MAGNETO_BOTH");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_MAGNETO_START, "MAGNETO_START");
-
+         
             simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_ALTERNATOR, "ALTERNATOR_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_BATTERY_MASTER, "MASTER_BATTERY_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_AVIONICS1, "AVIONICS_MASTER_1_SET");
@@ -322,6 +300,10 @@ public class SimConnectClient
 
             simConnect.MapClientEventToSimEvent(EVENT.FLAPS_DECR, "FLAPS_DECR");
             simConnect.MapClientEventToSimEvent(EVENT.FLAPS_INCR, "FLAPS_INCR");
+
+
+            simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_INCR, "MAGNETO_INCR");
+            simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_DECR, "MAGNETO_DECR");
 
             simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_LEFT, "FUEL_SELECTOR_LEFT");
             simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_ALL, "FUEL_SELECTOR_ALL");
@@ -421,8 +403,13 @@ public class SimConnectClient
             QueueItem itm;
             if (updateQueue.TryDequeue(out itm))
             {
+                uint[] scParams = new uint[5];
+                for(int i=0;i<itm.IParams.Length;i++)
+                {
+                    scParams[i]= itm.IParams[i];
+                }
                 simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
-                     NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, itm.IParams[0], itm.IParams[1], itm.IParams[2], itm.IParams[3], itm.IParams[4]);
+                     NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, scParams[0], scParams[1], scParams[2], scParams[3], scParams[4]);
             }
         }
     }

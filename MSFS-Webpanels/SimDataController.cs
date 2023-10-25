@@ -62,14 +62,11 @@ public class SimDataController: ControllerBase
         "simvar-fuelselectorall", //SET_FUEL_SELECTOR_ALL,
         "simvar-fuelselectorright", //SET_FUEL_SELECTOR_RIGHT,        
 
-        "simvar-magnetooff", //SET_MAGNETO_OFF,
-        "simvar-magnetoright", //SET_MAGNETO_RIGHT,
-        "simvar-magnetoleft", //SET_MAGNETO_LEFT,
-        "simvar-magnetoboth", //SET_MAGNETO_BOTH,
-        "simvar-magnetostart", //SET_MAGNETO_START,
+        "simvar-magnetodec", // MAGNETO_INCR
+        "simvar-magnetoinc", // MAGNETO_DECR
 
-        "simvar-flapup", //FLAPS_DECR,
-        "simvar-flapdown" //FLAPS_INCR
+        "simvar-flapspositiondec", //FLAPS_DECR,
+        "simvar-flapspositioninc" //FLAPS_INCR
     };
 
 
