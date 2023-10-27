@@ -66,7 +66,11 @@ public class SimDataController: ControllerBase
         "simvar-magnetoinc", // MAGNETO_DECR
 
         "simvar-flapspositiondec", //FLAPS_DECR,
-        "simvar-flapspositioninc" //FLAPS_INCR
+        "simvar-flapspositioninc", //FLAPS_INCR,
+
+        "simvar-gyrodrifterrorex", // GYRO_DRIFT_SET_EX1
+        "simvar-headinggyroset" // HEADING_GYRO_SET
+
     };
 
 
@@ -88,6 +92,7 @@ public class SimDataController: ControllerBase
         if (msg.EventName.Equals("simvar-xpdrswitch"))
         {
             SimConnectClient.getSimConnectClient().setTransponderSwitch(msg.IParams[0]);
+            return (IActionResult)Ok();
         }
         else
         {
@@ -96,6 +101,7 @@ public class SimDataController: ControllerBase
             {
                 SimConnectClient.getSimConnectClient().transmitEvent((uint)idx, msg.IParams);
             }
+            return (IActionResult)Ok();
         }
         return (IActionResult)BadRequest();
     }

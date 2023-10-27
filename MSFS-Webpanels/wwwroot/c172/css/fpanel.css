@@ -1024,7 +1024,7 @@ img
     height:100%;
 }
 
-.ui-button, .ui-switch, .ui-popup, .ui-dial, .ui-vshifter
+.ui-button, .ui-switch, .ui-popup, .ui-dial, .ui-vshifter, .ui-pbutton
 {
     z-index:3;
 }
@@ -1208,7 +1208,7 @@ img
     z-index:6;    
 }
 
-.help-rose-left
+.help-dial-left
 {
     position:absolute;
     top:0;
@@ -1217,7 +1217,7 @@ img
     height:100%;
 }
 
-.help-rose-right
+.help-dial-right
 {
     position:absolute;
     top:0;

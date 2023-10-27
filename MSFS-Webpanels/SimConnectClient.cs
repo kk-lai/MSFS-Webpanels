@@ -96,7 +96,10 @@ public class SimConnectClient
         MAGNETO_INCR,
 
         FLAPS_DECR,
-        FLAPS_INCR
+        FLAPS_INCR,
+
+        GYRO_DRIFT_SET_EX1,
+        HEADING_GYRO_SET
     };
 
     enum NOTIFICATIONGROUP
@@ -109,20 +112,16 @@ public class SimConnectClient
         public uint state;
     }
 
-    private static SimConnect simConnect = null;
+    private SimConnect simConnect = null;
     private SimData simData = new SimData();
     public const int WM_USER_SIMCONNECT = 0x0402;
     private ConcurrentQueue<QueueItem> updateQueue = new ConcurrentQueue<QueueItem>();
     private ArrayList aircraftConfigPaths = new ArrayList();
 
-    private static SimConnectClient? simClient = null;
+    private static SimConnectClient simClient = new SimConnectClient();
 
     public static SimConnectClient getSimConnectClient()
-    {
-        if (simClient == null)
-        {
-            simClient = new SimConnectClient();
-        }
+    {       
         return simClient;
     }
 
@@ -333,7 +332,8 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_DEC, "AP_VS_VAR_DEC");
 
             simConnect.MapClientEventToSimEvent(EVENT.SET_XPDR_CODE, "XPNDR_SET");
-
+            simConnect.MapClientEventToSimEvent(EVENT.GYRO_DRIFT_SET_EX1, "GYRO_DRIFT_SET_EX1");
+            simConnect.MapClientEventToSimEvent(EVENT.HEADING_GYRO_SET, "HEADING_GYRO_SET");
         }
         catch (COMException ex)
         {
@@ -396,7 +396,7 @@ public class SimConnectClient
                 ndata = new C172SimData(simData);
             }
             ndata.simData = (C172SimData.C172Data)data.dwData[0];
-            simData = ndata;
+            this.simData = ndata;
         }
         while (updateQueue.Count > 0)
         {

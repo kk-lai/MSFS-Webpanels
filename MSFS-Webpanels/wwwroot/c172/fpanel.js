@@ -127,16 +127,23 @@ function(jquery,util,sysconst) {
             return;
         }
         isPoolingSimVars=true;
-        jQuery.get(sysconst.simVarUrl,function(jsonData) {
-            isServerAppRunning=true;
-            refreshDisplay(jsonData);
-            isPoolingSimVars=false;
-        }, "json").fail(function() {
-            isServerAppRunning=false;
-            var jsonData=offlineData;
-            refreshDisplay(jsonData);
-            isPoolingSimVars=false;
-        });
+        jquery.ajax({
+            url: sysconst.simVarUrl,
+            success: function(jsonData, textStatus, jqXHR ){
+                isServerAppRunning=true;
+                refreshDisplay(jsonData);
+                isPoolingSimVars=false;
+            },
+            error: function(jqXHR, textStatus, errorThrown ) {
+                isServerAppRunning=false;
+                var jsonData=offlineData;
+                refreshDisplay(jsonData);
+                isPoolingSimVars=false;
+            },
+            type: "get",
+            dataType : "json",
+            cache: false
+        });        
     }
 
     function updateSimVarFreq(simvar, val)
@@ -224,7 +231,7 @@ function(jquery,util,sysconst) {
                 updateSimVar(target,0);
             }
             e.preventDefault();
-        });
+        });       
 
         jquery(".ui-dial").on(evMove,function(e) {
             var target=util.getAttrText(this,"target");
@@ -276,10 +283,20 @@ function(jquery,util,sysconst) {
                 jquery(this).addClass("ui-touched");
                 jquery(this).attr("fstate", newState);
                 jquery(this).attr("pos",newAng);
+                
                 if (Math.abs(newAng)>90) {
                     target = util.getAttrText(this, "targetLeft", target);
-                    sf = util.getAttrFloat(this,"sensitivityLeft", sf);
+                    sf = util.getAttrFloat(this,"sensitivityLeft", sf);                   
                 }
+                
+                var oldStateVar = ".ctl-"+target.substring(7,target.length);
+                var elm = jquery(oldStateVar).first();
+                oldState = util.getAttrFloat(elm ,"state",null);
+                oldfState=oldState;
+                newState=oldState;
+                newfState=newState;
+                jquery(this).attr("state",oldState);
+                jquery(this).attr("fstate",oldState);
                 jquery(this).attr("ctarget", target);
                 jquery(this).attr("csensitivity", sf);
             } else if ((e.type=="mousemove" || e.type=="touchmove") && jquery(this).hasClass("ui-touched")) {
@@ -307,21 +324,7 @@ function(jquery,util,sysconst) {
                 
                 dif = dif * sf;
                 
-                if (target=="simvar-gyrodrifterror") {         
-                    
-                    param = Math.sign(dif)* Math.floor(Math.abs(dif));
-                    
-                    var error = Math.sign(dif) * (Math.abs(dif) - Math.abs(param));
-                    
-                    param=util.boundDegree(param);
-                    
-                    newAng = newAng - error/sf;
-                    if (jquery(this).hasClass("ui-touched")) {
-                        jquery(this).attr("pos",newAng);
-                    }
-                    oldState = latestSimData.simData.gyroDriftError;
-                    newState = latestSimData.simData.gyroDriftError + param;
-                } else if (target=="simvar-tasadj") {
+                if (target=="simvar-tasadj") {
                     newfState = (oldfState + dif);
                     var min = util.getAttrFloat(this, "min");
                     var max = util.getAttrFloat(this, "max");
@@ -358,25 +361,27 @@ function(jquery,util,sysconst) {
                     jquery(this).attr("fstate", newfState);
                     util.setVariableCooldown(this);
                     util.setVariableCooldown("."+target);
-                    if (target=="simvar-gyrodrifterror") {
-                        util.setVariableCooldown(".simvar-heading");
-                        displaySimVar("simvar-heading", latestSimData.simData.heading + param);
+
+                    if (target=="simvar-heading") {
+                        jquery(".ctl-heading").attr("state", newState);
                         displaySimVar("simvar-hdgbug", {
-                            heading: latestSimData.simData.heading + param,
+                            heading: newState,
                             headingBug : latestSimData.simData.headingBug
-                        });                       
+                        });        
                     }
                     if (target=="simvar-headingbug") {
-                        util.setVariableCooldown(".simvar-hdgbug");
+                        jquery(".ctl-headingbug").attr("state", newState);
+                        util.setVariableCooldown(".simvar-hdgbug");                        
                         displaySimVar("simvar-hdgbug", {
                             heading: latestSimData.simData.heading,
                             headingBug : newState
                         });
                     }
                     displaySimVar(target, newState);
-                    if (target!="simvar-gyrodrifterror") {
-                        purgeQueue(target);
-                    }
+                    if (target=="simvar-heading") {
+                        target="simvar-gyrodrifterrorex";
+                    } 
+                    purgeQueue(target);
                     updateSimVar(target,param);
                 } else {
                     if (jquery(this).hasClass("ui-touched")) {
@@ -627,7 +632,14 @@ function(jquery,util,sysconst) {
 
         jquery(".ui-pbutton").on(ev, function(e) {
             var target=jquery(this).attr("target");
-            updateSimVar("simvar-"+target,1);
+            if (target=="headinggyroset") {
+                util.setVariableCooldown(".simvar-gyrodrifterror");
+                displaySimVar("simvar-gyrodrifterror", 0);
+                var nheading = latestSimData.simData.heading - latestSimData.simData.gyroDriftError;
+                displaySimVar("simvar-heading", nheading);
+                jquery(".ctl-heading").attr("state", nheading);
+            }
+            updateSimVar("simvar-"+target,0);
             if (target.substring(0,5)=="btnvs") {
                 if (vsDisplayTimer!=null) {
                     clearTimeout(vsDisplayTimer);
@@ -695,38 +707,38 @@ function(jquery,util,sysconst) {
 
     function processUpdateQueue()
     {
-        //console.log(Date.now()+":processUpdateQueue");
         if (isProcessingQueue) {
             return;
         }
         isProcessingQueue=true;
-        //console.log(Date.now()+":start processUpdateQueue nextUpdateTime="+nextUpdateTime);
         var now = Date.now();
         if (now >= nextUpdateTime && !isPauseQueue) {
             if (isServerAppRunning && latestSimData.isSimConnected) {
                 nextUpdateTime=now + sysconst.serverUpdateCooldown;
                 var itm = updateQueue.shift();
                 
-                var evt = itm.split("/");                
-                var arg1 = parseInt(evt[1]);
-                var obj={
-                    "eventName": evt[0],
-                    "iparams": [ arg1 ]                    
-                };
-                
-                if (evt[0]=="simvar-attitudebarposition") {
-                    obj.iparams= [0, arg1 ];
-                }
-                var jsonText=JSON.stringify(obj);
-                jquery.ajax(sysconst.simVarUrl,
-                {
-                    data: jsonText,
-                    contentType : "application/json",
-                    type: "POST",
-                    error: function(jqXHR, textStatus, errorThrown ) {
-                        isServerAppRunning=false;
+                if (typeof itm !== "undefined" && itm!=null) {
+                    var evt = itm.split("/");                
+                    var arg1 = parseInt(evt[1]);
+                    var obj={
+                        "eventName": evt[0],
+                        "iparams": [ arg1 ]                    
+                    };
+                    
+                    if (evt[0]=="simvar-attitudebarposition") {
+                        obj.iparams= [0, arg1 ];
                     }
-                });                
+                    var jsonText=JSON.stringify(obj);                
+                    jquery.ajax(sysconst.simVarUrl,
+                    {
+                        data: jsonText,
+                        contentType : "application/json",
+                        type: "POST",
+                        error: function(jqXHR, textStatus, errorThrown ) {
+                            isServerAppRunning=false;
+                        }
+                    });  
+                }
             }
         }
         if (updateQueue.length>0) {
@@ -736,7 +748,6 @@ function(jquery,util,sysconst) {
             }
             queueTimer = setTimeout(processUpdateQueue, timeDiff);
         }
-        //console.log(Date.now()+":end processUpdateQueue");
         isProcessingQueue=false;
     }
 
