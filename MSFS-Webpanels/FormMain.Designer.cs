@@ -36,6 +36,7 @@
             buttonTest = new Button();
             label3 = new Label();
             textboxInput = new TextBox();
+            buttonAbout = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
@@ -88,7 +89,7 @@
             // buttonTest
             // 
             buttonTest.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonTest.Location = new Point(402, 218);
+            buttonTest.Location = new Point(395, 77);
             buttonTest.Name = "buttonTest";
             buttonTest.Size = new Size(166, 59);
             buttonTest.TabIndex = 4;
@@ -116,11 +117,22 @@
             textboxInput.TabIndex = 9;
             textboxInput.Visible = false;
             // 
+            // buttonAbout
+            // 
+            buttonAbout.Location = new Point(402, 243);
+            buttonAbout.Name = "buttonAbout";
+            buttonAbout.Size = new Size(166, 59);
+            buttonAbout.TabIndex = 10;
+            buttonAbout.Text = "&About";
+            buttonAbout.UseVisualStyleBackColor = true;
+            buttonAbout.Click += buttonAbout_Click;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(580, 428);
+            Controls.Add(buttonAbout);
             Controls.Add(textboxInput);
             Controls.Add(label3);
             Controls.Add(buttonTest);
@@ -146,5 +158,6 @@
         private Button buttonTest;
         private Label label3;
         private TextBox textboxInput;
+        private Button buttonAbout;
     }
 }

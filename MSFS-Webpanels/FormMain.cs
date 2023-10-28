@@ -81,7 +81,7 @@ namespace MSFS_Webpanels
         {
             simConnectClient.Disconnect();
             if (!simConnectClient.SimData.IsSimConnected)
-            {               
+            {
                 simConnectClient.Connect(this.Handle);
             }
         }
@@ -124,6 +124,12 @@ namespace MSFS_Webpanels
         private void linkPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(new ProcessStartInfo(linkPanel.Text) { UseShellExecute = true });
+        }
+
+        private void buttonAbout_Click(object sender, EventArgs e)
+        {
+            AboutBox aboutBox = new AboutBox();
+            aboutBox.ShowDialog();
         }
     }
 }
