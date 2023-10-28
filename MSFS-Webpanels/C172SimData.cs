@@ -111,6 +111,14 @@ public class C172SimData : SimData
         private Int32 xpdr;
         private Int32 xpdrSwitch;
 
+        private Int32 com1tx;
+        private Int32 com1rx;
+        private Int32 com2tx;
+        private Int32 com2rx;
+        private Int32 nav1rx;
+        private Int32 nav2rx;
+        private Int32 adfrx;
+
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
         public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
         public float EngineEGT { get => engineEGT; set => engineEGT = value; }
@@ -190,6 +198,13 @@ public class C172SimData : SimData
         public int Xpdr { get => xpdr; set => xpdr = value; }
         public int RefEGT { get => refEGT; set => refEGT = value; }
         public int GeneralPanelOn { get => generalPanelOn; set => generalPanelOn = value; }
+        public int Com1tx { get => com1tx; set => com1tx = value; }
+        public int Com1rx { get => com1rx; set => com1rx = value; }
+        public int Com2tx { get => com2tx; set => com2tx = value; }
+        public int Com2rx { get => com2rx; set => com2rx = value; }
+        public int Nav1rx { get => nav1rx; set => nav1rx = value; }
+        public int Nav2rx { get => nav2rx; set => nav2rx = value; }
+        public int Adfrx { get => adfrx; set => adfrx = value; }
     }
     private C172Data c172data = new C172Data();
 

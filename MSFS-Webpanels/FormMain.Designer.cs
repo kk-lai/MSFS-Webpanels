@@ -35,7 +35,6 @@
             linkPanel = new LinkLabel();
             buttonTest = new Button();
             label3 = new Label();
-            linkGit = new LinkLabel();
             textboxInput = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
@@ -44,7 +43,7 @@
             // 
             buttonStart.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonStart.Enabled = false;
-            buttonStart.Location = new Point(348, 259);
+            buttonStart.Location = new Point(402, 320);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new Size(166, 59);
             buttonStart.TabIndex = 0;
@@ -65,9 +64,9 @@
             // pictureQRcode
             // 
             pictureQRcode.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pictureQRcode.Location = new Point(12, 66);
+            pictureQRcode.Location = new Point(12, 87);
             pictureQRcode.Name = "pictureQRcode";
-            pictureQRcode.Size = new Size(264, 252);
+            pictureQRcode.Size = new Size(329, 329);
             pictureQRcode.SizeMode = PictureBoxSizeMode.Zoom;
             pictureQRcode.TabIndex = 2;
             pictureQRcode.TabStop = false;
@@ -79,14 +78,17 @@
             linkPanel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             linkPanel.Location = new Point(12, 63);
             linkPanel.Name = "linkPanel";
-            linkPanel.Size = new Size(0, 21);
+            linkPanel.Size = new Size(53, 21);
             linkPanel.TabIndex = 3;
+            linkPanel.TabStop = true;
+            linkPanel.Text = "http://";
             linkPanel.Visible = false;
+            linkPanel.LinkClicked += linkPanel_LinkClicked;
             // 
             // buttonTest
             // 
             buttonTest.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonTest.Location = new Point(348, 157);
+            buttonTest.Location = new Point(402, 218);
             buttonTest.Name = "buttonTest";
             buttonTest.Size = new Size(166, 59);
             buttonTest.TabIndex = 4;
@@ -100,27 +102,15 @@
             label3.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(407, 330);
+            label3.Location = new Point(461, 391);
             label3.Name = "label3";
             label3.Size = new Size(107, 21);
             label3.TabIndex = 6;
             label3.Text = "By: Kevin King";
             // 
-            // linkGit
-            // 
-            linkGit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            linkGit.AutoSize = true;
-            linkGit.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            linkGit.Location = new Point(12, 330);
-            linkGit.Name = "linkGit";
-            linkGit.Size = new Size(310, 21);
-            linkGit.TabIndex = 7;
-            linkGit.TabStop = true;
-            linkGit.Text = "https://github.com/kk-lai/MSFS-Webpanels";
-            // 
             // textboxInput
             // 
-            textboxInput.Location = new Point(348, 104);
+            textboxInput.Location = new Point(461, 168);
             textboxInput.Name = "textboxInput";
             textboxInput.Size = new Size(100, 23);
             textboxInput.TabIndex = 9;
@@ -130,9 +120,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(526, 367);
+            ClientSize = new Size(580, 428);
             Controls.Add(textboxInput);
-            Controls.Add(linkGit);
             Controls.Add(label3);
             Controls.Add(buttonTest);
             Controls.Add(linkPanel);
@@ -156,7 +145,6 @@
         private LinkLabel linkPanel;
         private Button buttonTest;
         private Label label3;
-        private LinkLabel linkGit;
         private TextBox textboxInput;
     }
 }

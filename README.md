@@ -1,20 +1,29 @@
 # MSFS-Webpanels
 
-To Do
-=====
-1. Fix Magneto from R to off revert
-2. Radio frequency input validation (done)
-3. Help highlight (done)
-4. Annunciation incorrect status  (done)
-5. REF EGT needle (done)
-6. Display standby freq in radio (done)
-7. Turn coordinator angle (done)
-8. Wrong Gyro Indicator warning in Attitude Indicator (done)
 
 
-Test
-GYRO_DRIFT_SET_EX1
+Prerequisites
+=============
+ASP.NET Core 7.0 Runtime
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-aspnetcore-7.0.13-windows-x64-installer
+.NET 7.0 Desktop Runtime (v7.0.13)
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.13-windows-x64-installer
 
+Instructions
+============
+1. Install the runtime libraries stated in the prerequisites section.
+2. Run the executable "MSFS-Webpanels.exe"
+3. Connect MSFS by clicking "Connect" button
+4. In your tablet, open the panel page by entering the link stated in the application or scanning the QRCode by the camera.
+5. Tap "i" icon at the bottom right corner to see the locations of the controls, where arrows are draggable controls, dots are touchable controls.
+6. In case the panel does not work properly, tap the "refresh" icon to reload the page.
+
+Future Plans
+============
+1. Fix problem when "Magneto from R to off" the engine doesn't stop
+2. Rewrite frontend to be more modularized
+3. Separate one panel to left, main, radio, bottom panels
+4. Write panels for other aircrafts
 
 Image Credits
 =============
