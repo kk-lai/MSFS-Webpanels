@@ -88,6 +88,9 @@ function(jquery,util,sysconst) {
         }
         jsonData = util.postProcessSimData(jsonData);
 
+        if (jsonData.simData.apVerticalHold == 0 && jsonData.simData.apAltitudeLock == 0 && jsonData.simData.apGSHold ==0 ) {
+            updateSimVar("simvar-vsholdset", 1);
+        }
 
         for(var key in jsonData.simData) {
             var simvar = "simvar-" + key.toLowerCase();
@@ -691,7 +694,16 @@ function(jquery,util,sysconst) {
                 displaySimVar("simvar-heading", nheading);
                 jquery(".ctl-heading").attr("state", nheading);
             }
-            updateSimVar("simvar-"+target,0);
+            var state = util.getAttrText(this, "state", null);
+            if (target == "btnalt") {
+                if (state != "ALT") {
+                    updateSimVar("simvar-btnalt", 1);
+                } else {
+                    updateSimVar("simvar-vsholdset", 1);
+                }
+            } else {
+                updateSimVar("simvar-" + target, 0);
+            }
             if (target.substring(0,5)=="btnvs") {
                 if (vsDisplayTimer!=null) {
                     clearTimeout(vsDisplayTimer);
