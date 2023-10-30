@@ -6,7 +6,7 @@ using System;
 
 [Route("api/[controller]")]
 [ApiController]
-[EnableCors("MyPolicy")]
+
 public class SimDataController: ControllerBase
 {
     private readonly string[] SIMEVENTS =
@@ -15,7 +15,6 @@ public class SimDataController: ControllerBase
         "simvar-tasadj", //SET_TAS_ADJ,
         "simvar-attitudebarposition", //SET_ATTITUDE_BAR_POSITION,
         
-        "simvar-gyrodrifterror", //SET_GYRO_DRIFT_ERROR,
         "simvar-headingbug", //SET_HEADING_BUG,
         "simvar-nav1obs", //SET_NAV1_OBS,
         "simvar-nav2obs", //SET_NAV2_OBS,
@@ -41,7 +40,6 @@ public class SimDataController: ControllerBase
         "simvar-nav1standbyfreq", //SET_NAV1_STANDBY,
         "simvar-nav2standbyfreq", //SET_NAV2_STANDBY,
         "simvar-adfstandbyfreq", //SET_ADF_STANDBY,
-        "simvar-apaltitude", //SET_AP_ALTITUDE,
         "simvar-com1freqswap", //SWAP_COM1_FREQ,
         "simvar-com2freqswap", //SWAP_COM2_FREQ,
         "simvar-nav1freqswap", //SWAP_NAV1_FREQ,
@@ -76,7 +74,9 @@ public class SimDataController: ControllerBase
         "simvar-pilottx", // PILOT_TRANSMITTER_SET
         "simvar-nav1rx", // RADIO_VOR1_IDENT_TOGGLE
         "simvar-nav2rx", // RADIO_VOR2_IDENT_TOGGLE
-        "simvar-adfrx" // RADIO_ADF_IDENT_TOGGLE
+        "simvar-adfrx", // RADIO_ADF_IDENT_TOGGLE
+
+        "simvar-vsholdset" // AP_PANEL_VS_SET
     };
 
 
@@ -100,14 +100,19 @@ public class SimDataController: ControllerBase
             SimConnectClient.getSimConnectClient().setTransponderSwitch(msg.IParams[0]);
             return (IActionResult)Ok();
         }
+        else if (msg.EventName.Equals("simvar-apaltitude"))
+        {
+            SimConnectClient.getSimConnectClient().setAPAltitudeHold(msg.IParams[0]);
+            return (IActionResult)Ok();
+        }
         else
         {
             int idx = Array.IndexOf(SIMEVENTS, msg.EventName);
             if (idx >= 0)
             {
                 SimConnectClient.getSimConnectClient().transmitEvent((uint)idx, msg.IParams);
-            }
-            return (IActionResult)Ok();
+                return (IActionResult)Ok();
+            }            
         }
         return (IActionResult)BadRequest();
     }

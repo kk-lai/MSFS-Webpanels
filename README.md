@@ -2,6 +2,8 @@
 
 Introduction
 ============
+This is a touch panel web application that allows users to control and view the gauges and switches of an aircraft’s panel with the browser of a tablet.
+
 When I play MSFS, I face a problem where I need to move the view of the game to see some of the gauges. One of the most common solutions is to extend the screen with an extra monitor. However, my desk cannot fit one more monitor. There are solutions to extend PC screen with an iPad, but I think they are not good enough. If the second screen can accept input, it will be good. So, I developed this application. I looked for similar solutions on the internet, but some of them are not free. For free solutions, they do not fit me. Therefore, I decided to do it myself. My design goal is to find a balance between realism and usability. Thanks to project flightgear (https://www.flightgear.org/), I got readily made good quality images of gauges. These images make the panel look like a “real” panel. Instead of using knobs to change the input, my design is to drag the gauges directly because using knobs for input is difficult. After implementing all gauges and switches, I found that the auto-pilot and radio should be added too. My first thought was to implement the radio panel and show it when the user taps a button. However, changing the frequency or altitude with knobs is difficult, so I implemented a number pad interface to input these numbers. For now, only Cessna 172 panel is implemented. In the future, I plan to develop more panels for other aircraft.
 
 Prerequisites
