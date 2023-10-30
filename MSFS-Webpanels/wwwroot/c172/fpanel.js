@@ -177,10 +177,28 @@ function(jquery,util,sysconst) {
             var curState = parseInt(jquery(this).attr('state'));
             var nextState = 1-curState;
             var target= jquery(this).attr("target");
+            var atarget = util.getAttrText(this, "atarget", null);
+            
+            if (target=="simvar-tx" && nextState==0) {
+                // does not disable tx
+                e.preventDefault();
+                return;
+            }
+
 
             jquery(this).attr("state",nextState);
             util.setVariableCooldown("."+target);
             displaySimVar(target, nextState);
+            if (target=="simvar-tx") {
+                target="simvar-pilottx";
+                nextState = 0;
+                if (atarget.indexOf("com2")>=0) {
+                    nextState=1;
+                }                
+            }
+            if (target=="simvar-rx") {
+                target=atarget;                
+            }
             updateSimVar(target,nextState);
             e.preventDefault();
         });
@@ -559,6 +577,8 @@ function(jquery,util,sysconst) {
             jquery(radioPanel).find(".freq-name").text(src.toUpperCase());
 
             var type = src.substring(0,3);
+            var micvar = null;
+            var spkrvar = "simvar-"+src+"rx";
 
             digitPosition = 1;
             maxDigit = 6;
@@ -566,19 +586,29 @@ function(jquery,util,sysconst) {
             var isShowDecimal = true;
             var isShowActiveFreq = true;
 
-            if (type=="nav") {
-                maxDigit=5;
-            } else if (type=="adf") {
-                isShowDecimal=false;
-                maxDigit=4;
-            } else if (type=="alt") {
-                isShowActiveFreq=false;
-                isShowDecimal=false;
-                maxDigit=5;
-            } else if (type=="xpd") {
-                isShowActiveFreq=false;
-                isShowDecimal=false;
-                maxDigit=4;               
+            switch (type) {
+                case "com":
+                    micvar = "simvar-"+src+"tx";
+                    break;
+                case "nav":
+                    maxDigit=5;
+                    break;
+                case "adf":
+                    isShowDecimal=false;
+                    maxDigit=4;
+                    break;
+                case "alt":
+                    spkrvar=null;
+                    isShowActiveFreq=false;
+                    isShowDecimal=false;
+                    maxDigit=5;
+                    break;
+                case "xpd":
+                    spkrvar=null;
+                    isShowActiveFreq=false;
+                    isShowDecimal=false;
+                    maxDigit=4;
+                    break;
             }
 
             if (isShowDecimal) {
@@ -600,6 +630,28 @@ function(jquery,util,sysconst) {
                 jquery(radioPanel).find(".freq-active").text(freq1);
                 jquery(".button-swap").addClass("invisible");                
                 jquery(".freq-standby-row").addClass("invisible");
+            }
+
+            var state ;
+
+            if (spkrvar==null) {
+                jquery(".radio-spkr-container").addClass("hide");                
+            } else {
+                jquery(".radio-spkr-container").removeClass("hide");
+                jquery(".simvar-rx").attr("atarget", spkrvar);
+                state = util.getAttrInt("."+spkrvar,"state");
+                jquery(".simvar-rx").attr("state", state);
+                displaySimVar("simvar-rx", state, true);
+            }
+
+            if (micvar==null) {
+                jquery(".radio-mic-container").addClass("hide");
+            } else {
+                jquery(".radio-mic-container").removeClass("hide");
+                jquery(".simvar-tx").attr("atarget", micvar);
+                state = util.getAttrInt("."+micvar,"state");
+                jquery(".simvar-tx").attr("state", state);
+                displaySimVar("simvar-tx", state, true);
             }
             
             var val2 = util.getAttrText(jquery(this).find(".numeric-input-target").first(), "state");

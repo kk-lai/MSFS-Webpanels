@@ -49,16 +49,21 @@
             </div><div class="ap-button ui-pbutton text-container" target="btnvsinc"><div class="center-div font-larger">VS+</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ap-button ui-pbutton text-container" target="btnvsdec"><div class="center-div font-larger">VS-</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup com1-radio-info radio-info text-container" target="com1" >
+                <div class="hide radio-tx ctl-com1tx simvar-com1tx"></div>
+                <div class="hide radio-rx ctl-com1rx simvar-com1rx"></div>
                 <div class="radio-name">COM1</div>
                 <div class="radio-active-freq simvar-com1activefreq ctl-com1activefreq" func="showFreq" type="com"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-com1standbyfreq ctl-com1standbyfreq" func="showFreq" type="com"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup radio-info text-container" target="com2" >
+                <div class="hide radio-tx ctl-com2tx simvar-com2tx"></div>
+                <div class="hide radio-rx ctl-com2rx simvar-com2rx"></div>
                 <div class="radio-name">COM2</div>
                 <div class="radio-active-freq simvar-com2activefreq ctl-com2activefreq" func="showFreq" type="com"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-com2standbyfreq ctl-com2standbyfreq" func="showFreq" type="com"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup radio-info text-container" target="nav1" >
+                <div class="hide radio-rx ctl-nav1rx simvar-nav1rx"></div>
                 <div class="radio-name">NAV1</div>
                 <div class="radio-active-freq simvar-nav1activefreq ctl-nav1activefreq" func="showFreq" type="nav"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-nav1standbyfreq ctl-nav1standbyfreq" func="showFreq" type="nav"></div><!--
@@ -70,11 +75,13 @@
                     <div class="center-div dme-distance font-larger2 simvar-dmedistance" func="showText"></div>
                 </div>
             </div><div class="ui-popup radio-info text-container" target="nav2" >
+                <div class="hide radio-rx ctl-nav2rx simvar-nav2rx"></div>
                 <div class="radio-name">NAV2</div>
                 <div class="radio-active-freq simvar-nav2activefreq ctl-nav2activefreq" func="showFreq" type="nav"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-nav2standbyfreq ctl-nav2standbyfreq" func="showFreq" type="nav"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ui-popup radio-info text-container" target="adf" >
+                <div class="hide radio-rx ctl-adfrx simvar-adfrx"></div>
                 <div class="radio-name">ADF</div>
                 <div class="radio-active-freq simvar-adfactivefreq ctl-adfactivefreq" func="showFreq" type="adf"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-adfstandbyfreq ctl-adfstandbyfreq" func="showFreq" type="adf"></div><!--
@@ -463,6 +470,18 @@
                                 --><span class="freq-digit" id="digit-pos-5">0</span><!--
                                 --><span class="freq-digit" id="digit-pos-6">0</span>
                 </div>
+                <div class="radio-spkr-container">
+                    <div class="center-div font-larger2 ui-switch simvar-rx" target="simvar-rx" func="ctlSwitch">
+                        <i class="switch-state-1 color-green fa-solid fa-volume-high"></i>
+                        <i class="switch-state-0 hide color-red fa-solid fa-volume-xmark"></i>
+                    </div>
+                </div>
+                <div class="radio-mic-container">
+                    <div class="center-div font-larger2 ui-switch simvar-tx" target="simvar-tx" func="ctlSwitch">
+                        <i class="switch-state-0 color-red hide fa-solid fa-microphone-slash"></i>
+                        <i class="switch-state-1 color-green fa-solid fa-microphone"></i>
+                    </div>
+                </div>
             </div>
             <div class="radio-freq-container freq-error-container text-container">
                 <div class="center-div font-larger invisible" id="freq-error">Invalid frequency</div>
@@ -483,7 +502,7 @@
             </div>
             <div class="radio-panel-close text-container">
                 <p class="font-larger2"><i class="fa-solid fa-circle-xmark"></i></p>
-            </div>
+            </div>            
         </div>
         <div class="help-container">
             <img class="ui-reload" src="img/refresh-icon.png" alt="refresh-icon" />

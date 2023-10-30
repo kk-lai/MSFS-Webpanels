@@ -60,6 +60,16 @@ img
     font-size:250%;
 }
 
+.color-red
+{
+    color:red;
+}
+
+.color-green
+{
+    color:green;
+}
+
 .warning-red-on
 {
     color: #ff6060 !important;
@@ -1147,6 +1157,24 @@ img
     position:absolute;
     top:0;
     right:2%;
+}
+
+.radio-spkr-container
+{
+    position:absolute;
+    width:20%;
+    height:100%;
+    top:0;
+    left:0;    
+}
+
+.radio-mic-container
+{
+    position:absolute;
+    width:20%;
+    height:100%;
+    top:0;
+    right:0;    
 }
 
 .xpdr-panel

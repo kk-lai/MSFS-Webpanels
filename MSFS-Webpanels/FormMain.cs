@@ -6,10 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Configuration;
+using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text.Encodings.Web;
 using Zen.Barcode;
 
 
@@ -77,11 +79,8 @@ namespace MSFS_Webpanels
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            if (simConnectClient.SimData.IsSimConnected)
-            {
-                simConnectClient.Disconnect();
-            }
-            else
+            simConnectClient.Disconnect();
+            if (!simConnectClient.SimData.IsSimConnected)
             {
                 simConnectClient.Connect(this.Handle);
             }
@@ -122,5 +121,15 @@ namespace MSFS_Webpanels
             */
         }
 
+        private void linkPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(linkPanel.Text) { UseShellExecute = true });
+        }
+
+        private void buttonAbout_Click(object sender, EventArgs e)
+        {
+            AboutBox aboutBox = new AboutBox();
+            aboutBox.ShowDialog();
+        }
     }
 }

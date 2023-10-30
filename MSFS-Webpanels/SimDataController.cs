@@ -69,8 +69,14 @@ public class SimDataController: ControllerBase
         "simvar-flapspositioninc", //FLAPS_INCR,
 
         "simvar-gyrodrifterrorex", // GYRO_DRIFT_SET_EX1
-        "simvar-headinggyroset" // HEADING_GYRO_SET
+        "simvar-headinggyroset", // HEADING_GYRO_SET
 
+        "simvar-com1rx", // COM1_RECEIVE_SELECT
+        "simvar-com2rx", // COM2_RECEIVE_SELECT
+        "simvar-pilottx", // PILOT_TRANSMITTER_SET
+        "simvar-nav1rx", // RADIO_VOR1_IDENT_TOGGLE
+        "simvar-nav2rx", // RADIO_VOR2_IDENT_TOGGLE
+        "simvar-adfrx" // RADIO_ADF_IDENT_TOGGLE
     };
 
 
