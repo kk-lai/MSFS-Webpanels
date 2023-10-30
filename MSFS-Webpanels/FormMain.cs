@@ -78,11 +78,14 @@ namespace MSFS_Webpanels
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
-        {
-            simConnectClient.Disconnect();
+        {            
             if (!simConnectClient.SimData.IsSimConnected)
             {
+                simConnectClient.Disconnect();
                 simConnectClient.Connect(this.Handle);
+            } else
+            {
+                simConnectClient.Disconnect();
             }
         }
 
