@@ -16,14 +16,23 @@ Installation
 1. Install runtime libraries stated in prerequisites section
 2. Unzip MSFS-Webpanels.zip into any location you wanted
 
+Configuration
+=============
+The web server port is configured to 8888, you may change the port number by modifying the line below in the file "appsettings.json" as below:
+
+"Url": "http://*:xxxx"
+
+Where "xxxx" is your target port number
+ 
 Usage
 =====
 1. Run the executable “MSFS-Webpanels.exe”.
-2. Connect MSFS by clicking the “Connect” button.
-3. On your tablet, open the panel page with a browser by entering the link stated in the application or scanning the QRCode with your tablet’s camera.
-4. Tap the “i” icon at the bottom right corner to see the locations of the controls, where arrows are drag controls and dots are tap controls.
-5. In case the panel does not work properly, tap the “refresh” icon beside the “i” icon to reload the page.
-6. If you want to use the panel in full screen, you may add the page to your home screen by selecting “Share” > “Add to Home Screen” on your iPad.
+2. Click "Allow access" button to allow connection behind the firewall when "Windows Security Alert" is popped up.
+3. Connect MSFS by clicking the “Connect” button.
+4. On your tablet, open the panel page with a browser by entering the link stated in the application or scanning the QRCode with your tablet’s camera.
+5. Tap the “i” icon at the bottom right corner to see the locations of the controls, where arrows are drag controls and dots are tap controls.
+6. In case the panel does not work properly, tap the “refresh” icon beside the “i” icon to reload the page.
+7. If you want to use the panel in full screen, you may add the page to your home screen by selecting “Share” > “Add to Home Screen” on your iPad.
 
 Future Plans
 ============
