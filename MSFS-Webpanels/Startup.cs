@@ -29,13 +29,7 @@ namespace MSFS_Webpanels
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddMvc(option => option.EnableEndpointRouting = false);
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.WithOrigins("http://192.168.2.199")
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));            
+            services.AddMvc(option => option.EnableEndpointRouting = false);       
             //services.AddControllersWithViews();
         }
 

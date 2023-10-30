@@ -9,6 +9,7 @@ using System.Collections.Concurrent;
 using Microsoft.Extensions.Configuration.Ini;
 using Microsoft.Extensions.FileProviders;
 using System.Collections;
+using Microsoft.VisualBasic.Devices;
 
 public class SimConnectClient
 {
@@ -30,7 +31,8 @@ public class SimConnectClient
     enum DEFINITION
     {
         C172_FPANEL,
-        TRANSPONDER_STATE
+        TRANSPONDER_STATE,
+        AP_ALTITUDE_LOCK
     };
 
     public enum EVENT
@@ -43,7 +45,6 @@ public class SimConnectClient
         SET_TAS_ADJ,
         SET_ATTITUDE_BAR_POSITION,
 
-        SET_GYRO_DRIFT_ERROR,
         SET_HEADING_BUG,
         SET_NAV1_OBS,
         SET_NAV2_OBS,
@@ -69,7 +70,6 @@ public class SimConnectClient
         SET_NAV1_STANDBY,
         SET_NAV2_STANDBY,
         SET_ADF_STANDBY,
-        SET_AP_ALTITUDE,
         SWAP_COM1_FREQ,
         SWAP_COM2_FREQ,
         SWAP_NAV1_FREQ,
@@ -81,7 +81,7 @@ public class SimConnectClient
         BTN_NAV,
         BTN_APR,
         BTN_REV,
-        BTN_ALT,
+        BTN_ALT_SET,
         BTN_VS_INC,
         BTN_VS_DEC,
 
@@ -106,7 +106,9 @@ public class SimConnectClient
         SET_PILOT_TX,
         TOGGLE_VOR1_IDENT,
         TOGGLE_VOR2_IDENT,
-        TOGGLE_ADF_IDENT
+        TOGGLE_ADF_IDENT,
+
+        AP_PANEL_VS_SET
     };
 
     enum NOTIFICATIONGROUP
@@ -117,6 +119,11 @@ public class SimConnectClient
     struct TransponderState
     {
         public uint state;
+    }
+
+    struct APAltitudeHold
+    {
+        public uint altitude;
     }
 
     private SimConnect simConnect = null;
@@ -280,7 +287,11 @@ public class SimConnectClient
 
             fieldId = 0;
             simConnect.AddToDataDefinition(DEFINITION.TRANSPONDER_STATE, "TRANSPONDER STATE:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, 0);
-            simConnect.RegisterDataDefineStruct<TransponderState>(DEFINITION.TRANSPONDER_STATE);
+            //simConnect.RegisterDataDefineStruct<TransponderState>(DEFINITION.TRANSPONDER_STATE);
+
+            fieldId = 0;
+            simConnect.AddToDataDefinition(DEFINITION.AP_ALTITUDE_LOCK, "AUTOPILOT ALTITUDE LOCK VAR", "Feet", SIMCONNECT_DATATYPE.INT32, 0, 0);
+            //simConnect.RegisterDataDefineStruct<APAltitudeHold>(DEFINITION.AP_ALTITUDE_LOCK);
 
             /*
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "", "", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
@@ -289,7 +300,6 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.SET_EGT_REF, "EGT1_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_TAS_ADJ, "TRUE_AIRSPEED_CAL_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_ATTITUDE_BAR_POSITION, "ATTITUDE_BARS_POSITION_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_GYRO_DRIFT_ERROR, "GYRO_DRIFT_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_HEADING_BUG, "HEADING_BUG_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_QNH, "KOHLSMAN_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_OBS, "VOR1_SET");
@@ -329,7 +339,6 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_STANDBY, "NAV1_STBY_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_STANDBY, "NAV2_STBY_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_STANDBY, "ADF_STBY_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_AP_ALTITUDE, "AP_ALT_VAR_SET_ENGLISH");
             simConnect.MapClientEventToSimEvent(EVENT.SWAP_COM1_FREQ, "COM1_RADIO_SWAP");
             simConnect.MapClientEventToSimEvent(EVENT.SWAP_COM2_FREQ, "COM2_RADIO_SWAP");
             simConnect.MapClientEventToSimEvent(EVENT.SWAP_NAV1_FREQ, "NAV1_RADIO_SWAP");
@@ -341,7 +350,7 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.BTN_NAV, "AP_NAV1_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_APR, "AP_APR_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_REV, "AP_BC_HOLD");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_ALT, "AP_PANEL_ALTITUDE_HOLD");
+            simConnect.MapClientEventToSimEvent(EVENT.BTN_ALT_SET, "AP_PANEL_ALTITUDE_SET");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_INC, "AP_VS_VAR_INC");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_DEC, "AP_VS_VAR_DEC");
 
@@ -355,7 +364,7 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_VOR1_IDENT, "RADIO_VOR1_IDENT_TOGGLE");
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_VOR2_IDENT, "RADIO_VOR2_IDENT_TOGGLE");
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ADF_IDENT, "RADIO_ADF_IDENT_TOGGLE");
-
+            simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_SET, "AP_PANEL_VS_SET");
         }
         catch (COMException ex)
         {
@@ -554,6 +563,15 @@ public class SimConnectClient
             SimConnect.SIMCONNECT_OBJECT_ID_USER,
             SIMCONNECT_DATA_SET_FLAG.DEFAULT,
             new TransponderState { state = pos }
+        );
+    }
+
+    public void setAPAltitudeHold(uint apaltitude)
+    {        
+        simConnect.SetDataOnSimObject(DEFINITION.AP_ALTITUDE_LOCK,
+            SimConnect.SIMCONNECT_OBJECT_ID_USER,
+            SIMCONNECT_DATA_SET_FLAG.DEFAULT,
+            new APAltitudeHold { altitude = apaltitude }
         );
     }
 }
