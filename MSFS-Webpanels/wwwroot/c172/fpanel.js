@@ -88,8 +88,13 @@ function(jquery,util,sysconst) {
         }
         jsonData = util.postProcessSimData(jsonData);
 
-        if (jsonData.simData.apVerticalHold == 0 && jsonData.simData.apAltitudeLock == 0 && jsonData.simData.apGSHold ==0 ) {
-            updateSimVar("simvar-vsholdset", 1);
+        if (jsonData.isSimConnected && jsonData.isSimRunning) {
+            if (jsonData.simData.gpsDriveNav1) {
+                updateSimVar("simvar-togglegpsdrivenav1", 0);
+            }
+            if (jsonData.simData.apVerticalHold == 0 && jsonData.simData.apAltitudeLock == 0 && jsonData.simData.apGSHold == 0) {
+                updateSimVar("simvar-vsholdset", 1);
+            }
         }
 
         for(var key in jsonData.simData) {
@@ -163,7 +168,11 @@ function(jquery,util,sysconst) {
             }
             val=parseInt(bcd);
         }
-        updateSimVar("simvar-"+simvar, val);
+        updateSimVar("simvar-" + simvar, val);
+        if (simvar == "apaltitude") {
+            // if not send this event G1000 selected altitude will show "----"
+            updateSimVar("simvar-apaltvarset", val);            
+        }
     }
 
     jquery(document).ready(function() {
@@ -187,7 +196,6 @@ function(jquery,util,sysconst) {
                 e.preventDefault();
                 return;
             }
-
 
             jquery(this).attr("state",nextState);
             util.setVariableCooldown("."+target);
@@ -701,9 +709,8 @@ function(jquery,util,sysconst) {
                 } else {
                     updateSimVar("simvar-vsholdset", 1);
                 }
-            } else {
-                updateSimVar("simvar-" + target, 0);
             }
+            updateSimVar("simvar-" + target, 0);
             if (target.substring(0,5)=="btnvs") {
                 if (vsDisplayTimer!=null) {
                     clearTimeout(vsDisplayTimer);
@@ -791,6 +798,9 @@ function(jquery,util,sysconst) {
                     
                     if (evt[0]=="simvar-attitudebarposition") {
                         obj.iparams= [0, arg1 ];
+                    } else 
+                    if (evt[0] == "simvar-apaltvarset") {
+                        obj.iparams = [arg1, 1];
                     }
                     var jsonText=JSON.stringify(obj);                
                     jquery.ajax(sysconst.simVarUrl,

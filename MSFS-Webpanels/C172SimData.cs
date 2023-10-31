@@ -119,6 +119,8 @@ public class C172SimData : SimData
         private Int32 nav2rx;
         private Int32 adfrx;
 
+        private Int32 gpsDriveNav1;
+
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
         public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
         public float EngineEGT { get => engineEGT; set => engineEGT = value; }
@@ -205,6 +207,7 @@ public class C172SimData : SimData
         public int Nav1rx { get => nav1rx; set => nav1rx = value; }
         public int Nav2rx { get => nav2rx; set => nav2rx = value; }
         public int Adfrx { get => adfrx; set => adfrx = value; }
+        public int GpsDriveNav1 { get => gpsDriveNav1; set => gpsDriveNav1 = value; }
     }
     private C172Data c172data = new C172Data();
 
