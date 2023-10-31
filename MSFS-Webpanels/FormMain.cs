@@ -78,12 +78,13 @@ namespace MSFS_Webpanels
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
-        {            
+        {
             if (!simConnectClient.SimData.IsSimConnected)
             {
                 simConnectClient.Disconnect();
                 simConnectClient.Connect(this.Handle);
-            } else
+            }
+            else
             {
                 simConnectClient.Disconnect();
             }
@@ -122,6 +123,13 @@ namespace MSFS_Webpanels
             }
             simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SET_ATTITUDE_BAR_POSITION, 0, val);
             */
+            uint[] val = new uint[2];
+            val[0] = 5000;
+            val[1] = 1;
+            uint evt = SimConnectClient.EVENT.AP_ALT_VAR_SET - SimConnectClient.EVENT.SET_EGT_REF;
+
+
+            SimConnectClient.getSimConnectClient().transmitEvent(evt, val);
         }
 
         private void linkPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

@@ -108,7 +108,9 @@ public class SimConnectClient
         TOGGLE_VOR2_IDENT,
         TOGGLE_ADF_IDENT,
 
-        AP_PANEL_VS_SET
+        AP_PANEL_VS_SET,
+        AP_ALT_VAR_SET,
+        TOGGLE_GPS_DRIVES_NAV1
     };
 
     enum NOTIFICATIONGROUP
@@ -279,6 +281,7 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV SOUND:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV SOUND:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ADF SOUND:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GPS DRIVES NAV1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
             simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.C172_FPANEL, SimConnect.SIMCONNECT_OBJECT_ID_USER,
                 SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
@@ -365,6 +368,9 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_VOR2_IDENT, "RADIO_VOR2_IDENT_TOGGLE");
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ADF_IDENT, "RADIO_ADF_IDENT_TOGGLE");
             simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_SET, "AP_PANEL_VS_SET");
+
+            simConnect.MapClientEventToSimEvent(EVENT.AP_ALT_VAR_SET, "AP_ALT_VAR_SET_ENGLISH");
+            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_GPS_DRIVES_NAV1, "TOGGLE_GPS_DRIVES_NAV1");
         }
         catch (COMException ex)
         {
