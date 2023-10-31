@@ -76,7 +76,9 @@ public class SimDataController: ControllerBase
         "simvar-nav2rx", // RADIO_VOR2_IDENT_TOGGLE
         "simvar-adfrx", // RADIO_ADF_IDENT_TOGGLE
 
-        "simvar-vsholdset" // AP_PANEL_VS_SET
+        "simvar-vsholdset", // AP_PANEL_VS_SET
+        "simvar-apaltvarset", // AP_ALT_VAR_SET
+        "simvar-togglegpsdrivenav1" // TOGGLE_GPS_DRIVES_NAV1
     };
 
 
