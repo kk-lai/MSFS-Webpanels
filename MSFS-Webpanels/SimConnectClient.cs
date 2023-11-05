@@ -81,7 +81,7 @@ public class SimConnectClient
         BTN_NAV,
         BTN_APR,
         BTN_REV,
-        BTN_ALT_SET,
+        BTN_ALT,
         BTN_VS_INC,
         BTN_VS_DEC,
 
@@ -110,7 +110,8 @@ public class SimConnectClient
 
         AP_PANEL_VS_SET,
         AP_ALT_VAR_SET,
-        TOGGLE_GPS_DRIVES_NAV1
+        TOGGLE_GPS_DRIVES_NAV1,
+        AP_PANEL_VS_ON
     };
 
     enum NOTIFICATIONGROUP
@@ -353,7 +354,7 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.BTN_NAV, "AP_NAV1_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_APR, "AP_APR_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_REV, "AP_BC_HOLD");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_ALT_SET, "AP_PANEL_ALTITUDE_SET");
+            simConnect.MapClientEventToSimEvent(EVENT.BTN_ALT, "AP_PANEL_ALTITUDE_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_INC, "AP_VS_VAR_INC");
             simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_DEC, "AP_VS_VAR_DEC");
 
@@ -371,6 +372,9 @@ public class SimConnectClient
 
             simConnect.MapClientEventToSimEvent(EVENT.AP_ALT_VAR_SET, "AP_ALT_VAR_SET_ENGLISH");
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_GPS_DRIVES_NAV1, "TOGGLE_GPS_DRIVES_NAV1");
+
+            simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_ON, "AP_PANEL_VS_ON");
+
         }
         catch (COMException ex)
         {
