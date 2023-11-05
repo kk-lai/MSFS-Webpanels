@@ -60,5 +60,9 @@
       <HintPath>C:\MSFS SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
     </Reference>
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /y $(SolutionDir)..\README.md $(OutDir)README.md" />
+  </Target>
 
 </Project>

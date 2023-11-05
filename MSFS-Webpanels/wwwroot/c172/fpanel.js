@@ -35,6 +35,7 @@ function(jquery,util,sysconst) {
         var fh = wh;
         var fw = ww;
         var ar = ww / wh;
+        var voffset = 0;
         if (ar>sysconst.aspectRatio) {
             fw=Math.floor(wh*sysconst.aspectRatio);
         } else {
@@ -45,6 +46,7 @@ function(jquery,util,sysconst) {
         jquery(".container").css("width", fw);
         jquery(".container").css("height", fh);
         jquery(".container").removeClass("hide");
+        jquery(".container").css("top", wh - fh);
     }
 
     function displaySimVar(simvar, val, force=true) {
@@ -83,19 +85,10 @@ function(jquery,util,sysconst) {
                 }
             }
         }
-        if (!jsonData.isSimConnected) {
+        if (!jsonData.isSimConnected || typeof jsonData.simData === "undefined" || jsonData.simData==null) {
             jsonData.simData = util.defaultOfflineData.simData;
         }
         jsonData = util.postProcessSimData(jsonData);
-
-        if (jsonData.isSimConnected && jsonData.isSimRunning) {
-            if (jsonData.simData.gpsDriveNav1) {
-                updateSimVar("simvar-togglegpsdrivenav1", 0);
-            }
-            if (jsonData.simData.apVerticalHold == 0 && jsonData.simData.apAltitudeLock == 0 && jsonData.simData.apGSHold == 0) {
-                updateSimVar("simvar-vsholdset", 1);
-            }
-        }
 
         for(var key in jsonData.simData) {
             var simvar = "simvar-" + key.toLowerCase();
@@ -185,6 +178,32 @@ function(jquery,util,sysconst) {
             evMove='mousedown mousemove mouseup mouseleave';
         }
         resizeContainer();
+
+        jquery(".ui-fullscreen").on(ev, function (e) {
+            if (!document.fullscreenElement &&    // alternative standard method
+                !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        });
+
         jquery(".ui-switch").on(ev,function(e) {
             var curState = parseInt(jquery(this).attr('state'));
             var nextState = 1-curState;
@@ -702,15 +721,11 @@ function(jquery,util,sysconst) {
                 displaySimVar("simvar-heading", nheading);
                 jquery(".ctl-heading").attr("state", nheading);
             }
-            var state = util.getAttrText(this, "state", null);
-            if (target == "btnalt") {
-                if (state != "ALT") {
-                    updateSimVar("simvar-btnalt", 1);
-                } else {
-                    updateSimVar("simvar-vsholdset", 1);
-                }
-            }
             updateSimVar("simvar-" + target, 0);
+            var state = util.getAttrText(this, "state", null);
+            if (target == "btnalt" && state == "ALT") {
+                updateSimVar("simvar-appanelvson", 0);               
+            }            
             if (target.substring(0,5)=="btnvs") {
                 if (vsDisplayTimer!=null) {
                     clearTimeout(vsDisplayTimer);

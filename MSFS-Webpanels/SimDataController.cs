@@ -78,7 +78,8 @@ public class SimDataController: ControllerBase
 
         "simvar-vsholdset", // AP_PANEL_VS_SET
         "simvar-apaltvarset", // AP_ALT_VAR_SET
-        "simvar-togglegpsdrivenav1" // TOGGLE_GPS_DRIVES_NAV1
+        "simvar-togglegpsdrivenav1", // TOGGLE_GPS_DRIVES_NAV1
+        "simvar-appanelvson" // AP_PANEL_VS_ON
     };
 
 
