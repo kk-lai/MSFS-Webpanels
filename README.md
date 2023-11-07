@@ -83,3 +83,9 @@ https://www.freepik.com/free-vector/glossy-web-buttons-set-different-colors_4249
 
 Magneto (by macrovector)
 https://www.freepik.com/free-vector/metal-padlocks-keys-different-shapes-realistic-set_2873578.htm#query=keyhole&position=12&from_view=keyword&track=sph
+
+QR code scan (by freepik)
+https://www.freepik.com/free-vector/mobile-background-with-qr-code_1023723.htm#query=ipad%20app%20qr%20code&position=16&from_view=search&track=ais
+
+Monitor (by rawpixel.com)
+https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=12&from_view=search&track=sph
