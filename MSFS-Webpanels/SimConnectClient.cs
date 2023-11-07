@@ -167,7 +167,6 @@ public class SimConnectClient
 
             simConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(OnRecvSimobjectData);
             simConnect.SubscribeToSystemEvent(EVENT.AIRCRAFT_LOADED, "AircraftLoaded");
-            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_PAUSE, "Pause");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_RUNNING, "Sim");
             uint fieldId = 0;
@@ -412,6 +411,7 @@ public class SimConnectClient
     {
         Debug.WriteLine("OnRecvOpen");
         simData.IsSimConnected = true;
+        simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
     }
 
     private void OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
