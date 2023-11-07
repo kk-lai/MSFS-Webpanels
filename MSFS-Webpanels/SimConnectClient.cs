@@ -146,7 +146,7 @@ public class SimConnectClient
 
     public SimConnectClient()
     {
-        detectMSFSFileLocation();
+        //detectMSFSFileLocation();
     }
 
     public void Connect(IntPtr whnd)
