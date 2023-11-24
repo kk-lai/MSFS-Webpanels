@@ -1,27 +1,30 @@
+using log4net;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Encodings.Web;
 using Zen.Barcode;
 
 
-
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
 
 namespace MSFS_Webpanels
 {
     public partial class FormMain : Form
     {
-
+        private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
         private SimConnectClient simConnectClient = SimConnectClient.getSimConnectClient();
         private System.Windows.Forms.Timer timer;
         private String hostAddress = "localhost";
@@ -33,6 +36,8 @@ namespace MSFS_Webpanels
             timer.Tick += new EventHandler(timerFunc);
             timer.Interval = 500;
             timer.Start();
+
+            _logger.Info("MSFS-Webpanels (version:" + Application.ProductVersion + ") Start");
 
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
             {
@@ -46,11 +51,13 @@ namespace MSFS_Webpanels
                         if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {
                             hostAddress = ip.Address.ToString();
+                            _logger.Info("IP Address:" + hostAddress);
                             break;
                         }
                     }
                 }
             }
+            
 
             this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion + ")";
         }
@@ -81,11 +88,13 @@ namespace MSFS_Webpanels
         {
             if (!simConnectClient.SimData.IsSimConnected)
             {
+                _logger.Info("Start connecting MSFS");
                 simConnectClient.Disconnect();
                 simConnectClient.Connect(this.Handle);
             }
             else
             {
+                _logger.Info("End connecting MSFS");
                 simConnectClient.Disconnect();
             }
         }
@@ -108,6 +117,8 @@ namespace MSFS_Webpanels
                     pictureQRcode.Visible = true;
                     linkPanel.Visible = true;
                     timer.Stop();
+
+                    _logger.Info("Web Server " + webUrl + " Started");
                 }
             }
 

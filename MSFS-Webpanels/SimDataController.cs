@@ -1,14 +1,22 @@
-﻿using Microsoft.AspNetCore.Components.Routing;
+﻿using log4net;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 using MSFS_Webpanels;
 using System;
+using System.Reflection;
 
 [Route("api/[controller]")]
 [ApiController]
-
+#if DEBUG
+[EnableCors("MyPolicy")]
+#endif
 public class SimDataController: ControllerBase
 {
+    private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+
     private readonly string[] SIMEVENTS =
     {
         "simvar-refegt", //SET_EGT_REF,
@@ -79,17 +87,34 @@ public class SimDataController: ControllerBase
         "simvar-vsholdset", // AP_PANEL_VS_SET
         "simvar-apaltvarset", // AP_ALT_VAR_SET
         "simvar-togglegpsdrivenav1", // TOGGLE_GPS_DRIVES_NAV1
-        "simvar-appanelvson" // AP_PANEL_VS_ON
+        "simvar-appanelvson", // AP_PANEL_VS_ON
+        "simvar-xpdridentset", // XPNDR_IDENT_SET
+        "simvar-com1volume",
+        "simvar-nav1volume",
+        "simvar-com2volume",
+        "simvar-nav2volume",
+        "simvar-adfvolume",
+"simvar-audiopanelvolume", // AUDIO_PANEL_VOLUME_SET
+"simvar-markertestmute", // MARKER_BEACON_TEST_MUTE
+"simvar-markerishighsensitivity", // MARKER_BEACON_SENSITIVITY_HIGH
+"simvar-intercommode", // INTERCOM_MODE_SET
+"simvar-markersoundon", // MARKER_SOUND_TOGGLE
+"simvar-intercomactive", // TOGGLE_ICS
+"simvar-dmesoundon", // RADIO_DME1_IDENT_TOGGLE
+"simvar-speakeractive", // TOGGLE_SPEAKER
+"simvar-copilottxtype", // COPILOT_TRANSMITTER_SET
+
+
     };
 
-
     public SimDataController()
-	{
-	}
+    {
+        
+    }   
 
     [HttpGet()]
     public IActionResult Index()
-	{
+	{        
         SimData simData = SimConnectClient.getSimConnectClient().SimData;        
 
 		return Ok(simData);

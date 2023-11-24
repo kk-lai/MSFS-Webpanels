@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace MSFS_Webpanels
 {
@@ -29,12 +30,24 @@ namespace MSFS_Webpanels
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddMvc(option => option.EnableEndpointRouting = false);       
+            services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddLogging(cfg =>
+            {
+                cfg.AddLog4Net();
+            });
+#if DEBUG            
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.WithOrigins("*")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+#endif
             //services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -42,9 +55,11 @@ namespace MSFS_Webpanels
             }
             
             app.UseFileServer();
+            loggerFactory.AddLog4Net();
             app.UseMvc();
+#if DEBUG
             app.UseCors("MyPolicy");
-            
+#endif            
         }
     }
 }

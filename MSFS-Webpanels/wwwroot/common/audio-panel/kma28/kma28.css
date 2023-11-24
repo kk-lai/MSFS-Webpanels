@@ -1,0 +1,275 @@
+.kma28-panel
+{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+.kma28-panel > img 
+{
+    width:100%;
+    height:100%;
+}
+
+.kma28-panel .backplate
+{
+    width:100%;
+    height:100%;
+    background: url(kma28.png) 0 0;
+    background-size: cover;
+}
+
+.kma28-panel .knob-volume
+{
+    position:absolute;
+    width:8.203125%; height:39.2523364485981%; left:4.8828125%; top:43.9252336448598%;
+    background: url(kma28.png) 0 22.76595745%;
+    background-size: 1219.047619% 1219.047619%;
+}
+
+.kma28-panel .sw-selector
+{
+    position:absolute;
+    width:8.88671875%; height:42.5233644859813%; left:84.1796875%; top:25.7009345794393%;
+    background: url(kma28.png) 9.003215434% 22.93676313%;
+    background-size: 1125.274725% 1125.274725%;
+}
+
+.kma28-panel .small-led
+{
+    position:absolute;
+    width:3.90625%; height:18.6915887850467%;
+    background: url(kma28.png) 17.78455285% 21.74796748%;
+    background-size: 2560% 2560%
+}
+
+.kma28-panel .big-led
+{
+    position:absolute;
+    width:11.71875%; height:56.0747663551402%;
+    background: url(kma28.png) 17.68292683% 21.74796748%;
+    background-size: 2560% 2560%
+}
+
+.kma28-panel .com1-led
+{
+    left:28.61328125%; top:19.6261682242991%;
+}
+
+.kma28-panel .com2-led
+{
+    left:28.61328125%; top:50%;
+}
+
+.kma28-panel .nav1-led
+{
+    left:38.671875%; top:19.6261682242991%;
+}
+
+.kma28-panel .nav2-led
+{
+    left:38.671875%; top:50%;
+}
+
+.kma28-panel .mkr-led
+{
+    left:53.515625%; top:19.6261682242991%;
+}
+
+.kma28-panel .ics-led
+{
+    left:53.515625%; top:50%;
+}
+
+.kma28-panel .adf-led
+{
+    left:63.57421875%; top:19.6261682242991%;
+}
+
+.kma28-panel .aux-led
+{
+    left:63.57421875%; top:50%;
+}
+
+.kma28-panel .dme-led
+{
+    left:73.828125%; top:19.6261682242991%;
+}
+
+.kma28-panel .spr-led
+{
+    left:73.828125%; top:50%;
+}
+
+.kma28-panel .tx-led
+{
+    left:76.46484375%; top:43.9252336448598%;
+}
+
+.kma28-panel .swap-led
+{
+    left:88.4765625%; top:43.9252336448598%;
+}
+
+.kma28-panel .dimmer
+{
+    position:absolute;
+    width:4.19921875%; height:15.8878504672897%;
+    background-color: #101010;
+    opacity: 0.6;
+}
+
+.kma28-panel .om-dim
+{
+    left:1.85546875%; top:18.6915887850467%;
+}
+
+.kma28-panel .mm-dim
+{
+    left:6.73828125%; top:18.6915887850467%;
+}
+
+.kma28-panel .im-dim
+{
+    left:11.71875%; top:18.6915887850467%;
+}
+
+.kma28-panel .ctl-volume
+{
+
+}
+
+.kma28-panel .kbtn
+{
+    position:absolute;
+    width:9.47265625%; height:77.1028037383178%; top:12.1495327102804%;
+}
+
+.kma28-panel .knob-left
+{
+    left:78.90625%; 
+}
+
+.kma28-panel .knob-right
+{
+    left:88.37890625%;
+}
+
+.kma28-panel .btn
+{
+    position:absolute;
+    width:8.49609375%; height:22.4299065420561%;
+}
+
+.kma28-panel .btn-com1
+{
+    left:24.51171875%; top:17.2897196261682%;
+}
+
+.kma28-panel .btn-com2
+{
+    left:24.51171875%; top:48.59813084%;
+}
+
+.kma28-panel .btn-nav1
+{
+    left:34.47265625%; top:17.2897196261682%;
+}
+
+.kma28-panel .btn-nav2
+{
+    left:34.47265625%; top:48.5981308411215%;
+}
+
+.kma28-panel .btn-mkr
+{
+    left:48.92578125%; top:17.2897196261682%;
+}
+
+.kma28-panel .btn-ics
+{
+    left:48.92578125%; top:48.5981308411215%;
+}
+
+.kma28-panel .btn-adf
+{
+    left:58.984375%; top:17.2897196261682%;
+}
+
+.kma28-panel .btn-aux
+{
+    left:58.984375%; top:48.5981308411215%;
+}
+
+.kma28-panel .btn-dme
+{
+    left:69.04296875%; top:17.2897196261682%;
+}
+
+.kma28-panel .btn-spr
+{
+    left:69.04296875%; top:48.5981308411215%;
+}
+
+.kma28-panel .dot-volume
+{
+    position:absolute;
+    width:9.0234375%; height:43.1775700934579%; left:4.5703125%; top:42.4299065420561%;
+    text-align: center;
+    color:red;
+    font-size:70%;
+}
+
+.kma28-panel .ctl-volume
+{
+    position:absolute;
+    width:12.3046875%; height:58.8785046728972%; left:2.9296875%; top:34.5794392523364%;
+}
+
+.kma28-panel .sw-center
+{
+    
+    width:100%; height:100%;
+    background: url(kma28.png) 34.57172342621259% 22.08462332301342%;
+    background-size: 1861.818181818182% 1861.818181818182%;
+}
+
+.kma28-panel .sw-down
+{
+    
+    width:100%; height:100%;
+    background: url(kma28.png) 40.24767801857585% 22.08462332301342%;
+    background-size: 1861.818181818182% 1861.818181818182%;
+}
+
+.kma28-panel .sw-up
+{   
+    width:100%; height:100%;
+    background: url(kma28.png) 45.92363261093911% 22.08462332301342%;
+    background-size: 1861.818181818182% 1861.818181818182%;
+}
+
+.kma28-panel .switch-marker
+{
+    position:absolute;
+    width:5.37109375%; height:25.7009345794393%; left:16.2109375%; top:19.1588785046729%;
+}
+
+
+.kma28-panel .switch-intercom
+{
+    position:absolute;
+    width:5.37109375%; height:25.7009345794393%; left:16.2109375%; top:56.0747663551402%;
+}
+
+.kma28-panel .ctl-marker
+{
+    position:absolute;
+    width:7.03125%; height:40.1869158878505%; left:16.89453125%; top:10.2803738317757%;
+}
+
+.kma28-panel .ctl-intercom
+{
+    position:absolute;
+    width:7.03125%; height:40.1869158878505%; left:16.89453125%; top:52.803738317757%;
+}

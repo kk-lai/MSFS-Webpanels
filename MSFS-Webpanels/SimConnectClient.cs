@@ -10,9 +10,12 @@ using Microsoft.Extensions.Configuration.Ini;
 using Microsoft.Extensions.FileProviders;
 using System.Collections;
 using Microsoft.VisualBasic.Devices;
+using log4net;
+using System.Reflection;
 
 public class SimConnectClient
 {
+    private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
     class QueueItem
     {
         EVENT evt;
@@ -111,7 +114,22 @@ public class SimConnectClient
         AP_PANEL_VS_SET,
         AP_ALT_VAR_SET,
         TOGGLE_GPS_DRIVES_NAV1,
-        AP_PANEL_VS_ON
+        AP_PANEL_VS_ON,
+        XPNDR_IDENT_SET,
+        COM1_VOLUME_SET,
+        NAV1_VOLUME_SET_EX1,
+        COM2_VOLUME_SET,
+        NAV2_VOLUME_SET_EX1,
+        ADF_VOLUME_SET,
+        AUDIO_PANEL_VOLUME_SET,
+        MARKER_BEACON_TEST_MUTE,
+        MARKER_BEACON_SENSITIVITY_HIGH,
+        INTERCOM_MODE_SET,
+        MARKER_SOUND_TOGGLE,
+        TOGGLE_ICS,
+        RADIO_DME1_IDENT_TOGGLE,
+        TOGGLE_SPEAKER,
+        COPILOT_TRANSMITTER_SET
     };
 
     enum NOTIFICATIONGROUP
@@ -157,6 +175,7 @@ public class SimConnectClient
         }
         try
         {
+            _logger.Info("Calling SimConnect");
             simConnect = new SimConnect("MSFS Webpanels data request", whnd, WM_USER_SIMCONNECT, null, 0);
             simConnect.OnRecvOpen += new SimConnect.RecvOpenEventHandler(OnRecvOpen);
             simConnect.OnRecvQuit += new SimConnect.RecvQuitEventHandler(OnRecvQuit);
@@ -270,23 +289,70 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "AUTOPILOT BACKCOURSE HOLD", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "AUTOPILOT GLIDESLOPE HOLD", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV DME:1", "decinmile", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV DME:1", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV DMESPEED:1", "Knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV SIGNAL:1", "Number", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV HAS DME:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV DME:2", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV DMESPEED:2", "Knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV SIGNAL:2", "Number", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV HAS DME:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "TRANSPONDER CODE:1", "Bco16", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "TRANSPONDER STATE:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM TRANSMIT:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM RECEIVE:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM RECEIVE EX1:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM TRANSMIT:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM RECEIVE:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM RECEIVE EX1:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV SOUND:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV SOUND:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ADF SOUND:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GPS DRIVES NAV1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "INDICATED ALTITUDE:3", "Feet", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ADF VOLUME:1", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "SIMULATION TIME", "second", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM VOLUME:1", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV VOLUME:1", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM VOLUME:2", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "NAV VOLUME:2", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "KOHLSMAN SETTING MB:2", "millibar scaler 16", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
+            // VOL
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "AUDIO PANEL VOLUME", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            // HI/LO/TM EVT MARKER_BEACON_TEST_MUTE MARKER_BEACON_SENSITIVITY_HIGH
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "MARKER BEACON TEST MUTE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "MARKER BEACON SENSITIVITY HIGH", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            // ISO ALL CREW, EVT = INTERCOM_MODE_SET
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "INTERCOM MODE", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "MARKER SOUND", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            // ICS ?
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "INTERCOM SYSTEM ACTIVE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            // AUX Missing?
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "DME SOUND", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "SPEAKER ACTIVE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+
+            // COM3/2/1 COM1/2 COM2/1 TEL
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM TRANSMIT:3", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "PILOT TRANSMITTING", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COPILOT TRANSMITTING", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "PILOT TRANSMITTER TYPE", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COPILOT TRANSMITTER TYPE", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "INNER MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "MIDDLE MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "OUTER MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            simConnect.RegisterDataDefineStruct<C172SimData.C172Data>(DEFINITION.C172_FPANEL);
             simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.C172_FPANEL, SimConnect.SIMCONNECT_OBJECT_ID_USER,
                 SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
-            simConnect.RegisterDataDefineStruct<C172SimData.C172Data>(DEFINITION.C172_FPANEL);
-
 
             fieldId = 0;
             simConnect.AddToDataDefinition(DEFINITION.TRANSPONDER_STATE, "TRANSPONDER STATE:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, 0);
@@ -327,7 +393,6 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.FLAPS_DECR, "FLAPS_DECR");
             simConnect.MapClientEventToSimEvent(EVENT.FLAPS_INCR, "FLAPS_INCR");
 
-
             simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_INCR, "MAGNETO_INCR");
             simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_DECR, "MAGNETO_DECR");
 
@@ -336,8 +401,6 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_RIGHT, "FUEL_SELECTOR_RIGHT");
 
             simConnect.MapClientEventToSimEvent(EVENT.SET_COM1_STANDBY, "COM_STBY_RADIO_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_COM2_STANDBY, "COM2_STBY_RADIO_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_COM2_STANDBY, "COM2_STBY_RADIO_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_COM2_STANDBY, "COM2_STBY_RADIO_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_STANDBY, "NAV1_STBY_SET");
             simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_STANDBY, "NAV2_STBY_SET");
@@ -373,11 +436,30 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_GPS_DRIVES_NAV1, "TOGGLE_GPS_DRIVES_NAV1");
 
             simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_ON, "AP_PANEL_VS_ON");
+            simConnect.MapClientEventToSimEvent(EVENT.XPNDR_IDENT_SET, "XPNDR_IDENT_SET");
 
+            simConnect.MapClientEventToSimEvent(EVENT.COM1_VOLUME_SET, "COM1_VOLUME_SET");
+            simConnect.MapClientEventToSimEvent(EVENT.NAV1_VOLUME_SET_EX1, "NAV1_VOLUME_SET_EX1");
+            simConnect.MapClientEventToSimEvent(EVENT.COM2_VOLUME_SET, "COM2_VOLUME_SET");
+            simConnect.MapClientEventToSimEvent(EVENT.NAV2_VOLUME_SET_EX1, "NAV2_VOLUME_SET_EX1");
+            simConnect.MapClientEventToSimEvent(EVENT.ADF_VOLUME_SET, "ADF_VOLUME_SET");
+
+            simConnect.MapClientEventToSimEvent(EVENT.AUDIO_PANEL_VOLUME_SET, "AUDIO_PANEL_VOLUME_SET");
+            simConnect.MapClientEventToSimEvent(EVENT.MARKER_BEACON_TEST_MUTE, "MARKER_BEACON_TEST_MUTE");
+            simConnect.MapClientEventToSimEvent(EVENT.MARKER_BEACON_SENSITIVITY_HIGH, "MARKER_BEACON_SENSITIVITY_HIGH");
+            simConnect.MapClientEventToSimEvent(EVENT.INTERCOM_MODE_SET, "INTERCOM_MODE_SET");
+            simConnect.MapClientEventToSimEvent(EVENT.MARKER_SOUND_TOGGLE, "MARKER_SOUND_TOGGLE");
+            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ICS, "TOGGLE_ICS");
+            simConnect.MapClientEventToSimEvent(EVENT.RADIO_DME1_IDENT_TOGGLE, "RADIO_DME1_IDENT_TOGGLE");
+            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_SPEAKER, "TOGGLE_SPEAKER");
+            simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET");            
+
+            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
+            _logger.Info("End calling SimConnect");
         }
         catch (COMException ex)
         {
-            Debug.WriteLine(ex.ToString());
+            _logger.Error(ex.ToString());
         }
     }
 
@@ -387,6 +469,7 @@ public class SimConnectClient
         {
             return;
         }
+        _logger.Info("Call Dispose");
         simConnect.Dispose();
         simData.IsSimConnected = false;
         simConnect = null;
@@ -402,26 +485,26 @@ public class SimConnectClient
 
             } catch (Exception e)
             {
-                Debug.WriteLine(e.ToString());
+                _logger.Error(e.ToString());
             }
         }
     }
 
     private void OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
     {
-        Debug.WriteLine("OnRecvOpen");
+        _logger.Info("MSFS OnRecvOpen");
         simData.IsSimConnected = true;
-        simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
     }
 
     private void OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
     {
+        _logger.Info("MSFS OnRecvQuit");
         simData.IsSimConnected = false;
     }
 
     private void OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
     {
-        Debug.WriteLine(data.ToString());
+        _logger.Error("MSFS Exception:" + data.ToString());
     }
 
     private void OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
@@ -460,11 +543,11 @@ public class SimConnectClient
         switch ((EVENT)data.uEventID)
         {
             case EVENT.SIM_RUNNING:
-                Debug.WriteLine("Sim Running");
+                _logger.Info("Sim Running");
                 simData.IsSimRunning = (data.dwData == 1); ;
                 break;
             case EVENT.SIM_PAUSE:
-                Debug.WriteLine("Sim Paused");
+                _logger.Info("Sim Paused");
                 simData.IsPaused = (data.dwData == 1);
                 break;
         }
@@ -480,10 +563,14 @@ public class SimConnectClient
 
     private void OnRecvSystemStateHandler(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
     {
+        
         if (data.dwRequestID==(uint)REQUEST.AIRCRAFT_LOADED)
         {
+            /*
             string fpath = aircraftConfigPaths.ToArray().Where(s => s.ToString().EndsWith(data.szString)).First().ToString();
             simData.AircraftType = getAircraftType(fpath);
+            */
+            _logger.Info("OnRecvSystemStateHandler:Aircraft loaded");
         }
     }
 
