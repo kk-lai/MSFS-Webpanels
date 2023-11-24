@@ -298,7 +298,7 @@ function(jquery, SysParam) {
                             if (knob.nextStep>0) {
                                 newValue=newValue % knob.nextStep;
                                 if (newValue<0) {
-                                    newValue = knob.nextStep + newValue;
+                                    newValue = knob.max + knob.step + newValue;
                                 }
                             }
                             if (knob.min!=knob.max &&  knob.step>0) {
