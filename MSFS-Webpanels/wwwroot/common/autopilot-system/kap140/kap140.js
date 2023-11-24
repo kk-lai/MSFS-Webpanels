@@ -135,6 +135,10 @@ define([
             }
 
             onTapEvent(elm, e) {
+                if (this.isInstrumentOff) {
+                    e.preventDefault();
+                    return;
+                }
                 var ctl = jquery(elm).attr("value");
                 if (ctl == "baro") {
                     this.displayMode = "baro";
@@ -177,6 +181,10 @@ define([
             }
 
             onDragEvent(elm, ev, e) {
+                if (this.isInstrumentOff) {
+                    e.preventDefault();
+                    return;
+                }
                 var nAlt = this.handleKnobControl(elm,ev, this.IDX_ALT, 
                     [
                         {

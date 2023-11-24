@@ -82,7 +82,7 @@ function(jquery, Instrument) {
         refreshInstrument()
         {
             jquery(this.rootElm).find(".indicators").addClass("hide");
-
+            jquery(this.rootElm).find(".dot-et").addClass("hide");
             super.showKnob(".knob-volume", this.displayVal[this.IDX_VOLUME], 2.84, -152);            
             if (this.isInstrumentOff) {
                 return;
@@ -161,8 +161,7 @@ function(jquery, Instrument) {
             }
         }
 
-        onDragEvent(elm, ev, e) {
-            
+        onDragEvent(elm, ev, e) {            
             if (jquery(elm).hasClass("ctl-volume")) {
                 super.handleKnobControl(elm, ev, this.IDX_VOLUME,[ {
                     step: 1,
@@ -176,6 +175,7 @@ function(jquery, Instrument) {
                 }]);
             }
             if (this.isInstrumentOff) {
+                e.preventDefault();
                 return;
             }
             if (jquery(elm).hasClass("ctl-freq-et")) {               
