@@ -101,7 +101,6 @@ function(jquery, SysParam) {
             } else {
                 jquery(".error-overlay").addClass("hide");
             }
-            jquery(".error-overlay").addClass("hide");
         }        
         
         timerFunc() {                        
