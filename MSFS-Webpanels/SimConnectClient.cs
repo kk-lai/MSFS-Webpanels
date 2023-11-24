@@ -12,6 +12,7 @@ using System.Collections;
 using Microsoft.VisualBasic.Devices;
 using log4net;
 using System.Reflection;
+using MSFS_Webpanels;
 
 public class SimConnectClient
 {
@@ -28,14 +29,16 @@ public class SimConnectClient
     enum REQUEST
     {
         AIRCRAFT_LOADED,
-        AIRCRAFT_STATE
+        AIRCRAFT_STATE,
+        PLANE_INFO_REQ
     };
 
     enum DEFINITION
     {
         C172_FPANEL,
         TRANSPONDER_STATE,
-        AP_ALTITUDE_LOCK
+        AP_ALTITUDE_LOCK,
+        GENERAL_PLANE_DATA
     };
 
     public enum EVENT
@@ -181,11 +184,8 @@ public class SimConnectClient
             simConnect.OnRecvQuit += new SimConnect.RecvQuitEventHandler(OnRecvQuit);
             simConnect.OnRecvException += new SimConnect.RecvExceptionEventHandler(OnRecvException);
             simConnect.OnRecvEvent += new SimConnect.RecvEventEventHandler(OnRecvEvent);
-            simConnect.OnRecvEventFilename += new SimConnect.RecvEventFilenameEventHandler(OnRecvFilenameEvent);
-            simConnect.OnRecvSystemState += new SimConnect.RecvSystemStateEventHandler(OnRecvSystemStateHandler);
 
             simConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(OnRecvSimobjectData);
-            simConnect.SubscribeToSystemEvent(EVENT.AIRCRAFT_LOADED, "AircraftLoaded");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_PAUSE, "Pause");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_RUNNING, "Sim");
             uint fieldId = 0;
@@ -362,6 +362,17 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.AP_ALTITUDE_LOCK, "AUTOPILOT ALTITUDE LOCK VAR", "Feet", SIMCONNECT_DATATYPE.INT32, 0, 0);
             //simConnect.RegisterDataDefineStruct<APAltitudeHold>(DEFINITION.AP_ALTITUDE_LOCK);
 
+            fieldId = 0;
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC MODEL", null, SIMCONNECT_DATATYPE.STRING256, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE LATITUDE", "degree latitude", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE LONGITUDE", "degree longitude", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE ALTITUDE", "feet", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "GROUND VELOCITY", "Knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE HEADING DEGREES TRUE", "Degrees", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.RegisterDataDefineStruct<SimData.GenericData>(DEFINITION.GENERAL_PLANE_DATA);
+            simConnect.RequestDataOnSimObject(REQUEST.PLANE_INFO_REQ, DEFINITION.GENERAL_PLANE_DATA, SimConnect.SIMCONNECT_OBJECT_ID_USER,
+                    SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
+
             /*
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "", "", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             */
@@ -454,7 +465,6 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_SPEAKER, "TOGGLE_SPEAKER");
             simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET");            
 
-            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
             _logger.Info("End calling SimConnect");
         }
         catch (COMException ex)
@@ -522,6 +532,10 @@ public class SimConnectClient
             ndata.simData = (C172SimData.C172Data)data.dwData[0];
             this.simData = ndata;
         }
+        if (data.dwDefineID == (uint)DEFINITION.GENERAL_PLANE_DATA)
+        {
+            this.SimData.GeneralPlaneData = (SimData.GenericData)data.dwData[0];   
+        }
         while (updateQueue.Count > 0)
         {
             QueueItem itm;
@@ -553,98 +567,6 @@ public class SimConnectClient
         }
     }
 
-    private void OnRecvFilenameEvent(SimConnect sender, SIMCONNECT_RECV_EVENT_FILENAME data)
-    {
-        if (data.uEventID == (uint)EVENT.AIRCRAFT_LOADED)
-        {
-            simData.AircraftType = getAircraftType(data.szFileName);
-        }
-    }
-
-    private void OnRecvSystemStateHandler(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
-    {
-        
-        if (data.dwRequestID==(uint)REQUEST.AIRCRAFT_LOADED)
-        {
-            /*
-            string fpath = aircraftConfigPaths.ToArray().Where(s => s.ToString().EndsWith(data.szString)).First().ToString();
-            simData.AircraftType = getAircraftType(fpath);
-            */
-            _logger.Info("OnRecvSystemStateHandler:Aircraft loaded");
-        }
-    }
-
-    private void detectMSFSFileLocation()
-    {
-        aircraftConfigPaths.Clear();
-        string msfsPkgPath = null;
-        string[] msfsPaths =
-        {
-            "%APPDATA%\\Microsoft Flight Simulator\\UserCfg.opt",
-            "%LOCALAPPDATA%\\MSFSPackages\\UserCfg.opt",
-            "%LOCALAPPDATA%\\Packages\\Microsoft.FlightSimulator_8wekyb3d8bbwe\\LocalCache\\UserCfg.opt"
-        };
-        for(int i=0; i< msfsPaths.Length;i++)
-        {
-            string msfsPath = Environment.ExpandEnvironmentVariables(msfsPaths[i]);
-            if (File.Exists(msfsPath))
-            {
-                string[] lines = File.ReadAllLines(msfsPath);
-                msfsPkgPath = lines.Where(s => s.StartsWith("InstalledPackagesPath")).First();
-                if (msfsPkgPath!=null)
-                {
-                    msfsPkgPath = msfsPkgPath.Substring(21).Trim();
-                    msfsPkgPath = msfsPkgPath.Substring(1, msfsPkgPath.Length - 2);
-                    break;
-                }
-            }
-        }
-        if (msfsPkgPath!=null)
-        {
-            findAircraftCfg(msfsPkgPath + "\\Official");
-            findAircraftCfg(msfsPkgPath + "\\Community");
-        }
-    }
-
-    private void findAircraftCfg(string path)
-    {
-        if (File.Exists(path+"\\aircraft.CFG"))
-        {
-            aircraftConfigPaths.Add(path + "\\aircraft.CFG");
-        }
-        string[] folders = Directory.GetDirectories(path);
-        foreach (string fdr in folders)
-        {
-            findAircraftCfg(fdr);
-        }
-    }
-
-    private string getAircraftType(string aircraftCfg)
-    {
-        //aircraftCfg = "D:\\FS2020\\Community\\asobo-aircraft-c172sp-classic\\SimObjects\\Airplanes\\Asobo_C172sp_classic\\aircraft.cfg";
-        string actype = "";
-        try
-        {
-            IniConfigurationSource src = new IniConfigurationSource();
-            src.Path = Path.GetFileName(aircraftCfg);
-            src.Optional = false;
-            src.FileProvider = new PhysicalFileProvider(Path.GetDirectoryName(aircraftCfg));
-
-            IniConfigurationProvider provider = new IniConfigurationProvider(src);
-            provider.Load();
-            string? prop;
-            if (provider.TryGet("GENERAL:icao_type_designator", out prop))
-            {
-                actype = prop;
-            }
-        } catch (Exception e)
-        {
-            Console.WriteLine(e.ToString());
-        }
-
-        return actype;
-
-    }
     public void transmitEvent(uint eventOffset,  uint[] iparams)
     {
         uint evt = (uint)EVENT.SET_EGT_REF + eventOffset;

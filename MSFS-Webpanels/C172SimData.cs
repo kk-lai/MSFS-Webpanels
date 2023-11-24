@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MSFS_Webpanels;
+using System;
 using System.Runtime.InteropServices;
 
 public class C172SimData : SimData
@@ -276,7 +277,6 @@ public class C172SimData : SimData
     }
     private C172Data c172data = new C172Data();
 
-
     public C172Data simData { get => c172data; set => c172data = value; }
 
     public C172SimData(SimData data)
@@ -284,6 +284,6 @@ public class C172SimData : SimData
 		IsSimConnected = data.IsSimConnected;
 		IsSimRunning = data.IsSimRunning;
 		IsPaused = data.IsPaused;
-        AircraftType = data.AircraftType;
-	}
+        GeneralPlaneData = data.GeneralPlaneData;
+    }
 }

@@ -89,3 +89,41 @@ https://www.freepik.com/free-vector/mobile-background-with-qr-code_1023723.htm#q
 
 Monitor (by rawpixel.com)
 https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=12&from_view=search&track=sph
+
+Application Icon
+https://www.flaticon.com/free-icon/altitude-indicator_10403534
+
+7-segment font
+https://github.com/keshikan/DSEG
+
+Volume knob
+https://www.pngwing.com/en/free-png-zsndf
+
+Altitude, ADF Knob
+https://www.pngwing.com/en/free-png-zrgdi
+
+Transponder Knob
+https://www.pngwing.com/en/free-png-vatts
+
+LED
+https://www.pngwing.com/en/free-png-zhkmj
+
+Screws
+https://www.pngwing.com/en/free-png-awqdy
+
+DME knob
+https://www.pngwing.com/en/free-png-stxtt
+
+Com transceiver knob
+https://www.freepik.com/free-vector/realistic-set-circle-shiny-metallic-regulator-buttons-level-adjustment-transparent-background-isolated-vector-illustration_26763710.htm#query=control%20knob&position=1&from_view=search&track=ais&uuid=cf0bb9f9-4378-4642-860a-107cf52890ba
+
+LED light effect
+https://www.pngwing.com/en/free-png-bxvkg
+
+Radio icon
+https://www.freepik.com/icon/radio_1376241#fromView=search&term=radio+panel&page=4&position=34&track=ais
+
+
+
+
+
