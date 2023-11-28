@@ -188,22 +188,24 @@ define([
                 var nAlt = this.handleKnobControl(elm,ev, this.IDX_ALT, 
                     [
                         {
+                            startDigit:4,
+                            endDigit:5,
                             step:1000,
                             stepsPerFullCircle: 5,
-                            min:-90000,
+                            min:0,
                             max:90000,
                             divCtl: ".dot-1k",
-                            nextStep:0,
                             wrapAround: false,
                             carry: false
                         },
                         {
+                            startDigit:3,
+                            endDigit:3,
                             step:100,
                             stepsPerFullCircle: 5,
                             min:0,
                             max:0,
                             divCtl: ".dot-100",
-                            nextStep:1000,
                             wrapAround: false,
                             carry: true
                         }

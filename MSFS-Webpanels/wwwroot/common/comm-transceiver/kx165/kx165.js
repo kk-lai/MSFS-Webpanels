@@ -97,24 +97,26 @@ function(jquery, Instrument) {
         onDragEvent(elm, ev, e) {
             if (jquery(elm).hasClass("ctl-com-volume")) {
                 super.handleKnobControl(elm, ev, this.IDX_COM_VOLUME,[ {
+                    startDigit:1,
+                    endDigit:3,
                     step: 1,
                     stepsPerFullCircle : 3600/32,
                     min: 0,
                     max: 100,
-                    divCtl : ".dot-com-volume",
-                    nextStep:0,
+                    divCtl : ".dot-com-volume",                    
                     wrapAround: false,
                     carry: false
                 }]);
             }
             if (jquery(elm).hasClass("ctl-nav-volume")) {
                 super.handleKnobControl(elm, ev, this.IDX_NAV_VOLUME,[ {
+                    startDigit:1,
+                    endDigit:3,
                     step: 1,
                     stepsPerFullCircle : 3600/32,
                     min: 0,
                     max: 100,
-                    divCtl : ".dot-nav-volume",
-                    nextStep:0,
+                    divCtl : ".dot-nav-volume",                    
                     wrapAround: false,
                     carry: false
                 }]);
@@ -125,22 +127,24 @@ function(jquery, Instrument) {
             if (jquery(elm).hasClass("ctl-com-knob")) {
                 super.handleKnobControl(elm, ev, this.IDX_COM_STANDBY,[ 
                     {
+                        startDigit:4,
+                        endDigit:6,
                         step: 1000,
                         stepsPerFullCircle : 5,
                         min: 118000,
                         max: 136000,
-                        divCtl : ".dot-com-mhz",
-                        nextStep:0,
+                        divCtl : ".dot-com-mhz",                        
                         wrapAround: true,
                         carry: false
                     },
                     {
+                        startDigit:1,
+                        endDigit:3,
                         step: 25,
                         stepsPerFullCircle : 5,
                         min: 0,
-                        max: 0,
+                        max: 975,
                         divCtl : ".dot-com-khz",
-                        nextStep:1000,
                         wrapAround: true,
                         carry: false
                     }                    
@@ -149,25 +153,27 @@ function(jquery, Instrument) {
             if (jquery(elm).hasClass("ctl-nav-knob")) {
                 super.handleKnobControl(elm, ev, this.IDX_NAV_STANDBY,[ 
                     {
+                        startDigit:4,
+                        endDigit:6,
                         step: 1000,
                         stepsPerFullCircle : 5,
                         min: 108000,
                         max: 117000,
-                        divCtl : ".dot-nav-mhz",
-                        nextStep:0,
+                        divCtl : ".dot-nav-mhz",                        
                         wrapAround: true,
                         carry: false
                     },
                     {
+                        startDigit:1,
+                        endDigit:3,
                         step: 50,
                         stepsPerFullCircle : 5,
                         min: 0,
-                        max: 0,
+                        max: 950,
                         divCtl : ".dot-nav-khz",
-                        nextStep:1000,
                         wrapAround: true,
                         carry: false
-                    }                    
+                    }          
                 ]);
             }
         }

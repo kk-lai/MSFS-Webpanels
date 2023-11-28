@@ -267,12 +267,13 @@ function(jquery, Instrument) {
         onDragEvent(elm, ev, e) {
             if (jquery(elm).hasClass("ctl-volume")) {
                 super.handleKnobControl(elm, ev, this.IDX_AUDIO_PANEL_VOLUME,[ {
+                    startDigit:1,
+                    endDigit:3,
                     step: 1,
                     stepsPerFullCircle : 36000/270,
                     min: 0,
                     max: 100,
-                    divCtl : ".dot-volume",
-                    nextStep:0,
+                    divCtl : ".dot-volume",                    
                     wrapAround: false,
                     carry: false
                 }]);

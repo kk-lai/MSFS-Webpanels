@@ -164,12 +164,13 @@ function(jquery, Instrument) {
         onDragEvent(elm, ev, e) {            
             if (jquery(elm).hasClass("ctl-volume")) {
                 super.handleKnobControl(elm, ev, this.IDX_VOLUME,[ {
+                    startDigit: 1,
+                    endDigit:3,
                     step: 1,
                     stepsPerFullCircle : 36000/284,
                     min: 0,
                     max: 100,
                     divCtl : ".dot-volume",
-                    nextStep:0,
                     wrapAround: false,
                     carry: false
                 }]);
@@ -182,32 +183,35 @@ function(jquery, Instrument) {
                 if (this.deviceMode==this.MODE_ADF) {
                     super.handleKnobControl(elm, ev, this.IDX_STBY_FREQ,[ 
                         {
+                            startDigit: 3,
+                            endDigit:4,
                             step: 100,
                             stepsPerFullCircle : 10,
                             min: 100,
                             max: 1700,
                             divCtl : ".dot-freq-high",
-                            nextStep: 0,
                             wrapAround: true,
                             carry: false
                         },
                         {
+                            startDigit: 2,
+                            endDigit:2,
                             step: 10,
                             stepsPerFullCircle : 10,
                             min: 0,
                             max: 90,
                             divCtl : ".dot-freq-mid",
-                            nextStep: 100,
                             wrapAround: true,
                             carry: false
                         },
                         {
+                            startDigit: 1,
+                            endDigit:1,
                             step: 1,
                             stepsPerFullCircle : 10,
                             min: 0,
                             max: 9,
                             divCtl : ".dot-freq-low",
-                            nextStep: 10,
                             wrapAround: true,
                             carry: false
                         }
@@ -215,22 +219,24 @@ function(jquery, Instrument) {
                 } else {
                     super.handleKnobControl(elm, ev, this.IDX_TIMER_INIT_TIME,[ 
                         {
+                            startDigit: 3,
+                            endDigit:4,
                             step: 100,
                             stepsPerFullCircle : 20,
                             min: 0,
                             max: 5900,
                             divCtl : ".dot-et-high",
-                            nextStep: 0,
                             wrapAround: false,
                             carry: false
                         },
                         {
+                            startDigit: 1,
+                            endDigit:2,
                             step: 1,
                             stepsPerFullCircle : 20,
                             min: 0,
                             max: 59,
                             divCtl : ".dot-et-low",
-                            nextStep: 100,
                             wrapAround: true,
                             carry: false
                         }                       

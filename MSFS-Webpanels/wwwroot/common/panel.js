@@ -134,6 +134,9 @@ function(jquery, SysParam) {
             for(var i=0;i<this.instruments.length;i++) {
                 this.instruments[i].onSimVarChange(simvar,val);
             }
+            if (val<0) {
+                val=Math.pow(2,32)+val;
+            }
             var queueItem = {
                 simvar: simvar,
                 param: val
