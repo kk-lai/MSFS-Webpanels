@@ -184,8 +184,11 @@ public class SimConnectClient
             simConnect.OnRecvQuit += new SimConnect.RecvQuitEventHandler(OnRecvQuit);
             simConnect.OnRecvException += new SimConnect.RecvExceptionEventHandler(OnRecvException);
             simConnect.OnRecvEvent += new SimConnect.RecvEventEventHandler(OnRecvEvent);
+            simConnect.OnRecvEventFilename += new SimConnect.RecvEventFilenameEventHandler(OnRecvFilenameEvent);
+            simConnect.OnRecvSystemState += new SimConnect.RecvSystemStateEventHandler(OnRecvSystemStateHandler);
 
             simConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(OnRecvSimobjectData);
+            simConnect.SubscribeToSystemEvent(EVENT.AIRCRAFT_LOADED, "AircraftLoaded");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_PAUSE, "Pause");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_RUNNING, "Sim");
             uint fieldId = 0;
@@ -363,7 +366,6 @@ public class SimConnectClient
             //simConnect.RegisterDataDefineStruct<APAltitudeHold>(DEFINITION.AP_ALTITUDE_LOCK);
 
             fieldId = 0;
-            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC MODEL", null, SIMCONNECT_DATATYPE.STRING256, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE LATITUDE", "degree latitude", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE LONGITUDE", "degree longitude", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE ALTITUDE", "feet", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
@@ -377,94 +379,95 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "", "", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             */
 
-            simConnect.MapClientEventToSimEvent(EVENT.SET_EGT_REF, "EGT1_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_TAS_ADJ, "TRUE_AIRSPEED_CAL_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_ATTITUDE_BAR_POSITION, "ATTITUDE_BARS_POSITION_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_HEADING_BUG, "HEADING_BUG_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_QNH, "KOHLSMAN_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_OBS, "VOR1_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_OBS, "VOR2_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_CARD, "ADF_CARD_SET");
-         
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_ALTERNATOR, "ALTERNATOR_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_BATTERY_MASTER, "MASTER_BATTERY_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_AVIONICS1, "AVIONICS_MASTER_1_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_AVIONICS2, "AVIONICS_MASTER_2_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_FUELPUMP, "ELECT_FUEL_PUMP1_SET"); //?
+           simConnect.MapClientEventToSimEvent(EVENT.SET_EGT_REF, "EGT1_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_TAS_ADJ, "TRUE_AIRSPEED_CAL_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_ATTITUDE_BAR_POSITION, "ATTITUDE_BARS_POSITION_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_HEADING_BUG, "HEADING_BUG_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_QNH, "KOHLSMAN_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_OBS, "VOR1_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_OBS, "VOR2_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_CARD, "ADF_CARD_SET");
 
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_BCN, "BEACON_LIGHTS_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_LAND, "LANDING_LIGHTS_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_TAXI, "TAXI_LIGHTS_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_NAV, "NAV_LIGHTS_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_STROBE, "STROBES_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_PITOT_HEAT, "PITOT_HEAT_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_PARKING_BRAKE, "PARKING_BRAKE_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_VALVE_ENG1, "SET_FUEL_VALVE_ENG1");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_ALTERNATOR, "ALTERNATOR_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_BATTERY_MASTER, "MASTER_BATTERY_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_AVIONICS1, "AVIONICS_MASTER_1_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_AVIONICS2, "AVIONICS_MASTER_2_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_FUELPUMP, "ELECT_FUEL_PUMP1_SET"); //?
 
-            simConnect.MapClientEventToSimEvent(EVENT.FLAPS_DECR, "FLAPS_DECR");
-            simConnect.MapClientEventToSimEvent(EVENT.FLAPS_INCR, "FLAPS_INCR");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_BCN, "BEACON_LIGHTS_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_LAND, "LANDING_LIGHTS_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_TAXI, "TAXI_LIGHTS_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_NAV, "NAV_LIGHTS_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_STROBE, "STROBES_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_PITOT_HEAT, "PITOT_HEAT_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_SWITCH_PARKING_BRAKE, "PARKING_BRAKE_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_VALVE_ENG1, "SET_FUEL_VALVE_ENG1");
 
-            simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_INCR, "MAGNETO_INCR");
-            simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_DECR, "MAGNETO_DECR");
+           simConnect.MapClientEventToSimEvent(EVENT.FLAPS_DECR, "FLAPS_DECR");
+           simConnect.MapClientEventToSimEvent(EVENT.FLAPS_INCR, "FLAPS_INCR");
 
-            simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_LEFT, "FUEL_SELECTOR_LEFT");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_ALL, "FUEL_SELECTOR_ALL");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_RIGHT, "FUEL_SELECTOR_RIGHT");
+           simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_INCR, "MAGNETO_INCR");
+           simConnect.MapClientEventToSimEvent(EVENT.MAGNETO_DECR, "MAGNETO_DECR");
 
-            simConnect.MapClientEventToSimEvent(EVENT.SET_COM1_STANDBY, "COM_STBY_RADIO_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_COM2_STANDBY, "COM2_STBY_RADIO_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_STANDBY, "NAV1_STBY_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_STANDBY, "NAV2_STBY_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_STANDBY, "ADF_STBY_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.SWAP_COM1_FREQ, "COM1_RADIO_SWAP");
-            simConnect.MapClientEventToSimEvent(EVENT.SWAP_COM2_FREQ, "COM2_RADIO_SWAP");
-            simConnect.MapClientEventToSimEvent(EVENT.SWAP_NAV1_FREQ, "NAV1_RADIO_SWAP");
-            simConnect.MapClientEventToSimEvent(EVENT.SWAP_NAV2_FREQ, "NAV2_RADIO_SWAP");
-            simConnect.MapClientEventToSimEvent(EVENT.SWAP_ADF_FREQ, "ADF1_RADIO_SWAP");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_LEFT, "FUEL_SELECTOR_LEFT");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_ALL, "FUEL_SELECTOR_ALL");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_FUEL_SELECTOR_RIGHT, "FUEL_SELECTOR_RIGHT");
 
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_AP, "AP_MASTER");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_HDG, "AP_PANEL_HEADING_HOLD");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_NAV, "AP_NAV1_HOLD");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_APR, "AP_APR_HOLD");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_REV, "AP_BC_HOLD");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_ALT, "AP_PANEL_ALTITUDE_HOLD");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_INC, "AP_VS_VAR_INC");
-            simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_DEC, "AP_VS_VAR_DEC");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_COM1_STANDBY, "COM_STBY_RADIO_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_COM2_STANDBY, "COM2_STBY_RADIO_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_NAV1_STANDBY, "NAV1_STBY_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_NAV2_STANDBY, "NAV2_STBY_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_ADF_STANDBY, "ADF_STBY_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SWAP_COM1_FREQ, "COM1_RADIO_SWAP");
+           simConnect.MapClientEventToSimEvent(EVENT.SWAP_COM2_FREQ, "COM2_RADIO_SWAP");
+           simConnect.MapClientEventToSimEvent(EVENT.SWAP_NAV1_FREQ, "NAV1_RADIO_SWAP");
+           simConnect.MapClientEventToSimEvent(EVENT.SWAP_NAV2_FREQ, "NAV2_RADIO_SWAP");
+           simConnect.MapClientEventToSimEvent(EVENT.SWAP_ADF_FREQ, "ADF1_RADIO_SWAP");
 
-            simConnect.MapClientEventToSimEvent(EVENT.SET_XPDR_CODE, "XPNDR_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.GYRO_DRIFT_SET_EX1, "GYRO_DRIFT_SET_EX1");
-            simConnect.MapClientEventToSimEvent(EVENT.HEADING_GYRO_SET, "HEADING_GYRO_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_AP, "AP_MASTER");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_HDG, "AP_PANEL_HEADING_HOLD");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_NAV, "AP_NAV1_HOLD");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_APR, "AP_APR_HOLD");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_REV, "AP_BC_HOLD");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_ALT, "AP_PANEL_ALTITUDE_HOLD");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_INC, "AP_VS_VAR_INC");
+           simConnect.MapClientEventToSimEvent(EVENT.BTN_VS_DEC, "AP_VS_VAR_DEC");
 
-            simConnect.MapClientEventToSimEvent(EVENT.SET_COM1_RX, "COM1_RECEIVE_SELECT");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_COM2_RX, "COM2_RECEIVE_SELECT");
-            simConnect.MapClientEventToSimEvent(EVENT.SET_PILOT_TX, "PILOT_TRANSMITTER_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_VOR1_IDENT, "RADIO_VOR1_IDENT_TOGGLE");
-            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_VOR2_IDENT, "RADIO_VOR2_IDENT_TOGGLE");
-            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ADF_IDENT, "RADIO_ADF_IDENT_TOGGLE");
-            simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_SET, "AP_PANEL_VS_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_XPDR_CODE, "XPNDR_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.GYRO_DRIFT_SET_EX1, "GYRO_DRIFT_SET_EX1");
+           simConnect.MapClientEventToSimEvent(EVENT.HEADING_GYRO_SET, "HEADING_GYRO_SET");
 
-            simConnect.MapClientEventToSimEvent(EVENT.AP_ALT_VAR_SET, "AP_ALT_VAR_SET_ENGLISH");
-            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_GPS_DRIVES_NAV1, "TOGGLE_GPS_DRIVES_NAV1");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_COM1_RX, "COM1_RECEIVE_SELECT");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_COM2_RX, "COM2_RECEIVE_SELECT");
+           simConnect.MapClientEventToSimEvent(EVENT.SET_PILOT_TX, "PILOT_TRANSMITTER_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_VOR1_IDENT, "RADIO_VOR1_IDENT_TOGGLE");
+           simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_VOR2_IDENT, "RADIO_VOR2_IDENT_TOGGLE");
+           simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ADF_IDENT, "RADIO_ADF_IDENT_TOGGLE");
+           simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_SET, "AP_PANEL_VS_SET");
 
-            simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_ON, "AP_PANEL_VS_ON");
-            simConnect.MapClientEventToSimEvent(EVENT.XPNDR_IDENT_SET, "XPNDR_IDENT_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.AP_ALT_VAR_SET, "AP_ALT_VAR_SET_ENGLISH");
+           simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_GPS_DRIVES_NAV1, "TOGGLE_GPS_DRIVES_NAV1");
 
-            simConnect.MapClientEventToSimEvent(EVENT.COM1_VOLUME_SET, "COM1_VOLUME_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.NAV1_VOLUME_SET_EX1, "NAV1_VOLUME_SET_EX1");
-            simConnect.MapClientEventToSimEvent(EVENT.COM2_VOLUME_SET, "COM2_VOLUME_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.NAV2_VOLUME_SET_EX1, "NAV2_VOLUME_SET_EX1");
-            simConnect.MapClientEventToSimEvent(EVENT.ADF_VOLUME_SET, "ADF_VOLUME_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_ON, "AP_PANEL_VS_ON");
+           simConnect.MapClientEventToSimEvent(EVENT.XPNDR_IDENT_SET, "XPNDR_IDENT_SET");
 
-            simConnect.MapClientEventToSimEvent(EVENT.AUDIO_PANEL_VOLUME_SET, "AUDIO_PANEL_VOLUME_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.MARKER_BEACON_TEST_MUTE, "MARKER_BEACON_TEST_MUTE");
-            simConnect.MapClientEventToSimEvent(EVENT.MARKER_BEACON_SENSITIVITY_HIGH, "MARKER_BEACON_SENSITIVITY_HIGH");
-            simConnect.MapClientEventToSimEvent(EVENT.INTERCOM_MODE_SET, "INTERCOM_MODE_SET");
-            simConnect.MapClientEventToSimEvent(EVENT.MARKER_SOUND_TOGGLE, "MARKER_SOUND_TOGGLE");
-            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ICS, "TOGGLE_ICS");
-            simConnect.MapClientEventToSimEvent(EVENT.RADIO_DME1_IDENT_TOGGLE, "RADIO_DME1_IDENT_TOGGLE");
-            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_SPEAKER, "TOGGLE_SPEAKER");
-            simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET");            
+           simConnect.MapClientEventToSimEvent(EVENT.COM1_VOLUME_SET, "COM1_VOLUME_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.NAV1_VOLUME_SET_EX1, "NAV1_VOLUME_SET_EX1");
+           simConnect.MapClientEventToSimEvent(EVENT.COM2_VOLUME_SET, "COM2_VOLUME_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.NAV2_VOLUME_SET_EX1, "NAV2_VOLUME_SET_EX1");
+           simConnect.MapClientEventToSimEvent(EVENT.ADF_VOLUME_SET, "ADF_VOLUME_SET");
 
+           simConnect.MapClientEventToSimEvent(EVENT.AUDIO_PANEL_VOLUME_SET, "AUDIO_PANEL_VOLUME_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.MARKER_BEACON_TEST_MUTE, "MARKER_BEACON_TEST_MUTE");
+           simConnect.MapClientEventToSimEvent(EVENT.MARKER_BEACON_SENSITIVITY_HIGH, "MARKER_BEACON_SENSITIVITY_HIGH");
+           simConnect.MapClientEventToSimEvent(EVENT.INTERCOM_MODE_SET, "INTERCOM_MODE_SET");
+           simConnect.MapClientEventToSimEvent(EVENT.MARKER_SOUND_TOGGLE, "MARKER_SOUND_TOGGLE");
+           simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ICS, "TOGGLE_ICS");
+           simConnect.MapClientEventToSimEvent(EVENT.RADIO_DME1_IDENT_TOGGLE, "RADIO_DME1_IDENT_TOGGLE");
+           simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_SPEAKER, "TOGGLE_SPEAKER");
+           simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET");
+           
+            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
             _logger.Info("End calling SimConnect");
         }
         catch (COMException ex)
@@ -564,6 +567,30 @@ public class SimConnectClient
                 _logger.Info("Sim Paused");
                 simData.IsPaused = (data.dwData == 1);
                 break;
+        }
+    }
+
+    private void OnRecvFilenameEvent(SimConnect sender, SIMCONNECT_RECV_EVENT_FILENAME data)
+    {
+        if (data.uEventID == (uint)EVENT.AIRCRAFT_LOADED)
+        {            
+            int spos = data.szFileName.IndexOf("SimObjects\\Airplanes");
+            int epos = data.szFileName.LastIndexOf("\\");
+            if (spos>=0) 
+            {
+                this.SimData.AircraftFolder = data.szFileName.Substring(spos+21, epos - spos - 21);
+            }
+            _logger.Info("OnRecvFilenameEvent:"+data.szFileName);
+        }
+    }
+    private void OnRecvSystemStateHandler(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
+    {
+
+        if (data.dwRequestID == (uint)REQUEST.AIRCRAFT_LOADED)
+        {
+            int epos = data.szString.LastIndexOf("\\");
+            this.SimData.AircraftFolder = data.szString.Substring(21,epos-21);
+            _logger.Info("OnRecvSystemStateHandler:"+data.szString);
         }
     }
 

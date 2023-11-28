@@ -284,6 +284,7 @@ public class C172SimData : SimData
 		IsSimConnected = data.IsSimConnected;
 		IsSimRunning = data.IsSimRunning;
 		IsPaused = data.IsPaused;
+        AircraftFolder = data.AircraftFolder;
         GeneralPlaneData = data.GeneralPlaneData;
     }
 }
