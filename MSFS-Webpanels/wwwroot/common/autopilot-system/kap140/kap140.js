@@ -131,6 +131,9 @@ define([
                 if (this.displayVal[this.IDX_VSHOLD]) {
                     status2.text("VS");
                 }
+                if (this.displayVal[this.IDX_GS]) {
+                    status2.text("GS");
+                }
 
             }
 
