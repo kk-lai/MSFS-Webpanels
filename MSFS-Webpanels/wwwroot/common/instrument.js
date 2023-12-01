@@ -278,8 +278,6 @@ function(jquery, SysParam) {
                 var baseValue = parseInt(jquery(elm).attr("baseValue"));
                 var initValue = parseInt(jquery(elm).attr("initValue"));
 
-                console.log("baseValue:"+baseValue+",initValue:"+initValue+",currentValue:"+currentValue);
-
                 var knob = knobs[touchZone];
                 var angDiff = angle - lastAngle;
                 var newValue;
@@ -290,21 +288,18 @@ function(jquery, SysParam) {
                     netOffset = netOffset + angDiff;
                     jquery(this.rootElm).find(knob.divCtl).css("transform","rotate("+(-netOffset-touchZone*360/knobs.length)+"deg)");
                     newValue = -netOffset*knob.step*knob.stepsPerFullCircle/360;
-                    console.log("newValue1:"+newValue);
                     newValue = Math.round(newValue);
-                    console.log("newValue2:"+newValue);
                     newValue = (newValue + initValue) - (newValue % knob.step);
-                    console.log("newValue3:"+newValue);
+                    newValue = Math.round(newValue);
 
                     if (!knob.carry) {
                         if (knob.wrapAround) {
                             newValue = newValue % (knob.max-knob.min+knob.step) + knob.min;
-                            console.log("newValue4:"+newValue);
                             if (newValue<0) {
                                 newValue = (knob.max-knob.min+knob.step)+newValue + knob.min
-                                console.log("newValue5:"+newValue);
                             }
                         } else {
+                            newValue=newValue+knob.min;
                             if (newValue<knob.min) {
                                 newValue=knob.min;
                             }
@@ -314,7 +309,6 @@ function(jquery, SysParam) {
                         }                        
                     }
                     newValue = newValue + baseValue;
-                    console.log("newValue6:"+newValue);
                     if (newValue!=currentValue) {                        
                         this.purgeUpdateQueue(idx);
                         this.onInputValChanged(idx,newValue,true);

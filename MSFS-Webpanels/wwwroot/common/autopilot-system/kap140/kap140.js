@@ -63,6 +63,7 @@ define([
             refreshInstrument()
             {
                 jquery(this.rootElm).find(".indicators").addClass("hide");
+                jquery(this.rootElm).find(".dot").addClass("hide");
                 if (this.isInstrumentOff) {
                     return;
                 }
@@ -74,6 +75,7 @@ define([
                     var txt = this.displayVal[this.IDX_ALT].toString().padStart(6,'\u2800');
                     alt.text(txt);
                     jquery(this.rootElm).find(".ind-ft").removeClass("hide");
+                    jquery(this.rootElm).find(".dot-alt").removeClass("hide");
                 }
 
                 if (this.displayMode == "vs") {
@@ -82,15 +84,18 @@ define([
                 }
 
                 if (this.displayMode == "baro") {
+                    jquery(this.rootElm).find(".dot-baro").removeClass("hide");
+                    var hpa = this.displayVal[this.IDX_BARO]/16;
+                    var inHg = this.displayVal[this.IDX_BARO]*0.029529983071445/16;
                     var baro = "";
                     var nchar;
                     if (this.isBaroInHg) {
                         nchar=7;
-                        baro = 29.92;
+                        baro = inHg.toFixed(2);
                         jquery(this.rootElm).find(".ind-inhg").removeClass("hide");
                     } else {
                         nchar=6;
-                        baro = 1013;
+                        baro = hpa.toFixed(0);
                         jquery(this.rootElm).find(".ind-hpa").removeClass("hide");
                     }
                     alt.text(baro.toString().padStart(nchar,'\u2800'));
@@ -188,32 +193,58 @@ define([
                     e.preventDefault();
                     return;
                 }
-                var nAlt = this.handleKnobControl(elm,ev, this.IDX_ALT, 
-                    [
-                        {
-                            startDigit:4,
-                            endDigit:5,
-                            step:1000,
-                            stepsPerFullCircle: 5,
-                            min:0,
-                            max:90000,
-                            divCtl: ".dot-1k",
-                            wrapAround: false,
-                            carry: false
-                        },
-                        {
-                            startDigit:3,
-                            endDigit:3,
-                            step:100,
-                            stepsPerFullCircle: 5,
-                            min:0,
-                            max:0,
-                            divCtl: ".dot-100",
-                            wrapAround: false,
-                            carry: true
-                        }
-                    ]
+                if (this.displayMode=="alt") {
+                    this.handleKnobControl(elm,ev, this.IDX_ALT, 
+                        [
+                            {
+                                startDigit:4,
+                                endDigit:5,
+                                step:1000,
+                                stepsPerFullCircle: 5,
+                                min:0,
+                                max:90000,
+                                divCtl: ".dot-1k",
+                                wrapAround: false,
+                                carry: false
+                            },
+                            {
+                                startDigit:3,
+                                endDigit:3,
+                                step:100,
+                                stepsPerFullCircle: 5,
+                                min:0,
+                                max:0,
+                                divCtl: ".dot-100",
+                                wrapAround: false,
+                                carry: true
+                            }
+                        ]
                     );
+                } else if (this.displayMode=="baro") {
+                    var step;
+                    if (this.isBaroInHg) {
+                        step=5.4; // 0.01 inHg
+                    } else {
+                        step=16; // 1 hpa
+                    }
+                    this.handleKnobControl(elm,ev, this.IDX_BARO, 
+                        [
+                            {
+                                startDigit:1,
+                                endDigit:5,
+                                step:step,
+                                stepsPerFullCircle: 5,
+                                min:15168,
+                                max:17344,
+                                divCtl: ".dot-1k",
+                                wrapAround: false,
+                                carry: false
+                            }
+                        ]
+                    );
+                    this.setInputTimer();
+                }
+                
             }
 
             updateInstrumentState() {

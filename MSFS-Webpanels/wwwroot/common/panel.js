@@ -177,6 +177,10 @@ function(jquery, SysParam) {
                 if (itm.simvar=="xpdr") {
                     param.iparams=[parseInt(itm.param.toString(),16)]
                 }
+                if (itm.simvar=="qnh2") {
+                    param.eventName="simvar-qnh";
+                    param.iparams=[itm.param,2];
+                }
                 if (param.eventName.endsWith("freq")) {
                     var bcd = parseInt(itm.param.toString(),16);
                     if (param.eventName.startsWith("simvar-adf")) {
