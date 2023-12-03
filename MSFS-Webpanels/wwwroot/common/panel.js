@@ -113,9 +113,11 @@ function(jquery, SysParam) {
             jquery.ajax({
                 url: SysParam.simVarUrl,
                 success: function(jsonData, textStatus, jqXHR ){
-                    thisClass.isServerAppRunning=true;                    
-                    thisClass.postProcessingFunc(jsonData);
-                    thisClass.refreshDisplay(jsonData);
+                    thisClass.isServerAppRunning=true;
+                    if (jsonData.hasOwnProperty("simData")) {
+                        thisClass.postProcessingFunc(jsonData);
+                        thisClass.refreshDisplay(jsonData);
+                    }
                     thisClass.isPoolingSimVars=false;
                 },
                 error: function(jqXHR, textStatus, errorThrown ) {

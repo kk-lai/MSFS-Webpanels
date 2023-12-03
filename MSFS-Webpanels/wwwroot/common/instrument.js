@@ -294,10 +294,11 @@ function(jquery, SysParam) {
 
                     if (!knob.carry) {
                         if (knob.wrapAround) {
-                            newValue = newValue % (knob.max-knob.min+knob.step) + knob.min;
+                            newValue = newValue % (knob.max-knob.min+knob.step);
                             if (newValue<0) {
-                                newValue = (knob.max-knob.min+knob.step)+newValue + knob.min
+                                newValue = (knob.max-knob.min+knob.step)+newValue;
                             }
+                            newValue = newValue + knob.min;
                         } else {
                             newValue=newValue+knob.min;
                             if (newValue<knob.min) {
