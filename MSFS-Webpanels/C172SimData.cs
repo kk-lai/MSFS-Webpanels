@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MSFS_Webpanels;
+using System;
 using System.Runtime.InteropServices;
 
 public class C172SimData : SimData
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct C172Data
-	{
+    public struct C172Data 
+    {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         private String atcId;
 
@@ -107,7 +108,15 @@ public class C172SimData : SimData
         private Int32 apApproachHold;
         private Int32 apRevHold;
         private Int32 apGSHold;
-        private Int32 dmeDistance;
+        private float dmeDistance;
+        private float dmeSpeed;
+        private float dmeSignal;
+        private Int32 dmeIsAvailable;
+        private float dme2Distance;
+        private float dme2Speed;
+        private float dme2Signal;
+        private Int32 dme2IsAvailable;
+
         private Int32 xpdr;
         private Int32 xpdrSwitch;
 
@@ -120,6 +129,33 @@ public class C172SimData : SimData
         private Int32 adfrx;
 
         private Int32 gpsDriveNav1;
+        private float pressureAltitude;
+        private Int32 adfVolume;
+        private Int32 simulationTime;
+        private Int32 com1Volume;
+        private Int32 nav1Volume;
+        private Int32 com2Volume;
+        private Int32 nav2Volume;
+        private float qnh2;
+        private Int32 audioPanelVolume;
+        private Int32 markerTestMute;
+        private Int32 markerIsHighSensitivity;
+        private Int32 intercomMode;
+        private Int32 markerSoundOn;
+        private Int32 intercomActive;
+        private Int32 dmeSoundOn;
+        private Int32 speakerActive;
+        private Int32 com3tx;
+        private Int32 pilotTxing;
+        private Int32 copilotTxing;
+        private Int32 pilotTx;
+        private Int32 copilotTxType;
+        private Int32 insideMarkerOn;
+        private Int32 middleMarkerOn;
+        private Int32 outsideMarkerOn;
+        private Int32 isGearRetractable;
+        private Int32 gearHandlePosition;
+        private Int32 engineElapsedTime;
 
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
         public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
@@ -195,7 +231,7 @@ public class C172SimData : SimData
         public int ApApproachHold { get => apApproachHold; set => apApproachHold = value; }
         public int ApRevHold { get => apRevHold; set => apRevHold = value; }
         public int ApGSHold { get => apGSHold; set => apGSHold = value; }
-        public int DmeDistance { get => dmeDistance; set => dmeDistance = value; }
+        public float DmeDistance { get => dmeDistance; set => dmeDistance = value; }
         public int XpdrSwitch { get => xpdrSwitch; set => xpdrSwitch = value; }
         public int Xpdr { get => xpdr; set => xpdr = value; }
         public int RefEGT { get => refEGT; set => refEGT = value; }
@@ -208,9 +244,43 @@ public class C172SimData : SimData
         public int Nav2rx { get => nav2rx; set => nav2rx = value; }
         public int Adfrx { get => adfrx; set => adfrx = value; }
         public int GpsDriveNav1 { get => gpsDriveNav1; set => gpsDriveNav1 = value; }
+        public float DmeSpeed { get => dmeSpeed; set => dmeSpeed = value; }
+        public float DmeSignal { get => dmeSignal; set => dmeSignal = value; }
+        public int DmeIsAvailable { get => dmeIsAvailable; set => dmeIsAvailable = value; }
+        public float Dme2Distance { get => dme2Distance; set => dme2Distance = value; }
+        public float Dme2Speed { get => dme2Speed; set => dme2Speed = value; }
+        public float Dme2Signal { get => dme2Signal; set => dme2Signal = value; }
+        public int Dme2IsAvailable { get => dme2IsAvailable; set => dme2IsAvailable = value; }
+        public float PressureAltitude { get => pressureAltitude; set => pressureAltitude = value; }
+        public Int32 AdfVolume { get => adfVolume; set => adfVolume = value; }
+        public int SimulationTime { get => simulationTime; set => simulationTime = value; }
+        public int Com1Volume { get => com1Volume; set => com1Volume = value; }
+        public int Nav1Volume { get => nav1Volume; set => nav1Volume = value; }
+        public int Com2Volume { get => com2Volume; set => com2Volume = value; }
+        public int Nav2Volume { get => nav2Volume; set => nav2Volume = value; }
+        public float Qnh2 { get => qnh2; set => qnh2 = value; }
+        public int AudioPanelVolume { get => audioPanelVolume; set => audioPanelVolume = value; }
+        public int MarkerTestMute { get => markerTestMute; set => markerTestMute = value; }
+        public int MarkerIsHighSensitivity { get => markerIsHighSensitivity; set => markerIsHighSensitivity = value; }
+        public int IntercomMode { get => intercomMode; set => intercomMode = value; }
+        public int MarkerSoundOn { get => markerSoundOn; set => markerSoundOn = value; }
+        public int IntercomActive { get => intercomActive; set => intercomActive = value; }
+        public int DmeSoundOn { get => dmeSoundOn; set => dmeSoundOn = value; }
+        public int SpeakerActive { get => speakerActive; set => speakerActive = value; }
+        public int Com3tx { get => com3tx; set => com3tx = value; }
+
+        public int PilotTx { get => pilotTx; set => pilotTx = value; }
+        public int CopilotTxType { get => copilotTxType; set => copilotTxType = value; }
+        public int InsideMarkerOn { get => insideMarkerOn; set => insideMarkerOn = value; }
+        public int MiddleMarkerOn { get => middleMarkerOn; set => middleMarkerOn = value; }
+        public int OutsideMarkerOn { get => outsideMarkerOn; set => outsideMarkerOn = value; }
+        public int PilotTxing { get => pilotTxing; set => pilotTxing = value; }
+        public int CopilotTxing { get => copilotTxing; set => copilotTxing = value; }
+        public int IsGearRetractable { get => isGearRetractable; set => isGearRetractable = value; }
+        public int GearHandlePosition { get => gearHandlePosition; set => gearHandlePosition = value; }
+        public Int32 EngineElapsedTime { get => engineElapsedTime; set => engineElapsedTime = value; }
     }
     private C172Data c172data = new C172Data();
-
 
     public C172Data simData { get => c172data; set => c172data = value; }
 
@@ -219,6 +289,6 @@ public class C172SimData : SimData
 		IsSimConnected = data.IsSimConnected;
 		IsSimRunning = data.IsSimRunning;
 		IsPaused = data.IsPaused;
-        AircraftType = data.AircraftType;
-	}
+        AircraftFolder = data.AircraftFolder;
+    }
 }
