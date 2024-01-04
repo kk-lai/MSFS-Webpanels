@@ -123,7 +123,23 @@ https://www.pngwing.com/en/free-png-bxvkg
 Radio icon
 https://www.freepik.com/icon/radio_1376241#fromView=search&term=radio+panel&page=4&position=34&track=ais
 
+Map Icon
+https://www.flaticon.com/free-icon/treasure-map_475489?term=map&page=1&position=38&origin=search&related_id=475489
+
+Menu Icon
+<a href="https://www.freepik.com/icon/menu_4458493#fromView=search&term=menu&page=20&position=14&track=ais&uuid=1c4ec3af-c29b-4051-a741-5b2802a2ad11">Icon by Rizki Ahmad Fauzi</a>
+
+?
+https://www.flaticon.com/free-icon/plane_10133867?term=airplane&page=7&position=14&origin=tag&related_id=10133867
 
 
+Propeller Plane SVG Vector
+https://www.svgrepo.com/svg/481021/propeller-plane
 
+https://www.svgrepo.com/svg/480733/jumbo-plane
+
+
+https://www.shareicon.net/bottom-view-military-helicopter-helicopter-plane-army-helicopter-transport-659389
+
+https://www.svgrepo.com/svg/128811/helicopter-bottom-view-silhouette
 

@@ -14,40 +14,37 @@ define([
          ],
 function(jquery, Instrument, SysParam) {
 
-    Instrument.loadCss("../common/transponder/kt76c/kt76c.css");
-    var htmlPromise = Instrument.loadTemplate("../common/transponder/kt76c/kt76c-template.html");    
-
     return class KT76C extends Instrument {
         
         constructor(panel, elm, simvars)
         {
             super(panel, elm, simvars);
-            this.IDX_ALTITUDE = 0;
-            this.IDX_XPDR_CODE = 1;
-            this.IDX_XPDR_STATE = 2;
-            this.IDX_AVIONIC_SW = 3;
-            this.IDX_PANEL_ON = 4;
-            this.XPDR_STATE_OFF = 0;
-            this.XPDR_STATE_SBY = 1;
-            this.XPDR_STATE_TST = 2;
-            this.XPDR_STATE_ON = 3;
-            this.XPDR_STATE_ALT = 4;
+            var i=0;
+            this.IDX_ALTITUDE = i++;
+            this.IDX_XPDR_CODE = i++;
+            this.IDX_XPDR_STATE = i++;
+            this.IDX_AVIONIC_SW = i++;
+            this.IDX_PANEL_ON = i++;
+            i=0;
+            this.XPDR_STATE_OFF = i++;
+            this.XPDR_STATE_SBY = i++;
+            this.XPDR_STATE_TST = i++;
+            this.XPDR_STATE_ON = i++;
+            this.XPDR_STATE_ALT = i++;
             
-            this.aspectRatio = 6.25 / 1.63; // 6.25" (W) 1.63" (H)
             this.displayVal = [ 0, "1200", 0, false, false]; // "calibratedAltitude", "xpdr", "xpdrSwitch", "switchAvionics1", "generalPanelOn"
             this.nextToggleTime = 0;
             this.rState = false;
             this.userInput="";
             this.inputTimeoutTimer = null;
-            this.defaultInputTimeout = 3000; // ms
+            this.defaultInputTimeout = 3000; // ms            
+        }
 
-            var thisClass=this;
-            jquery(elm).addClass("kt76c");
-            this.onScreenResize();
-            htmlPromise.then(function(html) {
-                jquery(elm).append(html);
-                thisClass.bindControls();
-            });
+        init()
+        {
+            this.aspectRatio=6.25 / 1.63;
+            this.htmlFile="../common/transponder/kt76c/kt76c-template.html";
+            this.cssFile="../common/transponder/kt76c/kt76c.css";
         }
 
         onTapEvent(elm, e) {
@@ -109,8 +106,7 @@ function(jquery, Instrument, SysParam) {
                     break;
                 case this.XPDR_STATE_SBY: // SBY
                 case this.XPDR_STATE_ON: // ON
-                case this.XPDR_STATE_ALT: // ALT
-                
+                case this.XPDR_STATE_ALT: // ALT                
                     var altitude = this.displayVal[this.IDX_ALTITUDE];
                     var fl = Math.abs(Math.ceil(altitude/100));
                     dfl = String(fl).padStart(3, '0');

@@ -2,20 +2,21 @@ require.config({
     baseUrl : '.',
     paths : {
         jquery : '3rdparty/jquery/jquery-1.11.2.min',
-        'SysParam' : "../common/sysparam"
+        'SysParam' : "../common/sysparam",
+        StaticPropertyHelper: "../common/static-property-helper"
     },
     waitSeconds : 30,
 });
 
 
 define([
-         'jquery', 'SysParam'
+         'jquery', 'SysParam','StaticPropertyHelper'
          ],
-function(jquery, SysParam) {
+function(jquery, SysParam, StaticPropertyHelper) {
 
     return class Instrument {
         
-        static loadCss(url) {
+        loadCss(url) {            
             var head = jquery("head").first();
             var link = document.createElement("link");
             link.rel="stylesheet";
@@ -24,7 +25,7 @@ function(jquery, SysParam) {
             head.append(link);
         }
         
-        static loadTemplate(url) {
+        loadTemplate(url) {            
             return new Promise(function(resolve, reject) {
                 jquery.get(url, function(data) {
                     resolve(data);
@@ -33,9 +34,14 @@ function(jquery, SysParam) {
                 });
             });
         }
+
+        init()
+        {
+            // abstract func
+        }
                 
-        constructor(panel, rootElm, simvars) {
-            this.aspectRatio=1;
+        constructor(panel, rootElm, simvars) {  
+            this.init();
             this.simvars = [];
             this.coolDownTimeout=[];
             this.displayVal=[];
@@ -43,10 +49,26 @@ function(jquery, SysParam) {
             this.rootElm = rootElm;
             this.simvars = simvars;
             this.isInstrumentOff = false;
+            this.onScreenResize();
+
             for(var i=0;i<simvars.length;i++) {
                 this.coolDownTimeout.push(0);
                 this.displayVal.push("");
             }
+            var htmlPromise;
+            if (!StaticPropertyHelper.getProperty(this.constructor.name,"htmlPromise")) {
+                this.loadCss(this.cssFile);
+                htmlPromise = this.loadTemplate(this.htmlFile);
+                StaticPropertyHelper.setProperty(this.constructor.name, "htmlPromise", htmlPromise);
+            } else {
+                htmlPromise = StaticPropertyHelper.getProperty(this.constructor.name,"htmlPromise");
+            }
+
+            var thisClass=this;            
+            htmlPromise.then(function(html) {
+               jquery(rootElm).append(html); 
+               thisClass.bindControls();         
+            });
         }
         
         bindControls()
@@ -364,6 +386,17 @@ function(jquery, SysParam) {
                 }
             }
             return (val-tbl[idx][0])*(tbl[idx+1][1]-tbl[idx][1])/(tbl[idx+1][0]-tbl[idx][0]) + tbl[idx][1];
+        }
+
+        scale(val, sf, offset, min=null, max=null)
+        {
+            if ( min != undefined && val < min) {
+                val=min;
+            }
+            if ( max != undefined && val > max) {
+                val=max;
+            }
+            return val*sf + offset;
         }
     }
 

@@ -13,15 +13,11 @@ define([
          ],
 function(jquery, Instrument) {
     
-    Instrument.loadCss("../common/dme-system/kdi572/kdi572.css");
-    var htmlPromise = Instrument.loadTemplate("../common/dme-system/kdi572/kdi572-template.html");
-    
     return class KDI572 extends Instrument {
         constructor(panel, elm, simvars)
         {            
             super(panel, elm, simvars);
-            this.aspectRatio = 6.25 / 1.35; // 3.50"W x 1.35"H x 6.47"L;
-
+            
             var i = 0;
             this.IDX_AVIONIC_SW = i++;
             this.IDX_PANEL_ON = i++;
@@ -46,16 +42,14 @@ function(jquery, Instrument) {
             this.OFFSET_SIGNAL = i++;
             this.OFFSET_HAS_DME = i++;
 
-            this.displayVal.push(this.KNOB_N1);
-            
-            jquery(elm).addClass("kdi572");
-            this.onScreenResize();
-            
-            var thisClass=this;
-            htmlPromise.then(function(html) {
-               jquery(elm).append(html); 
-               thisClass.bindControls();
-            });
+            this.displayVal.push(this.KNOB_N1);            
+        }
+
+        init()
+        {
+            this.aspectRatio=6.25 / 1.35; // 3.50"W x 1.35"H x 6.47"L;
+            this.htmlFile="../common/dme-system/kdi572/kdi572-template.html";
+            this.cssFile="../common/dme-system/kdi572/kdi572.css";
         }
 
         refreshInstrument()

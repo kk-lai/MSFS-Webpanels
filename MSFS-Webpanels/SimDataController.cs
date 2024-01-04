@@ -94,17 +94,15 @@ public class SimDataController: ControllerBase
         "simvar-com2volume",
         "simvar-nav2volume",
         "simvar-adfvolume",
-"simvar-audiopanelvolume", // AUDIO_PANEL_VOLUME_SET
-"simvar-markertestmute", // MARKER_BEACON_TEST_MUTE
-"simvar-markerishighsensitivity", // MARKER_BEACON_SENSITIVITY_HIGH
-"simvar-intercommode", // INTERCOM_MODE_SET
-"simvar-markersoundon", // MARKER_SOUND_TOGGLE
-"simvar-intercomactive", // TOGGLE_ICS
-"simvar-dmesoundon", // RADIO_DME1_IDENT_TOGGLE
-"simvar-speakeractive", // TOGGLE_SPEAKER
-"simvar-copilottxtype", // COPILOT_TRANSMITTER_SET
-
-
+        "simvar-audiopanelvolume", // AUDIO_PANEL_VOLUME_SET
+        "simvar-markertestmute", // MARKER_BEACON_TEST_MUTE
+        "simvar-markerishighsensitivity", // MARKER_BEACON_SENSITIVITY_HIGH
+        "simvar-intercommode", // INTERCOM_MODE_SET
+        "simvar-markersoundon", // MARKER_SOUND_TOGGLE
+        "simvar-intercomactive", // TOGGLE_ICS
+        "simvar-dmesoundon", // RADIO_DME1_IDENT_TOGGLE
+        "simvar-speakeractive", // TOGGLE_SPEAKER
+        "simvar-copilottxtype", // COPILOT_TRANSMITTER_SET
     };
 
     public SimDataController()
@@ -115,7 +113,7 @@ public class SimDataController: ControllerBase
     [HttpGet()]
     public IActionResult Index()
 	{        
-        SimData simData = SimConnectClient.getSimConnectClient().SimData;        
+        SimData simData = SimConnectClient.getSimConnectClient().simData;        
 
 		return Ok(simData);
     }

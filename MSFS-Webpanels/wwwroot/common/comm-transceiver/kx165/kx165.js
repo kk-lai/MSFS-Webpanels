@@ -12,20 +12,12 @@ define([
          'jquery', 'Instrument'    
          ],
 function(jquery, Instrument) {
-       
-    Instrument.loadCss("../common/comm-transceiver/kx165/kx165.css");
-    var htmlPromise = Instrument.loadTemplate("../common/comm-transceiver/kx165/kx165-template.html");
 
     return class KX165 extends Instrument {
         
         constructor(panel,elm, simvars)
         {            
             super(panel,elm, simvars);
-            jquery(elm).addClass("kx165");
-            this.aspectRatio = 1024 / 328;
-            this.onScreenResize();
-            
-            var thisClass=this;
 
             var i = 0;
             this.IDX_AVIONIC_SW = i++;
@@ -36,11 +28,13 @@ function(jquery, Instrument) {
             this.IDX_NAV_ACTIVE = i++;
             this.IDX_NAV_STANDBY = i++;
             this.IDX_NAV_VOLUME = i++;
-            
-            htmlPromise.then(function(html) {
-               jquery(elm).append(html); 
-               thisClass.bindControls();
-            });
+        }
+
+        init()
+        {
+            this.aspectRatio=1024 / 328;
+            this.htmlFile="../common/comm-transceiver/kx165/kx165-template.html";
+            this.cssFile="../common/comm-transceiver/kx165/kx165.css";
         }
 
         refreshInstrument()

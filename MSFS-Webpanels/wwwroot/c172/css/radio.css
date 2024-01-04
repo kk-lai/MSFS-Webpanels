@@ -103,16 +103,17 @@ img
     height:100%;
     top:0;
     left:0;
-    color:red;
+    color:red;    
 }
 
 #sys-message
 {
+    position:absolute;
     font-size: 250%;
     font-weight:bold;
     font-style: italic;
-    line-height: 0%;
-    height:100%;
-    transform: translate(0,50%);
-    text-align: center;
+    width:100%;
+    top:50%;
+    text-align:center;
+    transform: translate(0%,-50%);
 }

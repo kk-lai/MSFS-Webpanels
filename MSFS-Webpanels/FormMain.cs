@@ -69,7 +69,7 @@ namespace MSFS_Webpanels
             if (m.Msg == SimConnectClient.WM_USER_SIMCONNECT)
             {
                 simConnectClient.SimConnectMsgHandler();
-                if (simConnectClient.SimData.IsSimConnected)
+                if (simConnectClient.simData.IsSimConnected)
                 {
                     buttonStart.Text = "&Disconnect";
                 }
@@ -86,7 +86,7 @@ namespace MSFS_Webpanels
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            if (!simConnectClient.SimData.IsSimConnected)
+            if (!simConnectClient.simData.IsSimConnected)
             {
                 _logger.Info("Start connecting MSFS");
                 simConnectClient.Disconnect();

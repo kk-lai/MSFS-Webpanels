@@ -1,0 +1,63 @@
+.c172-simple-ap-panel
+{
+    position: relative;
+    width:100%;
+    height:100%;
+    font-size:173.3334384%;
+}
+
+.c172-simple-ap-panel .ap-state
+{
+    position:relative;
+    display:inline-block;
+    background-color:black;
+    color:red;
+    height:100%;
+    width:11.43463059445612%;
+    margin-left:0.7623087062970746%;
+}
+
+.c172-simple-ap-panel .ap-state-text
+{
+    position:relative;
+    height:50%;
+    width:100%;
+    text-align:center;
+    font-size:136.3636363636364%;
+}
+
+.c172-simple-ap-panel .ap-button
+{
+    position:relative;
+    vertical-align: top;
+    display:inline-block;
+    background-color:white;
+    height:60%;
+    top:20%;
+    width:6.877973291%;
+    margin-left:0.857597295%;
+    margin-right:0.857597295%;
+    color:black;
+}
+
+.c172-simple-ap-panel .ap-altitude
+{
+    position:relative;
+    vertical-align: top;
+    display:inline-block;
+    background-color:black;
+    height:100%;
+    width:19.05771766%;
+    font-size: 227.2727272727273%;
+    
+}
+
+.c172-simple-ap-panel .apaltitude
+{
+    color:#12e049;
+}
+
+.c172-simple-ap-panel .apverticalholdspeed
+{
+    color:red;    
+}

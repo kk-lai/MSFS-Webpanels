@@ -13,15 +13,11 @@ define([
 ],
     function (jquery, Instrument) {
 
-        Instrument.loadCss("../common/autopilot-system/kap140/kap140.css");
-        var htmlPromise = Instrument.loadTemplate("../common/autopilot-system/kap140/kap140-template.html");
-
         return class KAP140 extends Instrument {
 
             constructor(panel, elm, simvars) {
                 super(panel, elm, simvars);
-                this.aspectRatio = 6.3 / 1.665; // 6.3” W x 1.665” H x 11.35” L
-
+               
                 var i=0;
                 this.IDX_AVIONIC_SW = i++;
                 this.IDX_PANEL_ON = i++;
@@ -47,17 +43,14 @@ define([
 
                 this.inputTimeoutTimer = null;
                 this.displayMode = "alt";
-                this.isBaroInHg = true;
+                this.isBaroInHg = true;                
+            }
 
-                jquery(elm).addClass("kap140");
-                this.onScreenResize();
-
-                var thisClass = this;
-
-                htmlPromise.then(function (html) {
-                    jquery(elm).append(html);
-                    thisClass.bindControls();
-                });
+            init()
+            {
+                this.aspectRatio=6.3 / 1.665;
+                this.htmlFile="../common/autopilot-system/kap140/kap140-template.html";
+                this.cssFile="../common/autopilot-system/kap140/kap140.css";
             }
 
             refreshInstrument()
@@ -106,40 +99,56 @@ define([
                 } else {
                     return;
                 }
+                var statusElm=[];
+                var statusTxt = ["ROL","PIT","",""];
 
-                var status1 = jquery(this.rootElm).find(".ind-status1");
-                var status2 = jquery(this.rootElm).find(".ind-status2");
-                var status3 = jquery(this.rootElm).find(".ind-status3");
-                var status4 = jquery(this.rootElm).find(".ind-status4");
-
-                status1.removeClass("hide");
-                status1.text("ROL");
-
-                if (this.displayVal[this.IDX_HEADING_LOCK]) {
-                    status1.text("HDG");
+                for(var i=1;i<=4;i++) {
+                    var elm = jquery(this.rootElm).find(".ind-status"+i);
+                    statusElm.push(elm);
                 }
-                if (this.displayVal[this.IDX_NAV_LOCK]) {
-                    status1.text("NAV");
-                }
+
                 if (this.displayVal[this.IDX_APR]) {
-                    status1.text("APR");
-                }
+                    statusTxt[2]="APR";
+                } else
                 if (this.displayVal[this.IDX_REV]) {
-                    status1.text("REV");
+                    statusTxt[2]="REV";
+                } else           
+                if (this.displayVal[this.IDX_NAV_LOCK]) {
+                    statusTxt[2]="NAV";
+                }                 
+                if (this.displayVal[this.IDX_HEADING_LOCK]) {
+                    statusTxt[0]="HDG";
+                }
+                if (statusTxt[2]!="" && statusTxt[0]=="ROL") {
+                    statusTxt[0]=statusTxt[2];
+                    statusTxt[2]="";                    
                 }
 
-                status2.removeClass("hide");
-                status2.text("PIT");
-                if (this.displayVal[this.IDX_ALT_LOCK]) {
-                    status2.text("ALT");
-                }
-                if (this.displayVal[this.IDX_VSHOLD]) {
-                    status2.text("VS");
-                }
                 if (this.displayVal[this.IDX_GS]) {
-                    status2.text("GS");
+                    statusTxt[3]="GS";  
+                } 
+                if (this.displayVal[this.IDX_ALT_LOCK]) {
+                    statusTxt[1]="ALT";  
+                } 
+                if (this.displayVal[this.IDX_VSHOLD]) {
+                    statusTxt[1]="VS";  
+                } 
+                if (statusTxt[3]!="" && statusTxt[1]=="PIT") {
+                    statusTxt[1]=statusTxt[3];
+                    statusTxt[3]="";
                 }
 
+                //var statusTxt = ["0","1","2","3"];
+                for(var i=0;i<4;i++) {
+                    var txt = statusTxt[i];
+                    if (txt!="") {
+                        statusElm[i].text(txt);
+                        statusElm[i].removeClass("hide");
+                        if (i>=2) {
+                            jquery(this.rootElm).find(".ind-arm-"+ ((i==2) ? "left" : "right")).removeClass("hide");
+                        }
+                    }
+                }
             }
 
             onTapEvent(elm, e) {

@@ -12,19 +12,12 @@ define([
          'jquery', 'Instrument'    
          ],
 function(jquery, Instrument) {
-    
-
-    Instrument.loadCss("../common/audio-panel/kma28/kma28.css");
-    var htmlPromise = Instrument.loadTemplate("../common/audio-panel/kma28/kma28-template.html");
 
     return class KMA28 extends Instrument {
         
         constructor(panel,elm, simvars)
         {            
-            super(panel,elm, simvars);
-            jquery(elm).addClass("kma28");
-            this.aspectRatio = 6.25 / 1.3; 
-            this.onScreenResize();
+            super(panel,elm, simvars);          
 
             var i=0;            
             this.TX_TYPE_COM1 = i++;
@@ -88,14 +81,14 @@ function(jquery, Instrument) {
             this.displayVal.push(this.MODE_TX_COM1);
 
             this.markerFlash = false //
-            this.nextToggleTime = Date.now()+500; // ms
-            
-            var thisClass=this;
-            
-            htmlPromise.then(function(html) {
-               jquery(elm).append(html); 
-               thisClass.bindControls();
-            });
+            this.nextToggleTime = Date.now()+500; // ms            
+        }
+
+        init()
+        {
+            this.aspectRatio = 6.25 / 1.3;
+            this.htmlFile="../common/audio-panel/kma28/kma28-template.html";
+            this.cssFile="../common/audio-panel/kma28/kma28.css";
         }
 
         refreshInstrument()

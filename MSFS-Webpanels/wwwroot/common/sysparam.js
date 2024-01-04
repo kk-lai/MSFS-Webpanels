@@ -8,6 +8,7 @@ define(function() {
         defaultCoolDown : 500, // ms
         refreshPeriod : 50, // ms;
         serverUpdateCooldown :20, // ms  
+        mapRefreshPeriod: 500, // ms
         simVarUrl: '/api/SimData',
         mapDataUrl: '/api/MapData',
         tapEvent: ('ontouchstart' in document.documentElement) ? 'touchstart': 'mousedown',

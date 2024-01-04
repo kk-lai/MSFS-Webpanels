@@ -55,6 +55,8 @@ function(jquery, SysParam) {
             }     
             jquery(".container").css("width", fw);
             jquery(".container").css("height", fh);
+            var fontSize = Math.ceil(fh/67);
+            //jquery(".container").css("font-size", fontSize);
             jquery(".container").removeClass("hide");
         }
         
@@ -115,9 +117,9 @@ function(jquery, SysParam) {
                 success: function(jsonData, textStatus, jqXHR ){
                     thisClass.isServerAppRunning=true;
                     if (jsonData.hasOwnProperty("simData")) {
-                        thisClass.postProcessingFunc(jsonData);
-                        thisClass.refreshDisplay(jsonData);
+                        thisClass.postProcessingFunc(jsonData);                        
                     }
+                    thisClass.refreshDisplay(jsonData);
                     thisClass.isPoolingSimVars=false;
                 },
                 error: function(jqXHR, textStatus, errorThrown ) {

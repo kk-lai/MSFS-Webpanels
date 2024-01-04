@@ -12,21 +12,13 @@ define([
          'jquery', 'Instrument'    
          ],
 function(jquery, Instrument) {
-       
-    Instrument.loadCss("../common/adf-system/kr87/kr87.css");
-    var htmlPromise = Instrument.loadTemplate("../common/adf-system/kr87/kr87-template.html");
 
     return class KR87 extends Instrument {
         
         constructor(panel,elm, simvars)
         {            
             super(panel,elm, simvars);
-            jquery(elm).addClass("kr87");
-            this.aspectRatio = 6.32 / 1.35; //6.32"W x 1.35"H x 10.73"L
-            this.onScreenResize();
             
-            var thisClass=this;
-
             var i = 0;
             this.IDX_AVIONIC_SW = i++;
             this.IDX_PANEL_ON = i++;
@@ -71,12 +63,14 @@ function(jquery, Instrument) {
             this.timerState = this.TIMER_RESET;
             this.timerMode = this.COUNT_UP;
 
-            this.inputTimeoutTimer=null;
-            
-            htmlPromise.then(function(html) {
-               jquery(elm).append(html); 
-               thisClass.bindControls();
-            });
+            this.inputTimeoutTimer=null;            
+        }
+
+        init()
+        {
+            this.aspectRatio = 6.32 / 1.35;
+            this.htmlFile="../common/adf-system/kr87/kr87-template.html";
+            this.cssFile="../common/adf-system/kr87/kr87.css";
         }
 
         refreshInstrument()
@@ -186,7 +180,7 @@ function(jquery, Instrument) {
                             startDigit: 3,
                             endDigit:4,
                             step: 100,
-                            stepsPerFullCircle : 10,
+                            stepsPerFullCircle : 5,
                             min: 100,
                             max: 1700,
                             divCtl : ".dot-freq-high",
@@ -197,7 +191,7 @@ function(jquery, Instrument) {
                             startDigit: 2,
                             endDigit:2,
                             step: 10,
-                            stepsPerFullCircle : 10,
+                            stepsPerFullCircle : 5,
                             min: 0,
                             max: 90,
                             divCtl : ".dot-freq-mid",
@@ -208,7 +202,7 @@ function(jquery, Instrument) {
                             startDigit: 1,
                             endDigit:1,
                             step: 1,
-                            stepsPerFullCircle : 10,
+                            stepsPerFullCircle : 5,
                             min: 0,
                             max: 9,
                             divCtl : ".dot-freq-low",

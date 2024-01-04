@@ -1,0 +1,92 @@
+.generic-attitude-indicator
+{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+.generic-attitude-indicator .background
+{
+    width:100%;
+    height:100%;
+    background: url(attitude-indicator.png) 0 0;
+    background-size: 200% 200%;
+}
+
+.generic-attitude-indicator .pitch-wrapper
+{
+    position:absolute;
+    left:11.71875%;
+    top:25%;
+    width:76.5625%;
+    height:50%;
+}
+
+.generic-attitude-indicator .pitch
+{
+    width:100%;
+    height:100%;
+    background: url(attitude-indicator.png) 81.0126582278481% 66.6666666666667%;
+    background-size: 261.224489795918% 400%;
+}
+
+.generic-attitude-indicator .roll
+{
+    position:absolute;
+    left:0%;
+    top:0;
+    width:100%;
+    height:100%;
+    background: url(attitude-indicator.png) 100% 0%;
+    background-size: 200% 200%;
+}
+
+.generic-attitude-indicator .plane-wrapper
+{
+    position:absolute;
+    left:24.21875%;
+    top:48.2421875%;
+    width:51.5625%;
+    height:33.984375%;
+}
+
+.generic-attitude-indicator .plane
+{
+    width:100%;
+    height:100%;
+    background: url(attitude-indicator.png) 67.3684210526316% 90.3529411764706%;
+    background-size: 387.878787878788% 588.505747126437%;
+}
+
+.generic-attitude-indicator .gyro
+{
+    position: absolute;
+    width:12.5%;
+    height:37.5%;
+    left:15.234375%;
+    top:13.1875%;
+    background: url(attitude-indicator.png) 94.1666666666667% 61.5384615384615%;
+    background-size: 1600% 533.333333333333%;
+}
+
+.generic-attitude-indicator .foreground
+{
+    position: absolute;
+    left:0%;
+    top:0;
+    width:100%;
+    height:100%;
+    background: url(attitude-indicator.png) 0% 100%;
+    background-size: 200% 200%;
+}
+
+.generic-attitude-indicator .knob
+{
+    position: absolute;
+    left:41.9921875%;
+    top:81.4453125%;
+    width:16.015625%;
+    height:16.015625%;
+    background: url(attitude-indicator.png) 82.9059829059829% 82.0512820512821%;
+    background-size: 1163.63636363636% 1163.63636363636%;
+}

@@ -13,6 +13,7 @@ using Microsoft.VisualBasic.Devices;
 using log4net;
 using System.Reflection;
 using MSFS_Webpanels;
+using System.Xml.Serialization;
 
 public class SimConnectClient
 {
@@ -30,7 +31,10 @@ public class SimConnectClient
     {
         AIRCRAFT_LOADED,
         AIRCRAFT_STATE,
-        PLANE_INFO_REQ
+        PLANE_INFO_REQ,
+        ACTIVE_FLIGHT_PLAN,
+        AI_AIRCRAFT_LIST,
+        AI_AIRCRAFT
     };
 
     enum DEFINITION
@@ -38,7 +42,8 @@ public class SimConnectClient
         C172_FPANEL,
         TRANSPONDER_STATE,
         AP_ALTITUDE_LOCK,
-        GENERAL_PLANE_DATA
+        GENERAL_PLANE_DATA,
+        AI_AIRCRAFT_LIST        
     };
 
     public enum EVENT
@@ -46,6 +51,8 @@ public class SimConnectClient
         SIM_PAUSE,
         SIM_RUNNING,
         AIRCRAFT_LOADED,
+        FLIGHT_PLAN_ACTIVATED,
+        FLIGHT_PLAN_DEACTIVATED,
 
         SET_EGT_REF,
         SET_TAS_ADJ,
@@ -151,10 +158,8 @@ public class SimConnectClient
     }
 
     private SimConnect simConnect = null;
-    private SimData simData = new SimData();
     public const int WM_USER_SIMCONNECT = 0x0402;
     private ConcurrentQueue<QueueItem> updateQueue = new ConcurrentQueue<QueueItem>();
-    private ArrayList aircraftConfigPaths = new ArrayList();
 
     private static SimConnectClient simClient = new SimConnectClient();
 
@@ -163,11 +168,13 @@ public class SimConnectClient
         return simClient;
     }
 
-    public SimData SimData { get => simData; set => simData = value; }
+    public SimData simData { get; set; }
+    public MapData mapData { get; set; }
 
     public SimConnectClient()
     {
-        //detectMSFSFileLocation();
+        simData = new SimData();
+        mapData = new MapData();        
     }
 
     public void Connect(IntPtr whnd)
@@ -188,9 +195,13 @@ public class SimConnectClient
             simConnect.OnRecvSystemState += new SimConnect.RecvSystemStateEventHandler(OnRecvSystemStateHandler);
 
             simConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(OnRecvSimobjectData);
+            simConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(OnRecvSimobjectDataBytypeEventHandler);
+
             simConnect.SubscribeToSystemEvent(EVENT.AIRCRAFT_LOADED, "AircraftLoaded");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_PAUSE, "Pause");
             simConnect.SubscribeToSystemEvent(EVENT.SIM_RUNNING, "Sim");
+            simConnect.SubscribeToSystemEvent(EVENT.FLIGHT_PLAN_ACTIVATED, "FlightPlanActivated");
+            simConnect.SubscribeToSystemEvent(EVENT.FLIGHT_PLAN_DEACTIVATED, "FlightPlanDeactivated");
             uint fieldId = 0;
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ATC ID", null, SIMCONNECT_DATATYPE.STRING256, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL LEFT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
@@ -339,7 +350,6 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "DME SOUND", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "SPEAKER ACTIVE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
-
             // COM3/2/1 COM1/2 COM2/1 TEL
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "COM TRANSMIT:3", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
@@ -366,14 +376,24 @@ public class SimConnectClient
             //simConnect.RegisterDataDefineStruct<APAltitudeHold>(DEFINITION.AP_ALTITUDE_LOCK);
 
             fieldId = 0;
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC ID", "degree latitude", SIMCONNECT_DATATYPE.STRING64, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC MODEL", "degree latitude", SIMCONNECT_DATATYPE.STRING64, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC TYPE", "degree latitude", SIMCONNECT_DATATYPE.STRING64, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC FLIGHT NUMBER", "degree latitude", SIMCONNECT_DATATYPE.STRING8, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC AIRLINE", "degree latitude", SIMCONNECT_DATATYPE.STRING64, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE LATITUDE", "degree latitude", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE LONGITUDE", "degree longitude", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE ALTITUDE", "feet", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "GROUND VELOCITY", "Knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "PLANE HEADING DEGREES TRUE", "Degrees", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
-            simConnect.RegisterDataDefineStruct<SimData.GenericData>(DEFINITION.GENERAL_PLANE_DATA);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "WING SPAN", "Feet", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "SIM ON GROUND", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ENGINE TYPE", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "NUMBER OF ENGINES", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+            simConnect.RegisterDataDefineStruct<SimData.GenericPlaneData>(DEFINITION.GENERAL_PLANE_DATA);
             simConnect.RequestDataOnSimObject(REQUEST.PLANE_INFO_REQ, DEFINITION.GENERAL_PLANE_DATA, SimConnect.SIMCONNECT_OBJECT_ID_USER,
-                    SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
+                    SIMCONNECT_PERIOD.SECOND, 0, 0, 0, 0);
 
             /*
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "", "", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
@@ -467,7 +487,8 @@ public class SimConnectClient
            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_SPEAKER, "TOGGLE_SPEAKER");
            simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET");
            
-            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
+           simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
+           simConnect.RequestSystemState(REQUEST.ACTIVE_FLIGHT_PLAN, "FlightPlan");
             _logger.Info("End calling SimConnect");
         }
         catch (COMException ex)
@@ -537,7 +558,9 @@ public class SimConnectClient
         }
         if (data.dwDefineID == (uint)DEFINITION.GENERAL_PLANE_DATA)
         {
-            this.SimData.GeneralPlaneData = (SimData.GenericData)data.dwData[0];   
+            mapData.userPlaneData = (SimData.GenericPlaneData)data.dwData[0];
+            mapData.removeOutdatedAIAircrafts();
+            simConnect.RequestDataOnSimObjectType(REQUEST.AI_AIRCRAFT_LIST, DEFINITION.GENERAL_PLANE_DATA, 200000, SIMCONNECT_SIMOBJECT_TYPE.AIRCRAFT);
         }
         while (updateQueue.Count > 0)
         {
@@ -567,6 +590,10 @@ public class SimConnectClient
                 _logger.Info("Sim Paused");
                 simData.IsPaused = (data.dwData == 1);
                 break;
+            case EVENT.FLIGHT_PLAN_DEACTIVATED:
+                _logger.Info("Flight plan deactivated");
+                mapData.flightPlanDoc = null;
+                break;
         }
     }
 
@@ -578,9 +605,14 @@ public class SimConnectClient
             int epos = data.szFileName.LastIndexOf("\\");
             if (spos>=0) 
             {
-                this.SimData.AircraftFolder = data.szFileName.Substring(spos+21, epos - spos - 21);
+                this.simData.AircraftFolder = data.szFileName.Substring(spos+21, epos - spos - 21);
             }
             _logger.Info("OnRecvFilenameEvent:"+data.szFileName);
+        }
+        if (data.uEventID==(uint)EVENT.FLIGHT_PLAN_ACTIVATED)
+        {
+            _logger.Info("Flight plan activated:" + data.szFileName);
+            readFlightPlanDoc(data.szFileName);
         }
     }
     private void OnRecvSystemStateHandler(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
@@ -589,10 +621,56 @@ public class SimConnectClient
         if (data.dwRequestID == (uint)REQUEST.AIRCRAFT_LOADED)
         {
             int epos = data.szString.LastIndexOf("\\");
-            this.SimData.AircraftFolder = data.szString.Substring(21,epos-21);
+            this.simData.AircraftFolder = data.szString.Substring(21,epos-21);
             _logger.Info("OnRecvSystemStateHandler:"+data.szString);
         }
+
+        if (data.dwRequestID == (uint)REQUEST.ACTIVE_FLIGHT_PLAN)
+        {            
+            _logger.Info("OnRecvSystemStateHandler.flightPlan:" + data.szString);
+            readFlightPlanDoc(data.szString);
+        }
     }
+
+    private void OnRecvSimobjectDataBytypeEventHandler(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
+    {
+        if (data.dwObjectID!= 1)
+        {
+            AIAircraft aircraft = new AIAircraft(data.dwObjectID);
+            int pos = mapData.aiAircrafts.IndexOf(aircraft);
+            if (pos >= 0)
+            {
+                aircraft = (AIAircraft)mapData.aiAircrafts[pos];
+            }
+            else
+            {
+                mapData.aiAircrafts.Add(aircraft);
+            }
+            aircraft.planeData = (SimData.GenericPlaneData)data.dwData[0];
+            aircraft.lastUpdated = DateTime.Now;
+        }
+
+    }
+
+    private void readFlightPlanDoc(string fname)
+    {
+        SimBaseDocument flightPlanDoc = null;
+        if (File.Exists(fname))
+        {
+            XmlSerializer serializer =
+                 new XmlSerializer(typeof(SimBaseDocument));
+
+            using (Stream reader = new FileStream(fname, FileMode.Open))
+            {
+                // Call the Deserialize method to restore the object's state.
+                flightPlanDoc = (SimBaseDocument)serializer.Deserialize(reader);
+                flightPlanDoc.lastUpdated = DateTime.Now;
+            }
+        } 
+        mapData.flightPlanDoc = flightPlanDoc;
+        _logger.Info("End loading flight plan");
+    }
+
 
     public void transmitEvent(uint eventOffset,  uint[] iparams)
     {
