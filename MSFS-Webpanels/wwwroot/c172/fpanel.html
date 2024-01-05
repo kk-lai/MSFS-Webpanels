@@ -359,13 +359,13 @@
                         <div class="help-bottom-button text-container">
                             <div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
                         </div>
-
                     </div>
                     <div class="vbutton ui-button button-top button-dec" target="simvar-flapsposition"></div>
                     <div class="vbutton ui-button button-bottom button-inc" target="simvar-flapsposition"></div>
                 </div>
             </div><div class="gauge rpm-guage">
                 <img src="img/rpm-backplate.png" class="gauge-item rpm-backplate" alt="rpm-backplate" />
+                <div class="rpm-hours-container text-container"><div class="rpm-enginehour simvar-enginehour" func="showText"></div><div class="rpm-enginehour10 simvar-enginehour10" func="showText"></div></div>
                 <img src="img/rpm-needle.png" class="rpm-needle simvar-enginerpm" alt="rpm-needle" func="rotateInterpolate" tbl="rpmPositions" />
                 <img src="img/rpm-needle-center.png" class="gauge-item rpm-needle-center" alt="rpm-needle-center"  />
             </div><div class="gauge adf-guage">
@@ -413,6 +413,19 @@
                     <img src="img/parking-brake-off.png" class="switch-state-0 hide" alt="toggle-switch-off" />
                     <img src="img/parking-brake-on.png" class="switch-state-1 " alt="toggle-switch-on" /><!--
                 --><div class="help-overlay text-container hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                </div>
+            </div><div class="bottom-control-container gear-container">
+                <div class="gear-wrapper simvar-isgearretractable" func="showHide" param="1">
+                    <div class="bottom-panel-label gear-label text-container">
+                        <div class="center-div font-larger">
+                            GEAR
+                        </div>
+                    </div>
+                    <div class="gear-switch-wrapper ui-switch ctl-gearhandleposition simvar-gearhandleposition" target="simvar-gearhandleposition" func="ctlSwitch">
+                        <img src="img/gen-toggle-switch-on.png" class="switch-state-0" alt="toggle-switch-off" />
+                        <img src="img/gen-toggle-switch-off.png" class="switch-state-1 hide" alt="toggle-switch-on" /><!--
+                    --><div class="help-overlay text-container hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+                    </div>
                 </div>
             </div><div class="warning-panel text-container">
                 <div class="warning-container warning-vac-container">

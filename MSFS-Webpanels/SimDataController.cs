@@ -103,6 +103,7 @@ public class SimDataController: ControllerBase
         "simvar-dmesoundon", // RADIO_DME1_IDENT_TOGGLE
         "simvar-speakeractive", // TOGGLE_SPEAKER
         "simvar-copilottxtype", // COPILOT_TRANSMITTER_SET
+        "simvar-gearhandleposition" // GEAR_TOGGLE
     };
 
     public SimDataController()

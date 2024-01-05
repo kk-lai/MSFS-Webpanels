@@ -139,7 +139,8 @@ public class SimConnectClient
         TOGGLE_ICS,
         RADIO_DME1_IDENT_TOGGLE,
         TOGGLE_SPEAKER,
-        COPILOT_TRANSMITTER_SET
+        COPILOT_TRANSMITTER_SET,
+        GEAR_TOGGLE
     };
 
     enum NOTIFICATIONGROUP
@@ -169,6 +170,7 @@ public class SimConnectClient
     }
 
     public SimData simData { get; set; }
+
     public MapData mapData { get; set; }
 
     public SimConnectClient()
@@ -202,6 +204,7 @@ public class SimConnectClient
             simConnect.SubscribeToSystemEvent(EVENT.SIM_RUNNING, "Sim");
             simConnect.SubscribeToSystemEvent(EVENT.FLIGHT_PLAN_ACTIVATED, "FlightPlanActivated");
             simConnect.SubscribeToSystemEvent(EVENT.FLIGHT_PLAN_DEACTIVATED, "FlightPlanDeactivated");
+
             uint fieldId = 0;
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "ATC ID", null, SIMCONNECT_DATATYPE.STRING256, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "FUEL LEFT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
@@ -363,6 +366,10 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "MIDDLE MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "OUTER MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "IS GEAR RETRACTABLE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GEAR HANDLE POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GENERAL ENG ELAPSED TIME:1", "hours over 10", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
             simConnect.RegisterDataDefineStruct<C172SimData.C172Data>(DEFINITION.C172_FPANEL);
             simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.C172_FPANEL, SimConnect.SIMCONNECT_OBJECT_ID_USER,
                 SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
@@ -485,9 +492,11 @@ public class SimConnectClient
            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ICS, "TOGGLE_ICS");
            simConnect.MapClientEventToSimEvent(EVENT.RADIO_DME1_IDENT_TOGGLE, "RADIO_DME1_IDENT_TOGGLE");
            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_SPEAKER, "TOGGLE_SPEAKER");
-           simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET");
-           
+           simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET")
+           simConnect.MapClientEventToSimEvent(EVENT.GEAR_TOGGLE, "GEAR_TOGGLE");
+
            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
+
            simConnect.RequestSystemState(REQUEST.ACTIVE_FLIGHT_PLAN, "FlightPlan");
             _logger.Info("End calling SimConnect");
         }
@@ -560,6 +569,7 @@ public class SimConnectClient
         {
             mapData.userPlaneData = (SimData.GenericPlaneData)data.dwData[0];
             mapData.removeOutdatedAIAircrafts();
+
             simConnect.RequestDataOnSimObjectType(REQUEST.AI_AIRCRAFT_LIST, DEFINITION.GENERAL_PLANE_DATA, 200000, SIMCONNECT_SIMOBJECT_TYPE.AIRCRAFT);
         }
         while (updateQueue.Count > 0)
@@ -670,7 +680,6 @@ public class SimConnectClient
         mapData.flightPlanDoc = flightPlanDoc;
         _logger.Info("End loading flight plan");
     }
-
 
     public void transmitEvent(uint eventOffset,  uint[] iparams)
     {

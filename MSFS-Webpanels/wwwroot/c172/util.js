@@ -282,8 +282,18 @@ define(['jquery','const'],function(jquery, sysconst) {
                 jsonData.simData.attitudeGyroOff = 0;
             }
 
-            jsonData.simData.dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
+            var dmeDistance = "";
+            if (jsonData.simData.dmeIsAvailable && jsonData.simData.dmeSignal>0) {
+                dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
+            }
+            jsonData.simData.dmeDistance=dmeDistance;
+            
             jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
+
+            var engineHour = jsonData.simData.engineElapsedTime.toString().padStart(5, "0");
+
+            jsonData.simData.engineHour = engineHour.substring(0,4);
+            jsonData.simData.engineHour10 = engineHour.substring(4,5);
 
             var apStatus1 = "";
             var apStatus2 = "";

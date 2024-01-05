@@ -37,6 +37,8 @@ Usage
 6. In case the panel does not work properly, tap the “refresh” icon beside the “i” icon to reload the page.
 7. If you want to use the panel in full screen, you may add the page to your home screen by selecting “Share” > “Add to Home Screen” on your iPad.
 
+Please remove existing icon from "Home Screen" and clear browsing data of the browser when using new version panel.
+
 Future Plans
 ============
 1. Fix problem when "Magneto from R to off" the engine doesn't stop
@@ -49,6 +51,11 @@ Source Code
 Source code can be downloadable at https://github.com/kk-lai/MSFS-Webpanels 
 
 It can be compiled with Microsoft Visual Studio 2022.
+
+Release Notes
+=============
+1.0.2 - Initial release
+1.1.0 - DME distance bug fix, add gear up/down switch, engine hours recorder, logging
 
 License
 =======

@@ -707,6 +707,36 @@ img
     padding: 45.3125% 37.5% 45.3125% 15.625%;
 }
 
+.rpm-hours-container
+{
+    position: absolute;
+    width:28.7109375%;
+    height:7.421875%;
+    left: 29.4921875%;
+    top: 61.328125%;
+    background-color: black;
+    color:white;
+}
+
+.rpm-enginehour
+{
+    width:80%;
+    height:100%;
+    letter-spacing:0.4em;
+    text-align:right;
+    display:inline-block;
+}
+
+.rpm-enginehour10
+{
+    width:20%;
+    height:100%;
+    display:inline-block;    
+    color:black;
+    background-color:white;
+    text-align:center;
+}
+
 .rpm-needle
 {
     position: absolute;
@@ -963,19 +993,20 @@ img
 
 .fuel-selector-label
 {
-    width:53.79591558%;
+    width:46.355098696%;
 }
 
 .fuel-selector-container
 {
-    width: 18%;
+    left:0.5%;
+    width: 15%;
 }
 
 .fuel-selector-switch-wrapper
 {
-    left:5%;
+    left:4.2%;
     height:100%;
-    width: 41.20408442%;
+    width: 49.444901304%;
     position:relative;
     display:inline-block;
 }
@@ -988,19 +1019,20 @@ img
 
 .fuel-valve-container
 {
-    width: 15%;
+    left:0.5%;
+    width: 9.8%;
 }
 
 .fuel-valve-label
 {
-    width:62.03673246%;
+    width:49.54601907142857%;
 }
 
 .fuel-valve-switch-wrapper
 {
     position:relative;
     display:inline-block;
-    width: 32.96326754%;
+    width: 50.45398092857143%;
     height: 100%;
 }
 
@@ -1010,21 +1042,54 @@ img
     padding-bottom:13.50460349%;
 }
 
+.gear-container
+{
+    left:0.5%;
+    width: 9.8%;
+}
+
+.gear-wrapper
+{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+.gear-label
+{
+    width:49.54601907142857%;
+}
+
+.gear-switch-wrapper
+{
+    position:relative;
+    display:inline-block;
+    width: 50.45398092857143%;
+    height: 100%;
+}
+
+.gear-switch-wrapper img {
+    height: 72.99079302%;
+    width: 72.99079302%;
+    padding-bottom:13.50460349%;
+}
+
 .parking-brake-container
 {
-    width: 15%;
+    width: 11.4%;
 }
 
 .parking-brake-label
 {
-    width:62.03673246%;
+    width:50.04833218421053%;
 }
 
 .parking-brake-switch-wrapper
 {
     position:relative;
     display:inline-block;
-    width: 32.96326754%;
+    left: 6.578947368421053%;
+    width: 43.37272044736842%;
     height: 100%;
 }
 
