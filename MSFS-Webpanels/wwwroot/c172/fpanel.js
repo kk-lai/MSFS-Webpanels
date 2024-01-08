@@ -12,6 +12,7 @@ require([
          'jquery','util','const'
          ],
 function(jquery,util,sysconst) {
+    var versionCode = '1.1.1';
     var isOffline = false;
     var isServerAppRunning = false;
     var refreshTimer = null;
@@ -178,7 +179,7 @@ function(jquery,util,sysconst) {
             evMove='mousedown mousemove mouseup mouseleave';
         }
         resizeContainer();
-
+        jquery(".version-code").text("Version: "+versionCode);
         jquery(".ui-fullscreen").on(ev, function (e) {
             if (!document.fullscreenElement &&    // alternative standard method
                 !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods

@@ -56,6 +56,7 @@ Release Notes
 =============
 1.0.2 - Initial release
 1.1.0 - DME distance bug fix, add gear up/down switch, engine hours recorder, logging
+1.1.1 - Add version code in js and html files for better support
 
 License
 =======
