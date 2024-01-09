@@ -5,6 +5,7 @@ require.config({
         util: 'util',
         'const' : 'const'
     },
+    urlArgs: "v=1.1.1",
     waitSeconds : 30,
 });
 

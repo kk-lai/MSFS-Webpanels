@@ -16,7 +16,7 @@
 <link href="../3rdparty/fontawesome/css/fontawesome.min.css" rel="stylesheet">
 <link href="../3rdparty/fontawesome/css/brands.min.css" rel="stylesheet">
 <link href="../3rdparty/fontawesome/css/solid.min.css" rel="stylesheet">
-<link href="css/fpanel.css" rel="stylesheet" />
+<link href="css/fpanel.css?v=1.1.1" rel="stylesheet" />
 </head>
 <body>
 <!-- Version: 1.1.1 -->
@@ -528,5 +528,13 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" async="async" data-main="./fpanel" src="../3rdparty/require/require.js"></script>
+<!-- <script type="text/javascript" async="async" data-main="./fpanel" src="../3rdparty/require/require.js"></script> -->
+<script src="../3rdparty/require/require.js"></script>
+<script>
+    require.config({
+        waitSeconds: 15,
+        urlArgs: "v=1.1.1",
+    });
+    require( ["./fpanel"]);
+</script>
 </html>

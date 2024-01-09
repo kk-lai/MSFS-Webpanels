@@ -4,6 +4,7 @@ require.config({
         jquery : '../3rdparty/jquery/jquery-1.11.2.min',
         'const' : 'const'
     },
+    urlArgs: "v=1.1.1",
     waitSeconds : 30,
 });
 
