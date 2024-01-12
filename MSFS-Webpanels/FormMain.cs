@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.VisualBasic;
+using Microsoft.VisualStudio.PlatformUI;
+using NetFwTypeLib;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net;
@@ -15,6 +18,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Encodings.Web;
+using System.Windows.Forms;
 using Zen.Barcode;
 
 
@@ -28,6 +32,7 @@ namespace MSFS_Webpanels
         private SimConnectClient simConnectClient = SimConnectClient.getSimConnectClient();
         private System.Windows.Forms.Timer timer;
         private String hostAddress = "localhost";
+
 
         public FormMain()
         {
@@ -57,7 +62,6 @@ namespace MSFS_Webpanels
                     }
                 }
             }
-            
 
             this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion + ")";
         }
@@ -109,7 +113,7 @@ namespace MSFS_Webpanels
                     var uri = new Uri(address);
                     var port = uri.Port;
 
-                    String webUrl = "http://" + hostAddress + ":" + port + "/";
+                    String webUrl = "http://" + hostAddress + ":" + port + "/?v=" + Application.ProductVersion;
                     linkPanel.Text = webUrl;
                     CodeQrBarcodeDraw qrCode = BarcodeDrawFactory.CodeQr;
                     pictureQRcode.Image = qrCode.Draw(webUrl, pictureQRcode.Height);
@@ -152,6 +156,51 @@ namespace MSFS_Webpanels
         {
             AboutBox aboutBox = new AboutBox();
             aboutBox.ShowDialog();
+        }
+
+        private void btnTroubleshoot_Click(object sender, EventArgs e)
+        {
+            Type NetFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
+            INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(NetFwMgrType);
+            bool firewallEnabled = mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
+            String appPath = Application.ExecutablePath;
+
+            Boolean fwBlocked = true;
+
+            if (firewallEnabled)
+            {
+                Type NetFwPolicyType = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
+                INetFwPolicy2 fwPolicy2 = (INetFwPolicy2)Activator.CreateInstance(NetFwPolicyType);
+                INetFwRules rules = fwPolicy2.Rules;
+                int activeProfile = fwPolicy2.CurrentProfileTypes;
+                foreach (INetFwRule rule in rules)
+                {
+                    if (rule.ApplicationName == null)
+                    {
+                        continue;
+                    }
+                    String ruleAppPath = rule.ApplicationName;
+                    if (PathUtil.ArePathsEqual(appPath, ruleAppPath))
+                    {
+                        if ((activeProfile & rule.Profiles) > 0 && rule.Enabled && rule.Action == NET_FW_ACTION_.NET_FW_ACTION_ALLOW)
+                        {
+                            fwBlocked = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                fwBlocked = false;
+            }
+            if (fwBlocked)
+            {
+                _logger.Info("Firewall blocked incoming connection");
+                MessageBox.Show("Windows Firewall blocked this application from incoming connection, please configure Windows Firewall.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } else
+            {
+                MessageBox.Show("Firewall configured properly", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

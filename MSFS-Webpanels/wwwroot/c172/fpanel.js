@@ -5,7 +5,7 @@ require.config({
         util: 'util',
         'const' : 'const'
     },
-    urlArgs: "v=1.1.1",
+    urlArgs: "v=1.2.0",
     waitSeconds : 30,
 });
 
@@ -13,7 +13,7 @@ require([
          'jquery','util','const'
          ],
 function(jquery,util,sysconst) {
-    var versionCode = '1.1.1';
+    var versionCode = '1.2.0';
     var isOffline = false;
     var isServerAppRunning = false;
     var refreshTimer = null;

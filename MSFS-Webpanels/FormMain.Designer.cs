@@ -37,6 +37,7 @@
             label3 = new Label();
             textboxInput = new TextBox();
             buttonAbout = new Button();
+            btnTroubleshoot = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
@@ -127,11 +128,22 @@
             buttonAbout.UseVisualStyleBackColor = true;
             buttonAbout.Click += buttonAbout_Click;
             // 
+            // btnTroubleshoot
+            // 
+            btnTroubleshoot.Location = new Point(402, 164);
+            btnTroubleshoot.Name = "btnTroubleshoot";
+            btnTroubleshoot.Size = new Size(166, 59);
+            btnTroubleshoot.TabIndex = 12;
+            btnTroubleshoot.Text = "&Troubleshoot";
+            btnTroubleshoot.UseVisualStyleBackColor = true;
+            btnTroubleshoot.Click += btnTroubleshoot_Click;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(580, 428);
+            Controls.Add(btnTroubleshoot);
             Controls.Add(buttonAbout);
             Controls.Add(textboxInput);
             Controls.Add(label3);
@@ -159,5 +171,6 @@
         private Label label3;
         private TextBox textboxInput;
         private Button buttonAbout;
+        private Button btnTroubleshoot;
     }
 }

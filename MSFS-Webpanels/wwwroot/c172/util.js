@@ -4,11 +4,11 @@ require.config({
         jquery : '../3rdparty/jquery/jquery-1.11.2.min',
         'const' : 'const'
     },
-    urlArgs: "v=1.1.1",
+    urlArgs: "v=1.2.0",
     waitSeconds : 30,
 });
 
-// Version: 1.1.1
+// Version: 1.2.0
 
 define(['jquery','const'],function(jquery, sysconst) {
     return {

@@ -12,10 +12,10 @@
     <Copyright>© 2023 Kevin King</Copyright>
     <RepositoryUrl>https://github.com/kk-lai/MSFS-Webpanels</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.1.1</Version>
+    <Version>1.2.0</Version>
     <Authors>Kevin King</Authors>
-    <FileVersion>1.1.1</FileVersion>
-    <AssemblyVersion>1.1.1</AssemblyVersion>
+    <FileVersion>1.2.0</FileVersion>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,6 +35,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.8.37221" />
     <PackageReference Include="Zen.Barcode.Rendering.Framework" Version="3.1.10729.1" />
   </ItemGroup>
 
@@ -65,6 +66,18 @@
         <Link>wwwroot\%(RecursiveDir)\%(Filename)%(Extension)</Link>
     </Content>
 </ItemGroup>
+  
+  <ItemGroup>
+    <COMReference Include="NetFwTypeLib">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>58fbcf7c-e7a9-467c-80b3-fc65e8fcca08</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   
   <ItemGroup>
     <Content Include="panel-icon.ico" />
