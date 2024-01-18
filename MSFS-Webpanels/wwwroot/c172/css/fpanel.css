@@ -120,10 +120,10 @@ img
 }
 
 #sys-message
-{    
+{
     font-size: 500%;
     font-weight:bold;
-    font-style: italic;   
+    font-style: italic;
     line-height: 0%;
     height:100%;
     transform: translate(0,50%);
@@ -133,7 +133,7 @@ img
 .panel {
     display: inline-block;
     vertical-align: text-top;
-    height: 86.46214467%;    
+    height: 86.46214467%;
 }
 
 .left-panel {
@@ -163,7 +163,7 @@ img
     top:6.768927665%;
     width:21.05263158%;
     height: 60%;
-    
+
     z-index:4;
     background-color:white;
 }
@@ -260,15 +260,22 @@ img
 
 .ap-altitude
 {
+    position:relative;
     vertical-align: top;
     display:inline-block;
     background-color:black;
     height:100%;
-    width:10%;    
+    width:10%;
     color:#12e049;
 }
 
-.apvs-display 
+.apaltitude-display
+{
+    width:100%;
+    text-align:center;
+}
+
+.apvs-display
 {
     color:red;
 }
@@ -282,18 +289,32 @@ img
     color:white;
     background-color:black;
     height:100%;
-    width:6%;
     text-align:center;
+}
+
+.com-radio-info
+{
+    width:5.5%;
+}
+
+.nav-radio-info
+{
+    width:5.1%;
+}
+
+.adf-radio-info
+{
+    width:4.1%;
 }
 
 .com1-radio-info
 {
-    margin-left:1.6%;
+    margin-left:1%;
 }
 
 .radio-info div
 {
-    font-size:130%;
+    font-size:120%;
 }
 
 .radio-name
@@ -317,13 +338,14 @@ img
 
 .dme-info
 {
+    position:relative;
     vertical-align: top;
     display:inline-block;
     padding-right:0.1%;
     color:white;
     background-color:black;
     height:100%;
-    width:4%;
+    width:5%;
     text-align:center;
 }
 
@@ -342,7 +364,7 @@ img
 .help-container
 {
     height:6.768927665%;
-    position:absolute;   
+    position:absolute;
     bottom:0;
     right:0;
     z-index:6;
@@ -350,7 +372,7 @@ img
 
 .reload-button
 {
-    display:inline-block;    
+    display:inline-block;
 }
 
 .help-container img
@@ -575,6 +597,15 @@ img
     left: 59.9609375%;
 }
 
+.nav-gps
+{
+    position: absolute;
+    width: 20.8984375%;
+    height: 8.7890625%;
+    top: 63.671875%;
+    left: 35.7421875%;
+}
+
 .nav-needle-motor
 {
     position: absolute;
@@ -731,7 +762,7 @@ img
 {
     width:20%;
     height:100%;
-    display:inline-block;    
+    display:inline-block;
     color:black;
     background-color:white;
     text-align:center;
@@ -1132,7 +1163,7 @@ img
     vertical-align:top;
 }
 
-.radio-freq-container 
+.radio-freq-container
 {
     position:relative;
     width: 100%;
@@ -1140,18 +1171,18 @@ img
 
 .freq-name-container
 {
-    height:15%;   
+    height:15%;
 }
 
 .freq-number-container
-{   
+{
     height: 10%;
     margin-bottom: 2%;
 }
 
 .freq-number-row
 {
-    position:relative;    
+    position:relative;
     margin-bottom:2%;
 }
 
@@ -1188,7 +1219,7 @@ img
     display: inline-block;
     width:50%;
     text-align: right;
-    padding-right:10%;   
+    padding-right:10%;
 }
 
 .freq-number
@@ -1230,7 +1261,7 @@ img
     width:20%;
     height:100%;
     top:0;
-    left:0;    
+    left:0;
 }
 
 .radio-mic-container
@@ -1239,7 +1270,7 @@ img
     width:20%;
     height:100%;
     top:0;
-    right:0;    
+    right:0;
 }
 
 .xpdr-panel
@@ -1266,7 +1297,7 @@ img
     width:100%;
     height:50%;
     display:block;
-    position:relative;    
+    position:relative;
 }
 
 .xpdr-name
@@ -1298,7 +1329,7 @@ img
     height:100%;
     top:0;
     left:0;
-    z-index:6;    
+    z-index:6;
 }
 
 .help-dial-left
@@ -1321,7 +1352,7 @@ img
 
 .help-arrow
 {
-    font-size: 800%;    
+    font-size: 800%;
     opacity: 0.8;
     color:yellow;
 }
@@ -1331,12 +1362,12 @@ img
     position:relative;
     width:100%;
     height:50%;
-    top:50%;    
+    top:50%;
 }
 
 .help-up-down-arrow
 {
-    font-size: 800%;    
+    font-size: 800%;
     opacity: 0.8;
     color:yellow;
     text-align:center;
@@ -1344,7 +1375,7 @@ img
 
 .help-egt-up-down-arrow
 {
-    font-size: 600%;    
+    font-size: 600%;
     opacity: 0.8;
     color:yellow;
     text-align:center;
@@ -1359,7 +1390,7 @@ img
     width:100%;
     height:100%;
     top:0;
-    left:0;    
+    left:0;
 }
 
 .help-button
@@ -1375,7 +1406,7 @@ img
     width:20%;
     height:20%;
     top:40%;
-    left:5%;    
+    left:5%;
 }
 
 .help-right-button
@@ -1384,7 +1415,7 @@ img
     width:20%;
     height:20%;
     top:40%;
-    right:5%;    
+    right:5%;
 }
 
 .help-top-button
@@ -1393,7 +1424,7 @@ img
     width:20%;
     height:20%;
     top:10%;
-    left:40%;    
+    left:40%;
 }
 
 .help-bottom-button
@@ -1402,9 +1433,8 @@ img
     width:20%;
     height:20%;
     bottom:10%;
-    left:40%;    
+    left:40%;
 }
-
 
 .version-code-wrapper
 {

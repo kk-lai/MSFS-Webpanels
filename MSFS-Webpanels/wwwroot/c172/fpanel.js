@@ -28,6 +28,7 @@ function(jquery,util,sysconst) {
     var vsDisplayTimer = null;
     var isPauseQueue = false;
     var isProcessingQueue = false;
+    var dmeSrc = 1;
 
     function resizeContainer() {
 
@@ -90,7 +91,7 @@ function(jquery,util,sysconst) {
         if (!jsonData.isSimConnected || typeof jsonData.simData === "undefined" || jsonData.simData==null) {
             jsonData.simData = util.defaultOfflineData.simData;
         }
-        jsonData = util.postProcessSimData(jsonData);
+        jsonData = util.postProcessSimData(jsonData, dmeSrc);
 
         for(var key in jsonData.simData) {
             var simvar = "simvar-" + key.toLowerCase();
@@ -146,7 +147,7 @@ function(jquery,util,sysconst) {
             type: "get",
             dataType : "json",
             cache: false
-        });        
+        });
     }
 
     function updateSimVarFreq(simvar, val)
@@ -166,7 +167,7 @@ function(jquery,util,sysconst) {
         updateSimVar("simvar-" + simvar, val);
         if (simvar == "apaltitude") {
             // if not send this event G1000 selected altitude will show "----"
-            updateSimVar("simvar-apaltvarset", val);            
+            updateSimVar("simvar-apaltvarset", val);
         }
     }
 
@@ -211,7 +212,7 @@ function(jquery,util,sysconst) {
             var nextState = 1-curState;
             var target= jquery(this).attr("target");
             var atarget = util.getAttrText(this, "atarget", null);
-            
+
             if (target=="simvar-tx" && nextState==0) {
                 // does not disable tx
                 e.preventDefault();
@@ -226,10 +227,10 @@ function(jquery,util,sysconst) {
                 nextState = 0;
                 if (atarget.indexOf("com2")>=0) {
                     nextState=1;
-                }                
+                }
             }
             if (target=="simvar-rx") {
-                target=atarget;                
+                target=atarget;
             }
             updateSimVar(target,nextState);
             e.preventDefault();
@@ -272,22 +273,22 @@ function(jquery,util,sysconst) {
                 jquery(ctl).attr("state",newVal);
                 util.setVariableCooldown(ctl);
                 util.setVariableCooldown("."+target);
-                displaySimVar(target, newVal);                
+                displaySimVar(target, newVal);
                 if (adj<0) {
                     target=target+"dec";
                 } else {
                     target=target+"inc";
-                }                                    
+                }
                 updateSimVar(target,0);
             }
             e.preventDefault();
-        });       
+        });
 
         jquery(".ui-dial").on(evMove,function(e) {
             var target=util.getAttrText(this,"target");
             var touchPos;
             var sf = util.getAttrFloat(this, "sensitivity", 0.36);
-            
+
             if ('offsetX' in e) {
                 touchPos={
                     x:e.offsetX,
@@ -304,13 +305,13 @@ function(jquery,util,sysconst) {
                     y:e.originalEvent[prop][0].clientY-pos.top
                 };
             }
-            
+
             var xc = jquery(this).width()/2;
             var yc = jquery(this).height()/2;
-            
+
             var y = yc - touchPos.y;
             var x = touchPos.x - xc;
-            
+
             var r = Math.sqrt(x*x+y*y);
             if (r>xc) {
                 if (jquery(this).hasClass("ui-touched")) {
@@ -318,9 +319,9 @@ function(jquery,util,sysconst) {
                 } else {
                     e.preventDefault();
                     return;
-                }                
+                }
             }
-            
+
             var newAng = Math.atan2(y,x)*180/Math.PI;
             var oldAng = newAng;
             var oldState = util.getAttrFloat(this,"state");
@@ -328,17 +329,17 @@ function(jquery,util,sysconst) {
             var newState = oldState;
             var newfState = oldfState;
             var param;
-            
+
             if (e.type=="mousedown" || e.type=="touchstart") {
                 jquery(this).addClass("ui-touched");
                 jquery(this).attr("fstate", newState);
                 jquery(this).attr("pos",newAng);
-                
+
                 if (Math.abs(newAng)>90) {
                     target = util.getAttrText(this, "targetLeft", target);
-                    sf = util.getAttrFloat(this,"sensitivityLeft", sf);                   
+                    sf = util.getAttrFloat(this,"sensitivityLeft", sf);
                 }
-                
+
                 var oldStateVar = ".ctl-"+target.substring(7,target.length);
                 var elm = jquery(oldStateVar).first();
                 oldState = util.getAttrFloat(elm ,"state",null);
@@ -354,7 +355,7 @@ function(jquery,util,sysconst) {
                 jquery(this).attr("pos", newAng);
                 target = util.getAttrText(this, "ctarget", target);
                 sf = util.getAttrFloat(this,"csensitivity",sf);
-            } else if ((e.type=="mouseup" || e.type=="mouseleave" || e.type=="touchend") && jquery(this).hasClass("ui-touched")) {            
+            } else if ((e.type=="mouseup" || e.type=="mouseleave" || e.type=="touchend") && jquery(this).hasClass("ui-touched")) {
                 oldAng = util.getAttrInt(this, "pos");
                 target = util.getAttrText(this, "ctarget", target);
                 sf = util.getAttrFloat(this,"csensitivity",sf);
@@ -363,32 +364,32 @@ function(jquery,util,sysconst) {
                 jquery(this).removeAttr("ctarget");
                 jquery(this).removeAttr("csensitivity");
             }
-            
+
             if (newAng!=oldAng) {
                 var dif = newAng-oldAng;
-                               
-                dif = newAng - oldAng;               
+
+                dif = newAng - oldAng;
                 if (Math.abs(dif)>180) {
                     dif=-1*Math.sign(dif)*(360-Math.abs(dif));
                 }
-                
+
                 dif = dif * sf;
-                
+
                 if (target=="simvar-tasadj") {
                     newfState = (oldfState + dif);
                     var min = util.getAttrFloat(this, "min");
                     var max = util.getAttrFloat(this, "max");
-                    
+
                     if (newfState > max) {
                         newfState = max;
-                    } 
+                    }
                     if (newfState < min) {
                         newfState = min;
                     }
                     newState = Math.round(newfState);
                     param=newState;
                 } else {
-                    newfState = (oldfState + dif);                    
+                    newfState = (oldfState + dif);
                     if (target!="simvar-qnh") {
                         newfState = (newfState % 360);
                         newState = util.boundDegree(Math.floor(newfState));
@@ -397,7 +398,7 @@ function(jquery,util,sysconst) {
                         var min=util.getAttrInt(this,"min");
                         if (newfState > max) {
                             newfState = max;
-                        } 
+                        }
                         if (newfState < min) {
                             newfState = min;
                         }
@@ -405,7 +406,7 @@ function(jquery,util,sysconst) {
                     }
                     param=newState;
                 }
-                
+
                 if (oldState!=newState) {
                     jquery(this).attr("state", newState);
                     jquery(this).attr("fstate", newfState);
@@ -417,11 +418,11 @@ function(jquery,util,sysconst) {
                         displaySimVar("simvar-hdgbug", {
                             heading: newState,
                             headingBug : latestSimData.simData.headingBug
-                        });        
+                        });
                     }
                     if (target=="simvar-headingbug") {
                         jquery(".ctl-headingbug").attr("state", newState);
-                        util.setVariableCooldown(".simvar-hdgbug");                        
+                        util.setVariableCooldown(".simvar-hdgbug");
                         displaySimVar("simvar-hdgbug", {
                             heading: latestSimData.simData.heading,
                             headingBug : newState
@@ -430,7 +431,7 @@ function(jquery,util,sysconst) {
                     displaySimVar(target, newState);
                     if (target=="simvar-heading") {
                         target="simvar-gyrodrifterrorex";
-                    } 
+                    }
                     purgeQueue(target);
                     updateSimVar(target,param);
                 } else {
@@ -442,7 +443,7 @@ function(jquery,util,sysconst) {
 
             e.preventDefault();
         });
-        
+
         jquery(".ui-vshifter").on(evMove,function(e) {
             var sf = util.getAttrFloat(this, "sensitivity", -1);
             var target=util.getAttrText(this,"target");
@@ -457,13 +458,13 @@ function(jquery,util,sysconst) {
                 }
                 newPos=e.originalEvent[prop][0].clientY-pos.top;
             }
-            
+
             var oldPos = newPos;
             var oldState = util.getAttrFloat(this,"state");
             var oldfState = util.getAttrFloat(this,"fstate"); // state in float
             var newState = oldState;
             var newfState = oldfState;
-            
+
             if (e.type=="mousedown" || e.type=="touchstart") {
                 jquery(this).addClass("ui-touched");
                 jquery(this).attr("fstate", newState);
@@ -471,29 +472,29 @@ function(jquery,util,sysconst) {
             } else if ((e.type=="mousemove" || e.type=="touchmove") && jquery(this).hasClass("ui-touched")) {
                 oldPos = util.getAttrInt(this, "pos");
                 jquery(this).attr("pos", newPos);
-            } else if ((e.type=="mouseup" || e.type=="mouseleave" || e.type=="touchend") && jquery(this).hasClass("ui-touched")) {            
+            } else if ((e.type=="mouseup" || e.type=="mouseleave" || e.type=="touchend") && jquery(this).hasClass("ui-touched")) {
                 oldPos = util.getAttrInt(this, "pos");
                 jquery(this).removeAttr("pos");
                 jquery(this).removeClass("ui-touched");
             }
-            
+
             if (oldPos!=newPos) {
                 var dif = (newPos - oldPos)*sf;
                 newfState = newfState + dif;
                 newState = Math.round(newfState);
                 var min = util.getAttrInt(this, "min");
                 var max = util.getAttrInt(this, "max");
-                
+
                 if (min!=null && newState<min) {
                     newState=min;
                     newfState=min;
                 }
-                
+
                 if (max!=null && newState>max) {
                     newState=max;
                     newfState=max;
                 }
-                
+
                 if (newState!=oldState) {
                     jquery(this).attr("state", newState);
                     jquery(this).attr("fstate", newfState);
@@ -553,7 +554,7 @@ function(jquery,util,sysconst) {
                     jquery("#freq-error").removeClass("invisible");
                     return;
                 }
-                
+
                 jquery(".ctl-"+vname).attr("state", v);
                 util.setVariableCooldown(".simvar-"+vname);
                 updateSimVarFreq(vname, v);
@@ -649,25 +650,25 @@ function(jquery,util,sysconst) {
                 jquery(".digit-decimal").addClass("hide");
             }
 
-            if (isShowActiveFreq) {                
+            if (isShowActiveFreq) {
                 var freq1 = jquery(this).find(".radio-active-freq").first().text();
                 var freq2 = jquery(this).find(".numeric-input-target").first().text();
-                
+
                 jquery(radioPanel).find(".freq-active").text(freq1);
                 jquery(radioPanel).find(".freq-standby").text(freq2);
-                jquery(".button-swap").removeClass("invisible");                
+                jquery(".button-swap").removeClass("invisible");
                 jquery(".freq-standby-row").removeClass("invisible");
             } else {
                 var freq1 = jquery(this).find(".numeric-input-target").first().text();
                 jquery(radioPanel).find(".freq-active").text(freq1);
-                jquery(".button-swap").addClass("invisible");                
+                jquery(".button-swap").addClass("invisible");
                 jquery(".freq-standby-row").addClass("invisible");
             }
 
             var state ;
 
             if (spkrvar==null) {
-                jquery(".radio-spkr-container").addClass("hide");                
+                jquery(".radio-spkr-container").addClass("hide");
             } else {
                 jquery(".radio-spkr-container").removeClass("hide");
                 jquery(".simvar-rx").attr("atarget", spkrvar);
@@ -685,7 +686,7 @@ function(jquery,util,sysconst) {
                 jquery(".simvar-tx").attr("state", state);
                 displaySimVar("simvar-tx", state, true);
             }
-            
+
             var val2 = util.getAttrText(jquery(this).find(".numeric-input-target").first(), "state");
 
             while (val2.length<maxDigit) {
@@ -726,8 +727,8 @@ function(jquery,util,sysconst) {
             updateSimVar("simvar-" + target, 0);
             var state = util.getAttrText(this, "state", null);
             if (target == "btnalt" && state == "ALT") {
-                updateSimVar("simvar-appanelvson", 0);               
-            }            
+                updateSimVar("simvar-appanelvson", 0);
+            }
             if (target.substring(0,5)=="btnvs") {
                 if (vsDisplayTimer!=null) {
                     clearTimeout(vsDisplayTimer);
@@ -739,6 +740,11 @@ function(jquery,util,sysconst) {
                     jquery(".apaltitude-display").removeClass("hide");
                 }, 3000);
             }
+            e.preventDefault();
+        });
+
+        jquery(".ui-dmeselector").on(ev, function(e) {
+            dmeSrc=(2-dmeSrc)+1;
             e.preventDefault();
         });
 
@@ -756,8 +762,8 @@ function(jquery,util,sysconst) {
         jquery(".ui-reload").on(ev, function(e) {
             location.reload(true);
         });
-        
-        jquery(".ui-help").on(ev, function(e) {            
+
+        jquery(".ui-help").on(ev, function(e) {
             if (jquery("#help-screen-overlay").hasClass("hide")) {
                 jquery("#help-screen-overlay").removeClass("hide");
                 jquery(".help-overlay").removeClass("hide");
@@ -804,22 +810,22 @@ function(jquery,util,sysconst) {
             if (isServerAppRunning && latestSimData.isSimConnected) {
                 nextUpdateTime=now + sysconst.serverUpdateCooldown;
                 var itm = updateQueue.shift();
-                
+
                 if (typeof itm !== "undefined" && itm!=null) {
-                    var evt = itm.split("/");                
+                    var evt = itm.split("/");
                     var arg1 = parseInt(evt[1]);
                     var obj={
                         "eventName": evt[0],
-                        "iparams": [ arg1 ]                    
+                        "iparams": [ arg1 ]
                     };
-                    
+
                     if (evt[0]=="simvar-attitudebarposition") {
                         obj.iparams= [0, arg1 ];
-                    } else 
+                    } else
                     if (evt[0] == "simvar-apaltvarset") {
                         obj.iparams = [arg1, 1];
                     }
-                    var jsonText=JSON.stringify(obj);                
+                    var jsonText=JSON.stringify(obj);
                     jquery.ajax(sysconst.simVarUrl,
                     {
                         data: jsonText,
@@ -828,7 +834,7 @@ function(jquery,util,sysconst) {
                         error: function(jqXHR, textStatus, errorThrown ) {
                             isServerAppRunning=false;
                         }
-                    });  
+                    });
                 }
             }
         }

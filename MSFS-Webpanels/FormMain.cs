@@ -42,6 +42,12 @@ namespace MSFS_Webpanels
             timer.Interval = 500;
             timer.Start();
 
+#if DEBUG
+            //btnTroubleshoot.Visible = true;
+            btnSend.Visible = true;
+            txtEventInput.Visible = true;
+#endif
+
             _logger.Info("MSFS-Webpanels (version:" + Application.ProductVersion + ") Start");
 
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
@@ -125,26 +131,6 @@ namespace MSFS_Webpanels
                     _logger.Info("Web Server " + webUrl + " Started");
                 }
             }
-
-        }
-
-        private void buttonTest_Click(object sender, EventArgs e)
-        {
-            /*
-            uint val = 0;
-            if (textboxInput.Text.Trim().Length > 0)
-            {
-                val = uint.Parse(textboxInput.Text.Trim());
-            }
-            simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SET_ATTITUDE_BAR_POSITION, 0, val);
-            */
-            uint[] val = new uint[2];
-            val[0] = 5000;
-            val[1] = 1;
-            uint evt = SimConnectClient.EVENT.AP_ALT_VAR_SET - SimConnectClient.EVENT.SET_EGT_REF;
-
-
-            SimConnectClient.getSimConnectClient().transmitEvent(evt, val);
         }
 
         private void linkPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -197,10 +183,36 @@ namespace MSFS_Webpanels
             {
                 _logger.Info("Firewall blocked incoming connection");
                 MessageBox.Show("Windows Firewall blocked this application from incoming connection, please configure Windows Firewall.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            } else
+            }
+            else
             {
                 MessageBox.Show("Firewall configured properly", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+#if DEBUG
+            if (txtEventInput.Text.Trim().Length > 0)
+            {
+                string[] fields = txtEventInput.Text.Trim().Split(",");
+                string evt = "";
+                uint[] vals = null;
+                if (fields.Length > 0)
+                {
+                    evt = fields[0].Trim();
+                    vals = new uint[fields.Length - 1];
+                    for (int i = 1; i < fields.Length; i++)
+                    {
+                        vals[i - 1] = uint.Parse(fields[i]);
+                    }
+                }
+                simConnectClient.sendCustomEvent(evt, vals);
+            } else
+            {
+                simConnectClient.testSimvar();
+            }
+#endif
         }
     }
 }

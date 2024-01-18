@@ -52,39 +52,41 @@
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ap-button ui-pbutton text-container" target="btnvsinc"><div class="center-div font-larger">VS+</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ap-button ui-pbutton text-container" target="btnvsdec"><div class="center-div font-larger">VS-</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup com1-radio-info radio-info text-container" target="com1" >
+            </div><div class="ap-button ui-pbutton text-container" target="togglegpsdrivenav1"><div class="center-div font-larger">NAV<br/>GPS</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ui-popup com1-radio-info com-radio-info radio-info text-container" target="com1" >
                 <div class="hide radio-tx ctl-com1tx simvar-com1tx"></div>
                 <div class="hide radio-rx ctl-com1rx simvar-com1rx"></div>
                 <div class="radio-name">COM1</div>
                 <div class="radio-active-freq simvar-com1activefreq ctl-com1activefreq" func="showFreq" type="com"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-com1standbyfreq ctl-com1standbyfreq" func="showFreq" type="com"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup radio-info text-container" target="com2" >
+            </div><div class="ui-popup radio-info com-radio-info text-container" target="com2" >
                 <div class="hide radio-tx ctl-com2tx simvar-com2tx"></div>
                 <div class="hide radio-rx ctl-com2rx simvar-com2rx"></div>
                 <div class="radio-name">COM2</div>
                 <div class="radio-active-freq simvar-com2activefreq ctl-com2activefreq" func="showFreq" type="com"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-com2standbyfreq ctl-com2standbyfreq" func="showFreq" type="com"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup radio-info text-container" target="nav1" >
+            </div><div class="ui-popup radio-info nav-radio-info text-container" target="nav1" >
                 <div class="hide radio-rx ctl-nav1rx simvar-nav1rx"></div>
                 <div class="radio-name">NAV1</div>
                 <div class="radio-active-freq simvar-nav1activefreq ctl-nav1activefreq" func="showFreq" type="nav"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-nav1standbyfreq ctl-nav1standbyfreq" func="showFreq" type="nav"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="dme-info text-container">
+            </div><div class="dme-info text-container ui-dmeselector">
                 <div class="dme-row">
-                    <div class="center-div dme-label font-larger2">DME</div>
+                    <div class="center-div dme-label font-larger2 simvar-dmesrc" func="showText">DME</div>
                 </div><div class="dme-row">
                     <div class="center-div dme-distance font-larger2 simvar-dmedistance" func="showText"></div>
-                </div>
-            </div><div class="ui-popup radio-info text-container" target="nav2" >
+                </div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ui-popup radio-info nav-radio-info text-container" target="nav2" >
                 <div class="hide radio-rx ctl-nav2rx simvar-nav2rx"></div>
                 <div class="radio-name">NAV2</div>
                 <div class="radio-active-freq simvar-nav2activefreq ctl-nav2activefreq" func="showFreq" type="nav"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-nav2standbyfreq ctl-nav2standbyfreq" func="showFreq" type="nav"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup radio-info text-container" target="adf" >
+            </div><div class="ui-popup radio-info adf-radio-info text-container" target="adf" >
                 <div class="hide radio-rx ctl-adfrx simvar-adfrx"></div>
                 <div class="radio-name">ADF</div>
                 <div class="radio-active-freq simvar-adfactivefreq ctl-adfactivefreq" func="showFreq" type="adf"></div>
@@ -164,10 +166,11 @@
                 <img src="img/nav-from.png" class="nav-to-from simvar-nav1tofrom" alt="nav-from" func="showHide" param="2" />
                 <img src="img/nav-to.png" class="nav-to-from simvar-nav1tofrom" alt="nav-to" func="showHide" param="1" />
                 <img src="img/nav-gs.png" class="nav-gs simvar-nav1gsflag" alt="nav-gs" func="showHide" param="1" />
-                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-top simvar-nav1cdi" alt="nav-needle-motor" func="generic" rotateScaleFactor="-0.2519685039" rotateOffset="90" />
-                <img src="img/nav-needle.png" class="nav-needle simvar-nav1cdi" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />
-                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-gs simvar-nav1gsi" alt="nav-needle-motor" func="generic" rotateScaleFactor="0.2941176470" />
-                <img src="img/nav-gs-needle.png" class="nav-gs-needle simvar-nav1gsi" alt="nav-gs-needle" func="generic" rotateScaleFactor="0.2941176470" />
+                <img src="img/nav-gps.png" class="nav-gps simvar-gpsdrivenav1" alt="nav-gps" func="showHide" param="1" />
+                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-top simvar-hsicdineedle" alt="nav-needle-motor" func="generic" rotateScaleFactor="-0.2519685039" rotateOffset="90" />
+                <img src="img/nav-needle.png" class="nav-needle simvar-hsicdineedle" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />
+                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-gs simvar-hsigsineedle" alt="nav-needle-motor" func="generic" rotateScaleFactor="0.2941176470" />
+                <img src="img/nav-gs-needle.png" class="nav-gs-needle simvar-hsigsineedle" alt="nav-gs-needle" func="generic" rotateScaleFactor="0.2941176470" />
                 <img src="img/gen-radial.png" class="gauge-item nav-radial simvar-nav1obs" alt="gen-radial" func="generic" rotateScaleFactor="-1" />
                 <img src="img/nav-arrow-up.png" class="nav-arrow-up" alt="nav-arrow-up" />
                 <img src="img/nav-arrow-down.png" class="nav-arrow-down" alt="nav-arrow-down" />

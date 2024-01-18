@@ -229,7 +229,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             }
             return deg;
         },
-        postProcessSimData: function (jsonData) {
+        postProcessSimData: function (jsonData, dmeSrc) {
             jsonData.simData.warningVACLeft = 0;
             jsonData.simData.warningVACRight = 0;
             jsonData.simData.warningVAC = 0;
@@ -238,7 +238,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             jsonData.simData.warningFuelLeft = 0;
             jsonData.simData.warningFuelRight = 0;
             jsonData.simData.warningFuel = 0;
-            
+
             if (jsonData.simData.electricalBusVoltage>0) {
                 if (jsonData.simData.fuelLeftQuantity<8) {
                     jsonData.simData.warningFuelLeft = 1;
@@ -248,7 +248,7 @@ define(['jquery','const'],function(jquery, sysconst) {
                     jsonData.simData.warningFuelRight = 1;
                     jsonData.simData.warningFuel = 1;
                 }
-                
+
                 if (jsonData.simData.engineOilPressure*144 < 2880) {
                     jsonData.simData.warningOilPressure = 1;
                 }
@@ -285,12 +285,30 @@ define(['jquery','const'],function(jquery, sysconst) {
                 jsonData.simData.attitudeGyroOff = 0;
             }
 
+            if (!jsonData.simData.hsiCDINeedleValid) {
+                jsonData.simData.hsiCDINeedle=0;
+            }
+            if (!jsonData.simData.hsiGSINeedleValid) {
+                jsonData.simData.hsiGSINeedle=0;
+            }
+
+            var dmePrefix = "dme";
+            if (dmeSrc!=1) {
+                dmePrefix="dme2";
+            }
+
             var dmeDistance = "";
-            if (jsonData.simData.dmeIsAvailable && jsonData.simData.dmeSignal>0) {
-                dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
+            if (dmeSrc==1 && jsonData.simData.gpsDriveNav1) {
+                jsonData.simData.dmesrc = "GPS";
+                dmeDistance = (jsonData.simData.hsiDistance / 10).toFixed(1);
+            } else {
+                jsonData.simData.dmesrc = "DME"+dmeSrc;
+                if (jsonData.simData[dmePrefix+"IsAvailable"] && jsonData.simData[dmePrefix+"Signal"]>0) {
+                    dmeDistance = (jsonData.simData[dmePrefix+"Distance"] / 10).toFixed(1);
+                }
             }
             jsonData.simData.dmeDistance=dmeDistance;
-            
+
             jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
 
             var engineHour = jsonData.simData.engineElapsedTime.toString().padStart(5, "0");
@@ -306,7 +324,11 @@ define(['jquery','const'],function(jquery, sysconst) {
                 if (jsonData.simData.apHeadingLock != 0) {
                     apStatus1 = "HDG";
                 } else if (jsonData.simData.apNavLock != 0) {
-                    apStatus1 = "NAV";
+                    if (jsonData.simData.gpsDriveNav1) {
+                        apStatus1 = "GPS";
+                    } else {
+                        apStatus1 = "NAV";
+                    }
                 } else if (jsonData.simData.apApproachHold != 0) {
                     apStatus1 = "APR";
                 } else if (jsonData.simData.apRevHold != 0) {

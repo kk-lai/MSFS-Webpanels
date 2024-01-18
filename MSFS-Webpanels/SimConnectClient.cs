@@ -35,6 +35,9 @@ public class SimConnectClient
         ACTIVE_FLIGHT_PLAN,
         AI_AIRCRAFT_LIST,
         AI_AIRCRAFT
+#if DEBUG
+        , CUSTOM_REQ
+#endif
     };
 
     enum DEFINITION
@@ -43,7 +46,10 @@ public class SimConnectClient
         TRANSPONDER_STATE,
         AP_ALTITUDE_LOCK,
         GENERAL_PLANE_DATA,
-        AI_AIRCRAFT_LIST        
+        AI_AIRCRAFT_LIST
+#if DEBUG
+        ,CUSTOM_DEF
+#endif
     };
 
     public enum EVENT
@@ -140,13 +146,21 @@ public class SimConnectClient
         RADIO_DME1_IDENT_TOGGLE,
         TOGGLE_SPEAKER,
         COPILOT_TRANSMITTER_SET,
-        GEAR_TOGGLE
+        GEAR_TOGGLE,
+        CUSTOM_EVENT1
     };
 
     enum NOTIFICATIONGROUP
     {
         DEFAULT_GROUP
     }
+
+#if DEBUG
+    struct CustomStruct
+    {
+        public Int32 customVar;
+    }
+#endif 
 
     struct TransponderState
     {
@@ -363,6 +377,11 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "IS GEAR RETRACTABLE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GEAR HANDLE POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GENERAL ENG ELAPSED TIME:1", "hours over 10", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI CDI NEEDLE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI GSI NEEDLE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI CDI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI GSI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI DISTANCE", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
             simConnect.RegisterDataDefineStruct<C172SimData.C172Data>(DEFINITION.C172_FPANEL);
             simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.C172_FPANEL, SimConnect.SIMCONNECT_OBJECT_ID_USER,
@@ -396,11 +415,17 @@ public class SimConnectClient
             simConnect.RequestDataOnSimObject(REQUEST.PLANE_INFO_REQ, DEFINITION.GENERAL_PLANE_DATA, SimConnect.SIMCONNECT_OBJECT_ID_USER,
                     SIMCONNECT_PERIOD.SECOND, 0, 0, 0, 0);
 
+#if DEBUG
+            fieldId = 0;
+            simConnect.AddToDataDefinition(DEFINITION.CUSTOM_DEF, "L:A320_FCU_SHOW_SELECTED_SPEED", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.RegisterDataDefineStruct<CustomStruct>(DEFINITION.CUSTOM_DEF);
+#endif
+
             /*
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "", "", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             */
 
-           simConnect.MapClientEventToSimEvent(EVENT.SET_EGT_REF, "EGT1_SET");
+            simConnect.MapClientEventToSimEvent(EVENT.SET_EGT_REF, "EGT1_SET");
            simConnect.MapClientEventToSimEvent(EVENT.SET_TAS_ADJ, "TRUE_AIRSPEED_CAL_SET");
            simConnect.MapClientEventToSimEvent(EVENT.SET_ATTITUDE_BAR_POSITION, "ATTITUDE_BARS_POSITION_SET");
            simConnect.MapClientEventToSimEvent(EVENT.SET_HEADING_BUG, "HEADING_BUG_SET");
@@ -489,7 +514,7 @@ public class SimConnectClient
            simConnect.MapClientEventToSimEvent(EVENT.COPILOT_TRANSMITTER_SET, "COPILOT_TRANSMITTER_SET");
            simConnect.MapClientEventToSimEvent(EVENT.GEAR_TOGGLE, "GEAR_TOGGLE");
 
-            simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
+           simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
            simConnect.RequestSystemState(REQUEST.ACTIVE_FLIGHT_PLAN, "FlightPlan");
             _logger.Info("End calling SimConnect");
         }
@@ -540,7 +565,7 @@ public class SimConnectClient
 
     private void OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
     {
-        _logger.Error("MSFS Exception:" + data.ToString());
+        _logger.Error("MSFS Exception:" + data.dwException);
     }
 
     private void OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
@@ -562,6 +587,13 @@ public class SimConnectClient
         {
             simConnect.RequestDataOnSimObjectType(REQUEST.AI_AIRCRAFT_LIST, DEFINITION.GENERAL_PLANE_DATA, 200000, SIMCONNECT_SIMOBJECT_TYPE.AIRCRAFT);
         }
+#if DEBUG
+        if (data.dwDefineID == (uint)DEFINITION.CUSTOM_DEF)
+        {
+            CustomStruct customData = (CustomStruct)data.dwData[0];
+            //_logger.Info("Connection:" + customData.busConnectionOn);
+        }
+#endif
         while (updateQueue.Count > 0)
         {
             QueueItem itm;
@@ -646,4 +678,46 @@ public class SimConnectClient
             new APAltitudeHold { altitude = apaltitude }
         );
     }
+#if DEBUG
+    public void sendCustomEvent(string eventName, uint[] values)
+    {
+
+
+        uint[] scParams = new uint[5];
+        for(int i=0;i<5 && i<values.Length;i++)
+        {
+            scParams[i] = values[i];
+        }
+        simConnect.MapClientEventToSimEvent(EVENT.CUSTOM_EVENT1, eventName);
+        simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, EVENT.CUSTOM_EVENT1,
+                     NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, scParams[0], scParams[1], scParams[2], scParams[3], scParams[4]);        
+    }
+
+    public void testSimvar()
+    {
+        /*
+        CustomStruct customData = new CustomStruct();
+        customData.busLookupIdx = 11;
+        customData.apuBleed = 0;
+        simConnect.SetDataOnSimObject(DEFINITION.CUSTOM_DEF,
+            SimConnect.SIMCONNECT_OBJECT_ID_USER,
+            SIMCONNECT_DATA_SET_FLAG.DEFAULT,
+            customData
+        );
+        _logger.Info("xConnection:" + customData.busConnectionOn);
+        */
+        CustomStruct customData = new CustomStruct();
+        customData.customVar = 2;
+        simConnect.SetDataOnSimObject(DEFINITION.CUSTOM_DEF,
+            SimConnect.SIMCONNECT_OBJECT_ID_USER,
+            SIMCONNECT_DATA_SET_FLAG.DEFAULT,
+            customData
+        );
+        uint[] param = { 2 };
+        sendCustomEvent("SPEED_SLOT_INDEX_SET", param);
+
+        simConnect.RequestDataOnSimObject(REQUEST.CUSTOM_REQ, DEFINITION.CUSTOM_DEF, SimConnect.SIMCONNECT_OBJECT_ID_USER,
+            SIMCONNECT_PERIOD.ONCE, 0, 0, 0, 0);
+    }
+#endif
 }

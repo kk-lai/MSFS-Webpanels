@@ -33,11 +33,13 @@
             label1 = new Label();
             pictureQRcode = new PictureBox();
             linkPanel = new LinkLabel();
-            buttonTest = new Button();
             label3 = new Label();
             textboxInput = new TextBox();
             buttonAbout = new Button();
             btnTroubleshoot = new Button();
+            txtEventInput = new TextBox();
+            btnSend = new Button();
+            txtInputEvent = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
@@ -87,18 +89,6 @@
             linkPanel.Visible = false;
             linkPanel.LinkClicked += linkPanel_LinkClicked;
             // 
-            // buttonTest
-            // 
-            buttonTest.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonTest.Location = new Point(395, 77);
-            buttonTest.Name = "buttonTest";
-            buttonTest.Size = new Size(166, 59);
-            buttonTest.TabIndex = 4;
-            buttonTest.Text = "&Test";
-            buttonTest.UseVisualStyleBackColor = true;
-            buttonTest.Visible = false;
-            buttonTest.Click += buttonTest_Click;
-            // 
             // label3
             // 
             label3.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -138,16 +128,45 @@
             btnTroubleshoot.UseVisualStyleBackColor = true;
             btnTroubleshoot.Click += btnTroubleshoot_Click;
             // 
+            // txtEventInput
+            // 
+            txtEventInput.Location = new Point(402, 42);
+            txtEventInput.Name = "txtEventInput";
+            txtEventInput.Size = new Size(166, 23);
+            txtEventInput.TabIndex = 13;
+            txtEventInput.Visible = false;
+            // 
+            // btnSend
+            // 
+            btnSend.Location = new Point(402, 87);
+            btnSend.Name = "btnSend";
+            btnSend.Size = new Size(166, 59);
+            btnSend.TabIndex = 15;
+            btnSend.Text = "&Send Event";
+            btnSend.UseVisualStyleBackColor = true;
+            btnSend.Visible = false;
+            btnSend.Click += btnSend_Click;
+            // 
+            // txtInputEvent
+            // 
+            txtInputEvent.Location = new Point(402, 9);
+            txtInputEvent.Name = "txtInputEvent";
+            txtInputEvent.Size = new Size(166, 23);
+            txtInputEvent.TabIndex = 16;
+            txtInputEvent.Visible = false;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(580, 428);
+            Controls.Add(txtInputEvent);
+            Controls.Add(btnSend);
+            Controls.Add(txtEventInput);
             Controls.Add(btnTroubleshoot);
             Controls.Add(buttonAbout);
             Controls.Add(textboxInput);
             Controls.Add(label3);
-            Controls.Add(buttonTest);
             Controls.Add(linkPanel);
             Controls.Add(pictureQRcode);
             Controls.Add(label1);
@@ -167,10 +186,12 @@
         private Label label1;
         private PictureBox pictureQRcode;
         private LinkLabel linkPanel;
-        private Button buttonTest;
         private Label label3;
         private TextBox textboxInput;
         private Button buttonAbout;
         private Button btnTroubleshoot;
+        private TextBox txtEventInput;
+        private Button btnSend;
+        private TextBox txtInputEvent;
     }
 }
