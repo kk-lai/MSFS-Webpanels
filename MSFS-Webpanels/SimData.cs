@@ -9,6 +9,8 @@ public class SimData
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct GenericPlaneData
     {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        private string aircraftTitle;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         private string atcId;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
@@ -30,6 +32,7 @@ public class SimData
         private int planeEngineType;
         private int planeNumberOfEngines;
 
+        public string AircraftTitle { get => aircraftTitle; set => aircraftTitle = value; }
         public float PlaneLatitude { get => planeLatitude; set => planeLatitude = value; }
         public float PlaneLongitude { get => planeLongitude; set => planeLongitude = value; }
         public float PlaneAltitude { get => planeAltitude; set => planeAltitude = value; }
@@ -49,11 +52,23 @@ public class SimData
     private bool isSimConnected;
     private bool isSimRunning;
     private bool isPaused;
-    private String? aircraftFolder;
+    private string? aircraftFolder;
+
+    public SimData()
+    {
+
+    }
+
+    public SimData(SimData data)
+    {
+        this.isPaused = data.isPaused;
+        this.isSimRunning = data.isSimRunning;
+        this.isSimConnected = data.isSimConnected;
+        this.aircraftFolder = data.aircraftFolder;
+    }
 
     public bool IsPaused { get => isPaused; set => isPaused = value; }
     public bool IsSimRunning { get => isSimRunning; set => isSimRunning = value; }
     public bool IsSimConnected { get => isSimConnected; set => isSimConnected = value; }
     public string? AircraftFolder { get => aircraftFolder; set => aircraftFolder = value; }
-
 }

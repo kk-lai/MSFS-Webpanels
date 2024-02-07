@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualBasic;
-using Microsoft.VisualStudio.PlatformUI;
 using NetFwTypeLib;
 using System.Configuration;
 using System.Diagnostics;
@@ -48,7 +47,7 @@ namespace MSFS_Webpanels
             txtEventInput.Visible = true;
 #endif
 
-            _logger.Info("MSFS-Webpanels (version:" + Application.ProductVersion + ") Start");
+            _logger.Info(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + " (version:" + Application.ProductVersion + ") Start");
 
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
             {
@@ -69,7 +68,7 @@ namespace MSFS_Webpanels
                 }
             }
 
-            this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion + ")";
+            this.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + " (version:" + Application.ProductVersion + ")";
         }
 
 
@@ -100,7 +99,10 @@ namespace MSFS_Webpanels
             {
                 _logger.Info("Start connecting MSFS");
                 simConnectClient.Disconnect();
-                simConnectClient.Connect(this.Handle);
+                if (simConnectClient.Connect(this.Handle)!=0)
+                {
+                    MessageBox.Show("Connection Error", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
@@ -149,7 +151,7 @@ namespace MSFS_Webpanels
             Type NetFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
             INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(NetFwMgrType);
             bool firewallEnabled = mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
-            String appPath = Application.ExecutablePath;
+            String appPath = Path.GetFullPath(Application.ExecutablePath);
 
             Boolean fwBlocked = true;
 
@@ -165,8 +167,10 @@ namespace MSFS_Webpanels
                     {
                         continue;
                     }
-                    String ruleAppPath = rule.ApplicationName;
-                    if (PathUtil.ArePathsEqual(appPath, ruleAppPath))
+                    String ruleAppPath = Path.GetFullPath(rule.ApplicationName);
+
+                    
+                    if (appPath.Equals(ruleAppPath, StringComparison.OrdinalIgnoreCase))                    
                     {
                         if ((activeProfile & rule.Profiles) > 0 && rule.Enabled && rule.Action == NET_FW_ACTION_.NET_FW_ACTION_ALLOW)
                         {
