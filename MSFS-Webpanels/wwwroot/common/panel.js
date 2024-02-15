@@ -27,7 +27,30 @@ function(jquery, SysParam) {
             this.queueTimerId = null;
             this.aspectRatio=aspectRatio;
             this.aircraftFolder = "";
-            this.resizeContainer();
+            this.logger = {
+                info:function(txt) {
+                    this._log(1,txt);
+                },
+                debug:function(txt) {
+                    this._log(0,txt);
+                },
+                error:function(txt) {
+                    this._log(3,txt);
+                },
+                warn: function(txt) {
+                    this._log(2,txt);
+                },
+                _log:function(lvl,txt) {
+                    if (lvl>=SysParam.logLevel) {
+                        var lvlText = ['DEBUG', 'INFO', 'WARNING', 'ERROR'];
+                        var d = new Date().toISOString();
+                        var logString = d+" " + lvlText[lvl]+" "+txt;
+                        var html = jquery("#log-window").html() + logString + "<br/>";
+                        jquery("#log-window").html(html);
+                        console.log(logString);
+                    }
+                }
+            }
         }
 
         postProcessingFunc(jsonData)
@@ -35,7 +58,7 @@ function(jquery, SysParam) {
             return jsonData;
         }
 
-        resizeContainer() {
+        resizePanel() {
             var wh=jquery(window).innerHeight();
             var ww=jquery(window).innerWidth();
             var fh = wh;
@@ -59,9 +82,10 @@ function(jquery, SysParam) {
             }
             jquery(".container").css("width", fw);
             jquery(".container").css("height", fh);
-            var fontSize = Math.ceil(fh/67);
-            //jquery(".container").css("font-size", fontSize);
-            jquery(".container").removeClass("hide");
+
+            for(var i=0;i<this.instruments.length;i++) {
+                this.instruments[i].onScreenResize();
+            }
         }
 
         addInstrument(instrument) {
@@ -70,6 +94,7 @@ function(jquery, SysParam) {
 
         start()
         {
+            this.logger.info("Panel Start");
             jquery(".menu-link").attr('href',"../?v="+SysParam.versionCode+"&noRedirect=true");
             jquery(".reload-icon").on(SysParam.tapEvent, function(e) {
                 location.reload(true);
@@ -85,11 +110,10 @@ function(jquery, SysParam) {
             });
 
             jquery(window).resize(jquery.proxy(function() {
-                this.resizeContainer();
-                for(var i=0;i<this.instruments.length;i++) {
-                    this.instruments[i].onScreenResize();
-                }
+                this.resizePanel();
             }, this));
+
+            this.resizePanel();
             jquery(".container").removeClass("hide");
             setInterval(jquery.proxy(this.timerFunc,this), SysParam.refreshPeriod);
         }
@@ -121,7 +145,7 @@ function(jquery, SysParam) {
                         errMessage="";
                     }
                     if (jsonData.hasOwnProperty("simData")) {
-                        this.simvarsOrg = {...jsonData.simData};
+                        this.simvarsOrg = JSON.parse(JSON.stringify(jsonData));
                         this.aircraftFolder = jsonData.aircraftFolder;
                         var keys = Object.keys(jsonData.simData);
                         var ct = Date.now();
@@ -167,6 +191,7 @@ function(jquery, SysParam) {
                     thisClass.isServerAppRunning=false;
                     thisClass.refreshDisplay(null);
                     thisClass.isPoolingSimVars=false;
+                    this.logger.error("Unable to fetch sim data");
                 },
                 type: "get",
                 dataType : "json",
@@ -255,7 +280,7 @@ function(jquery, SysParam) {
                 }
             }
             var jsonText=JSON.stringify(param);
-            console.log(Date.now()+",ajax:"+jsonText);
+            this.logger.debug("Send command "+jsonText);
             jquery.ajax(SysParam.simVarUrl,
             {
                 data: jsonText,

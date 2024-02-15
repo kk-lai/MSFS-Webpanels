@@ -19,12 +19,11 @@ define(['Panel','SysParam'],function(Panel,SysParam) {
                 return;
             }
             if (jsonData.aircraftFolder!="Asobo_A320_NEO") {
+                this.logger.info("Aircraft is not A20N, redirect to index");
                 window.location.replace("../?v=" + SysParam.versionCode);
             }
         }
     }
 
     return A20NPanel;
-
-
 });

@@ -129,7 +129,7 @@ function(jquery, SysParam, StaticPropertyHelper) {
 
         refreshInstrument()
         {
-            this.localDisplayVal = {...this.panel.displayVal};
+            this.localDisplayVal = JSON.parse(JSON.stringify(this.panel.displayVal));
             this.preprocessLocalDisplayVal();
         }
 

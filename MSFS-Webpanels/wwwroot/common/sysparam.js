@@ -5,6 +5,7 @@ require.config({
 define(function() {
     return {
         versionCode : "1.2.0",
+        logLevel: 2,
         isOfflineTest : false,
         defaultCoolDown : 500, // ms
         refreshPeriod : 200, // ms;
