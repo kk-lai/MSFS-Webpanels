@@ -583,7 +583,6 @@ public class SimConnectClient
             try
             {
                 simConnect.ReceiveMessage();
-
             } catch (Exception e)
             {
                 _logger.Error(e.ToString());
@@ -603,7 +602,16 @@ public class SimConnectClient
         simData.IsSimConnected = false;
         simData.AircraftFolder = null;
         aircraftTitle = null;
-        simConnect = null;
+        if (simConnect!=null)
+        {
+            simConnect.Dispose();
+            simConnect = null;
+        }        
+        if (waSimClient!=null)
+        {
+            waSimClient.Dispose();
+            waSimClient = null;
+        }
     }
 
     private void OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
@@ -615,19 +623,19 @@ public class SimConnectClient
     {
         if (data.dwDefineID == (uint)DEFINITION.PANEL_DATA)
         {
-            if (simData.AircraftFolder == null)
-            {
-                simData = new SimData(simData);
-            } else if (simData.AircraftFolder.Equals("Asobo_A320_NEO"))
+            if (data.dwData[0].GetType()==typeof(A20NSimData.A20NData))
             {
                 simData = new A20NSimData(simData);
                 A20NSimData pdata = (A20NSimData)simData;
                 pdata.simData = (A20NSimData.A20NData)data.dwData[0];
-            } else
+            } else if (data.dwData[0].GetType() == typeof(C172SimData.C172Data))
             {
                 simData = new C172SimData(simData);
                 C172SimData pdata = (C172SimData)simData;
                 pdata.simData = (C172SimData.C172Data)data.dwData[0];
+            } else
+            {
+                simData = new SimData(simData);
             }
         }
         if (data.dwDefineID == (uint)DEFINITION.GENERAL_PLANE_DATA)
@@ -747,9 +755,7 @@ public class SimConnectClient
     }
 
     public int processWebRequest(string req, uint[] iparams)
-    {
-        _logger.Info("processWebRequest:" + req);
-        Debug.WriteLine(DateTime.Now+":processWebRequest:" + req);
+    {        
         int idx = Array.IndexOf(SimConnectClient.WritableSimVars, req);
         QueueItem itm = new QueueItem();
         itm.IParams = iparams;

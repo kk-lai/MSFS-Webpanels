@@ -5,7 +5,6 @@ require.config({
         util: 'util',
         'const' : 'const'
     },
-    urlArgs: "v=1.2.0",
     waitSeconds : 30,
 });
 
@@ -13,7 +12,7 @@ require([
          'jquery','util','const'
          ],
 function(jquery,util,sysconst) {
-    var versionCode = '1.2.0';
+    var versionCode = sysconst.versionCode;
     var isOffline = false;
     var isServerAppRunning = false;
     var refreshTimer = null;
@@ -135,6 +134,10 @@ function(jquery,util,sysconst) {
             url: sysconst.simVarUrl,
             success: function(jsonData, textStatus, jqXHR ){
                 isServerAppRunning=true;
+                if (jsonData.isSimConnected && jsonData.aircraftFolder=="Asobo_A320_NEO") {
+                    window.location.replace("../?v=" + sysconst.versionCode);
+                    return;
+                }
                 refreshDisplay(jsonData);
                 isPoolingSimVars=false;
             },
@@ -172,6 +175,16 @@ function(jquery,util,sysconst) {
     }
 
     jquery(document).ready(function() {
+
+        var head = jquery("head").first();
+        var link = document.createElement("link");
+        link.rel="stylesheet";
+        link.type="text/css";
+        link.href="css/fpanel.css?v="+sysconst.versionCode;
+        head.append(link);
+
+        jquery(".menu-link").attr('href',"../?v="+sysconst.versionCode+"&noRedirect=true");
+
         var touchDevice = ('ontouchstart' in document.documentElement);
         if (touchDevice) {
             ev='touchstart';

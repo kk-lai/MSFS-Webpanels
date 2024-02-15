@@ -70,13 +70,38 @@ function(jquery, SysParam) {
 
         start()
         {
+            jquery(".menu-link").attr('href',"../?v="+SysParam.versionCode+"&noRedirect=true");
+            jquery(".reload-icon").on(SysParam.tapEvent, function(e) {
+                location.reload(true);
+            });
+            jquery(".help-icon").on(SysParam.tapEvent, function(e) {
+                if (jquery("#help-screen-overlay").hasClass("hide")) {
+                    jquery("#help-screen-overlay").removeClass("hide");
+                    jquery(".help-overlay").removeClass("hide");
+                } else {
+                    jquery("#help-screen-overlay").addClass("hide");
+                    jquery(".help-overlay").addClass("hide");
+                }
+            });
+
             jquery(window).resize(jquery.proxy(function() {
                 this.resizeContainer();
                 for(var i=0;i<this.instruments.length;i++) {
                     this.instruments[i].onScreenResize();
                 }
             }, this));
+            jquery(".container").removeClass("hide");
             setInterval(jquery.proxy(this.timerFunc,this), SysParam.refreshPeriod);
+        }
+
+        loadCss(url)
+        {
+            var head = jquery("head").first();
+            var link = document.createElement("link");
+            link.rel="stylesheet";
+            link.type="text/css";
+            link.href=url + "?v="+SysParam.versionCode;
+            head.append(link);
         }
 
         refreshDisplay(jsonData)

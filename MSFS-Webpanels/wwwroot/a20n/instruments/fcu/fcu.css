@@ -7,6 +7,36 @@
     font-size: 32%;
 }
 
+.a20n-fcu .img-alt-knob
+{
+    background: url(fcu.png) 0 0;
+    background-size: 200% 400%;
+}
+
+.a20n-fcu .img-alt-select
+{
+    background: url(fcu.png) 100% 0;
+    background-size: 200% 400%;
+}
+
+.a20n-fcu .img-circle-button
+{
+    background: url(fcu.png) 0% 33.3333333333%;
+    background-size: 200% 400%;
+}
+
+.a20n-fcu .img-generic-knob
+{
+    background: url(fcu.png) 100% 33.3333333333%;
+    background-size: 200% 400%;
+}
+
+.a20n-fcu .img-hdg-knob
+{
+    background: url(fcu.png) 0% 66.6666666667%;
+    background-size: 200% 400%;
+}
+
 .a20n-fcu .mockup
 {
     position:absolute;
@@ -53,6 +83,12 @@
     position:absolute;
     top:0;
     left:0;
+}
+
+.a20n-fcu .btn-tapped
+{
+    background-color:yellow;
+    opacity: 0.5;
 }
 
 .a20n-fcu .knob.state-on
@@ -441,8 +477,6 @@
     position:absolute;
     width:4.46428571%;	height:12.72264631%;
     border-radius:50%;
-    background-color: white;
-    opacity: 0.1;
 }
 
 .a20n-fcu .ip-spd-inc

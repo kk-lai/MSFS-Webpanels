@@ -10,28 +10,46 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<link rel="apple-touch-icon" href="img/panel-icon.png" />
-<link rel="icon" type="image/x-icon" href="img/panel-icon.png" />
+<link rel="apple-touch-icon" href="../img/panel-icon.png" />
+<link rel="icon" type="image/x-icon" href="../img/panel-icon.png" />
 <link id="ui-theme" rel="stylesheet" href="../3rdparty/jquery-ui-themes-1.11.2/themes/smoothness/jquery-ui.min.css" />
 <link href="../3rdparty/fontawesome/css/fontawesome.min.css" rel="stylesheet">
 <link href="../3rdparty/fontawesome/css/brands.min.css" rel="stylesheet">
 <link href="../3rdparty/fontawesome/css/solid.min.css" rel="stylesheet">
 <link href="../3rdparty/DSEG7-Classic/DSEG7Classic.css" rel="stylesheet">
-<link href="css/glareshield.css" rel="stylesheet" />
-
+<style>
+.hide
+{
+    display:none;
+}
+</style>
 </head>
-<body>
 <div class="wrapper">
-    <div class="container">
+    <div class="container hide">
+        <div class="error-overlay">
+            <div id="sys-message" >Webpanel is not started</div>
+        </div>
+        <div id="help-screen-overlay" class="help-screen-overlay hide"></div>
         <div class="fcu"></div>
+        <div class="bottom-panel"></div>
+        <div class="help-container">
+            <a class="menu-link hide" href="../index.html"><img src="../img/menu-icon.png" alt="menu-icon" /></a><!--
+            --><img class="reload-icon" src="../img/refresh-icon.png" alt="refresh-icon" /><!--
+            --><img class="help-icon" src="../img/information-icon.png" alt="help-icon" />
+        </div>
     </div>
 </div>
 </body>
 <script src="../3rdparty/require/require.js"></script>
 <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var urlArgs = "";
+    if (urlParams.has('v')) {
+        urlArgs="v="+urlParams.get('v');
+    }
     require.config({
         waitSeconds: 15,
-        urlArgs: "v=1.2.0",
+        urlArgs: urlArgs
     });
     require( ["./glareshield"]);
 </script>

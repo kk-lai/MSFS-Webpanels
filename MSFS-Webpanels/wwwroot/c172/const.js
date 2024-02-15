@@ -1,11 +1,18 @@
-// Version: 1.2.0
+require.config({
+    baseUrl : '../.',
+    paths : {
+        sysparam: 'common/sysparam'
+    },
+    waitSeconds : 30,
+});
 
-define(function () {
+define(['sysparam'],function (sysparam) {
     return {
         aspectRatio: 1024/748,  // 1024/748 (full screen)
         defaultCoolDown : 500, // ms
         refreshPeriod : 50, // ms;
-        serverUpdateCooldown :20, // ms  
-        simVarUrl: '/api/SimData'
+        serverUpdateCooldown :20, // ms
+        simVarUrl: sysparam.simVarUrl,
+        versionCode: sysparam.versionCode
     }
 });

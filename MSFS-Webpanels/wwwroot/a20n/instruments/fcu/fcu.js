@@ -198,9 +198,11 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 var func = "on" + target + "Toggle";
                 this[func]();
             } else if (jquery(elm).hasClass("ip-btn")) {
+                jquery(elm).addClass("btn-tapped");
                 var func = "on" + target;
                 this[func]();
             } else if (jquery(elm).hasClass("ip-inc") || jquery(elm).hasClass("ip-dec")) {
+                jquery(elm).addClass("btn-tapped");
                 if (this.timerId!=null) {
                     clearInterval(this.timerId);
                     this.timerId=null;
@@ -211,6 +213,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 }
                 this.adjScaleFactor = 1;
                 this.ctlTarget = target;
+                this.rotateKnob();
                 var func = "on" + target + "Changed";
                 this[func]();
                 this.tapStartTimeStamp=Date.now();
@@ -219,6 +222,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
         }
 
         onTapEndEvent(elm, e) {
+            jquery(elm).removeClass("btn-tapped");
             if (this.timerId!=null) {
                 clearInterval(this.timerId);
                 this.timerId=null;
@@ -237,6 +241,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
             if (this.adjScaleFactor == 2 && ct - this.tapStartTimeStamp > 3000) {
                 this.adjScaleFactor = 5;
             }
+            this.rotateKnob();
             var func = "on"+this.ctlTarget +"Changed";
             this[func]();
         }
@@ -451,6 +456,26 @@ function(jquery, Instrument, StaticPropertyHelper) {
             }
             this.panel.sendEvent("btnapr",0);
             this.onSimVarChange("autoPilotGlideslopeHold", newState, false);
+        }
+
+        rotateKnob()
+        {
+            var map = {
+                "SpeedHold": "spd",
+                "HeadingHold": "hdg",
+                "AltHold": "alt",
+                "VSHold": "vs"
+            };
+            var elmClass = map[this.ctlTarget];
+            var elm = jquery(this.rootElm).find(".knb-"+elmClass+" .knob-img");
+            var angle = parseInt(jquery(elm).attr("angle"));
+            angle = angle + this.adjVal * this.adjScaleFactor*10;
+            if (angle<0) {
+                angle = 360 + angle;
+            }
+            angle = angle % 360;
+            jquery(elm).attr("angle", angle);
+            jquery(elm).css("transform", "rotate("+angle+"deg)");
         }
     }
 

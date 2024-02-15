@@ -97,3 +97,9 @@ https://www.freepik.com/free-vector/mobile-background-with-qr-code_1023723.htm#q
 
 Monitor (by rawpixel.com)
 https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=12&from_view=search&track=sph
+
+Attitude Indicator (Freepik - Flaticon)
+https://www.flaticon.com/free-icon/altitude-indicator_10403534?term=altitude+indicator&page=1&position=4&origin=tag&related_id=10403534
+
+
+
