@@ -113,7 +113,10 @@ function(jquery, SysParam) {
                 this.resizePanel();
             }, this));
 
-            this.resizePanel();
+            jquery(document).ready(jquery.proxy(function() {
+                this.resizePanel();
+            }, this));
+
             jquery(".container").removeClass("hide");
             setInterval(jquery.proxy(this.timerFunc,this), SysParam.refreshPeriod);
         }

@@ -647,6 +647,8 @@ public class SimConnectClient
                 simData.AircraftFolder = null;
                 if (this.aircraftTitle!=null)
                 {
+                    simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.PANEL_DATA, SimConnect.SIMCONNECT_OBJECT_ID_USER,
+                            SIMCONNECT_PERIOD.NEVER, 0, 0, 0, 0);
                     simConnect.ClearDataDefinition(DEFINITION.PANEL_DATA);
                 }
                 simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");

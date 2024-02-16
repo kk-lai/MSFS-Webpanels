@@ -178,6 +178,8 @@ function(jquery,util,sysconst) {
 
         var head = jquery("head").first();
         var link = document.createElement("link");
+        var ev, evMove, evTapEnd, evTapStart;
+
         link.rel="stylesheet";
         link.type="text/css";
         link.href="css/fpanel.css?v="+sysconst.versionCode;
@@ -188,9 +190,13 @@ function(jquery,util,sysconst) {
         var touchDevice = ('ontouchstart' in document.documentElement);
         if (touchDevice) {
             ev='touchstart';
+            evTapStart='touchstart';
+            evTapEnd='touchend';
             evMove='touchstart touchmove touchend';
         } else {
             ev='click';
+            evTapStart='mousedown';
+            evTapEnd='mouseup mouseleave';
             evMove='mousedown mousemove mouseup mouseleave';
         }
         resizeContainer();
@@ -726,6 +732,14 @@ function(jquery,util,sysconst) {
             hideNumPadDigits(type);
             jquery("#freq-error").addClass("invisible");
             radioPanel.removeClass("hide");
+        });
+
+        jquery(".ui-pbutton").on(evTapStart, function(e) {
+            jquery(this).addClass("btn-tapped");
+        });
+
+        jquery(".ui-pbutton").on(evTapEnd, function(e) {
+            jquery(this).removeClass("btn-tapped");
         });
 
         jquery(".ui-pbutton").on(ev, function(e) {

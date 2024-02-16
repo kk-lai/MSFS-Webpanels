@@ -39,11 +39,6 @@ function($,sysParam) {
     $(document).ready(function() {
         var versionCode = sysParam.versionCode;
         $("#version").text("("+versionCode+")");
-        $(".aircraft-box a").attr({
-            href:function(idx,href) {
-                return href+"?v="+versionCode;
-            }
-        });
         if (!urlParams.has("noRedirect")) {
             // redirect
             redirect();
