@@ -18,6 +18,7 @@ Installation
 ============
 1. Install runtime libraries stated in prerequisites section
 2. Unzip MSFS-Webpanels.zip into any location you wanted
+3. Copy folder "wasimcommander-module" into "Community" folder of MSFS
 
 Configuration
 =============
@@ -41,10 +42,8 @@ Please remove existing icon from "Home Screen" and clear browsing data of the br
 
 Future Plans
 ============
-1. Fix problem when "Magneto from R to off" the engine doesn't stop
-2. Rewrite front-end to be more modularized
-3. Separate one panel to left, main, radio, bottom panels
-4. Write panels for other aircrafts
+1. Enhance A320neo panels with EFIS
+2. Add support for A320NX
 
 Source Code
 ===========
@@ -57,6 +56,7 @@ Release Notes
 1.0.2 - Initial release
 1.1.0 - DME distance bug fix, add gear up/down switch, engine hours recorder, logging
 1.1.1 - Add version code in js and html files for better support
+1.2.0 - Add support to A320neo FCU, C172 panel add GPS support. Enhanced buttons
 
 License
 =======
@@ -67,7 +67,8 @@ GPLv3
 1. jquery (https://jquery.com/)
 2. jquery-ui (https://jqueryui.com/)
 3. requirejs (https://requirejs.org/)
-4. Zen Barcode https://www.nuget.org/packages/Zen.Barcode.Rendering.Framework
+4. Zen Barcode (https://www.nuget.org/packages/Zen.Barcode.Rendering.Framework)
+5. WASimCommander (https://github.com/mpaperno/WASimCommander)
 
 Image Credits
 =============
@@ -100,6 +101,15 @@ https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=1
 
 Attitude Indicator (Freepik - Flaticon)
 https://www.flaticon.com/free-icon/altitude-indicator_10403534?term=altitude+indicator&page=1&position=4&origin=tag&related_id=10403534
+
+Buttons (AP)
+https://www.freepik.com/free-vector/black-silver-tv-remote-controllers-different-models-realistic-set-isolated-vector-illustration_39927903.htm#query=TV%20remote%20controller%20RC%20realistic%20set&position=1&from_view=search&track=ais&uuid=9350a4bf-19d6-4e96-9efa-de53b41e6637
+
+Buttons (Numeric pad)
+https://www.freepik.com/free-vector/stationery-realistic-composition-with-isolated-image-calculator-blank-background-vector-illustration_23128887.htm?query=calculator#from_view=detail_alsolike
+
+Button (A320 FCU SPD MACH)
+https://www.freepik.com/free-vector/set-nine-blank-colorful-round-buttons-website-internet-applications-with-eight-small-points-around-two-ones_11242766.htm#page=4&query=black%20circle%20button&position=9&from_view=search&track=ais&uuid=55f6f39a-a992-462f-a03d-f25a937e0031
 
 
 

@@ -367,11 +367,11 @@ public class SimConnectClient
         }
     }
 
-    public int Connect(IntPtr whnd)
+    public string Connect(IntPtr whnd)
     {
         if (simConnect != null)
         {
-            return -1;
+            return "Already Connected";
         }
         try
         {
@@ -381,9 +381,9 @@ public class SimConnectClient
 
             if (waSimClient.connectSimulator()!=WASimCommander.CLI.Enums.HR.OK)
             {
-                _logger.Error("Error connect simulator");
+                _logger.Error("Error connect MSFS");
                 waSimClient.Dispose();
-                return -1;
+                return "Cannot connect simulator";
             }
 
             UInt32 version = waSimClient.pingServer();
@@ -391,21 +391,21 @@ public class SimConnectClient
             {
                 _logger.Error("Error WASimCommander Module is not installed");
                 waSimClient.Dispose();
-                return -1;
+                return "WASimCommander module is not found, please copy folder wasimcommander-module in Community Folder of MSFS";
             }
 
             if (waSimClient.connectServer()!=WASimCommander.CLI.Enums.HR.OK)
             {
                 _logger.Error("Error connecting WASimCommander");
                 waSimClient.Dispose();
-                return -1;
+                return "WASimCommander module connection failure";
             }
 
             if (!dataUpdateEvent.WaitOne(1000))
             {
                 _logger.Error("Error connecting WASimCommander");
                 waSimClient.Dispose();
-                return -1;
+                return "WASimCommander module connection failure";
             }
 
             _logger.Info("Calling SimConnect");
@@ -545,13 +545,13 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.AUTO_THROTTLE_ARM, "AUTO_THROTTLE_ARM");
 
             _logger.Info("End calling SimConnect");
-            return 0;
+            return "Success";
         }
         catch (COMException ex)
         {
             _logger.Error(ex.ToString());
             Disconnect();
-            return -1;
+            return "Unknown error";
         }
     }
 

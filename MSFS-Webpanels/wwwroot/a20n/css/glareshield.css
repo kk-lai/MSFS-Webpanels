@@ -136,3 +136,13 @@ body
     opacity: 0.8;
     overflow: scroll;
 }
+
+.version-lbl
+{
+    margin:0;
+    position:absolute;
+    color:white;
+    top: 50%;
+    left: 1%;
+    transform: translate(0, -50%);
+}

@@ -99,9 +99,10 @@ namespace MSFS_Webpanels
             {
                 _logger.Info("Start connecting MSFS");
                 simConnectClient.Disconnect();
-                if (simConnectClient.Connect(this.Handle)!=0)
+                String result = simConnectClient.Connect(this.Handle);
+                if (!result.Equals("Success"))
                 {
-                    MessageBox.Show("Connection Error", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(result, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
