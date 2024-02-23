@@ -1126,7 +1126,7 @@ img
     height:100%;
 }
 
-.ui-button, .ui-switch, .ui-popup, .ui-dial, .ui-vshifter, .ui-pbutton
+.ui-button, .ui-switch, .ui-popup, .ui-dial, .ui-vshifter, .ui-pbutton, .ui-dmeselector
 {
     z-index:3;
 }
