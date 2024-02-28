@@ -110,6 +110,7 @@
             // 
             // buttonAbout
             // 
+            buttonAbout.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonAbout.Location = new Point(402, 243);
             buttonAbout.Name = "buttonAbout";
             buttonAbout.Size = new Size(166, 59);
@@ -120,6 +121,7 @@
             // 
             // btnTroubleshoot
             // 
+            btnTroubleshoot.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnTroubleshoot.Location = new Point(402, 164);
             btnTroubleshoot.Name = "btnTroubleshoot";
             btnTroubleshoot.Size = new Size(166, 59);

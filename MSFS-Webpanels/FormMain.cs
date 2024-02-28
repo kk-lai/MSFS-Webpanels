@@ -170,8 +170,8 @@ namespace MSFS_Webpanels
                     }
                     String ruleAppPath = Path.GetFullPath(rule.ApplicationName);
 
-                    
-                    if (appPath.Equals(ruleAppPath, StringComparison.OrdinalIgnoreCase))                    
+
+                    if (appPath.Equals(ruleAppPath, StringComparison.OrdinalIgnoreCase))
                     {
                         if ((activeProfile & rule.Profiles) > 0 && rule.Enabled && rule.Action == NET_FW_ACTION_.NET_FW_ACTION_ALLOW)
                         {
