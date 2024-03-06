@@ -46,7 +46,6 @@ function(jquery, SysParam, StaticPropertyHelper) {
             this.rootElm = rootElm;
             this.isInstrumentOff = false;
             this.localDisplayVal = {};
-            this.onScreenResize();
 
             var htmlPromise;
             if (!StaticPropertyHelper.getProperty(this.constructor.name,"htmlPromise")) {
@@ -61,6 +60,7 @@ function(jquery, SysParam, StaticPropertyHelper) {
             htmlPromise.then(function(html) {
                jquery(rootElm).append(html);
                thisClass.bindControls();
+               thisClass.onScreenResize();
             });
         }
 

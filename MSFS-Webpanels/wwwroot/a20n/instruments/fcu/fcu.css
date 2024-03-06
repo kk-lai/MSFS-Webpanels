@@ -3,8 +3,17 @@
     width:100%;
     height:100%;
     position:relative;
-    background-color:#41556d;
     font-size: 32%;
+}
+
+.a20n-fcu .backplate
+{
+    position:absolute;
+    width:100%;
+    height:100%;
+    opacity: 1;
+    top:0;
+    left:0;
 }
 
 .a20n-fcu .img-alt-knob
@@ -178,12 +187,7 @@
     width:100%;
 }
 
-.a20n-fcu .v-seperator
-{
-    position:absolute;
-    width:0.17857143%;	height:63.35877863%;
-    background-color: white;
-}
+
 
 .a20n-fcu  .ind-btn
 {
@@ -212,12 +216,12 @@
 
 .a20n-fcu .selector-switch.state-on
 {
-    transform:rotate(30deg);
+    transform:rotate(34deg);
 }
 
 .a20n-fcu .selector-switch.state-off
 {
-    transform:rotate(-30deg);
+    transform:rotate(-36deg);
 }
 
 .a20n-fcu .btn-spdmch-wrapper
@@ -291,53 +295,6 @@
     position:absolute;
     border-radius: 1.5%/15%;
     background-color: #211b1b;
-}
-
-.a20n-fcu .lbl-spdmch
-{
-    left:1.78571429%;	top:52.67175573%;	width:4.82142857%;	height:9.66921120%;
-}
-
-.a20n-fcu .lbl-hdgtrk
-{
-    left:42.67857143%;	top:37.65903308%;	width:3.66071429%;	height:9.92366412%;
-    text-align:right;
-}
-
-.a20n-fcu .lbl-vsfpa
-{
-    left:53.75000000%;	top:37.65903308%;	width:3.66071429%;	height:9.92366412%;
-    text-align:left;
-}
-
-.a20n-fcu .lbl-metricalt
-{
-    left:75.26785714%;	top:53.18066158%;	width:6.25000000%;	height:9.66921120%;
-}
-
-.a20n-fcu .lbl-pushlvl
-{
-    left:93.66071429%;	top:48.34605598%;	width:5.26785714%;	height:19.33842239%;
-}
-
-.a20n-fcu .lbl-vsup
-{
-    left:87.41071429%;	top:38.67684478%;	width:2.76785714%;	height:5.08905852%;
-}
-
-.a20n-fcu .lbl-vsdn
-{
-    left:87.41071429%;	top:75.06361323%;	width:2.76785714%;	height:5.08905852%;
-}
-
-.a20n-fcu .lbl-alt100
-{
-    left:61.5%;	top:36%;	width:2.67857143%;	height:4.58015267%;
-}
-
-.a20n-fcu .lbl-alt1000
-{
-    left:71.2%;	top:36%;	width:3.66071429%;	height:4.58015267%;
 }
 
 .a20n-fcu .val-spd
@@ -460,16 +417,6 @@
     border-top-width: 0.15em;
     border-right-style: solid;
     border-right-width: 0.15em;
-}
-
-.a20n-fcu .v-seperator.left-seperator
-{
-    left:39.19642857%;	top:33.58778626%;
-}
-
-.a20n-fcu .v-seperator.right-seperator
-{
-    left:59.82142857%;	top:33.58778626%;
 }
 
 .a20n-fcu .knob-ctl

@@ -198,7 +198,11 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 var func = "on" + target + "Toggle";
                 this[func]();
             } else if (jquery(elm).hasClass("ip-btn")) {
-                jquery(elm).addClass("btn-tapped");
+                if (jquery(elm).hasClass("knob-ctl")) {
+                    jquery(elm).addClass("btn-tapped");
+                } else {
+                    jquery(elm).find(".btn").addClass("btn-tapped");
+                }
                 var func = "on" + target;
                 this[func]();
             } else if (jquery(elm).hasClass("ip-inc") || jquery(elm).hasClass("ip-dec")) {
@@ -222,7 +226,11 @@ function(jquery, Instrument, StaticPropertyHelper) {
         }
 
         onTapEndEvent(elm, e) {
-            jquery(elm).removeClass("btn-tapped");
+            if (jquery(elm).hasClass("knob-ctl")) {
+                jquery(elm).removeClass("btn-tapped");
+            } else {
+                jquery(elm).find(".btn").removeClass("btn-tapped");
+            }
             if (this.timerId!=null) {
                 clearInterval(this.timerId);
                 this.timerId=null;
