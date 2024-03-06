@@ -4,8 +4,11 @@ require.config({
         jquery : '../3rdparty/jquery/jquery-1.11.2.min',
         'const' : 'const'
     },
+    urlArgs: "v=1.2.0",
     waitSeconds : 30,
 });
+
+// Version: 1.2.0
 
 define(['jquery','const'],function(jquery, sysconst) {
     return {
@@ -226,7 +229,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             }
             return deg;
         },
-        postProcessSimData: function (jsonData) {
+        postProcessSimData: function (jsonData, dmeSrc) {
             jsonData.simData.warningVACLeft = 0;
             jsonData.simData.warningVACRight = 0;
             jsonData.simData.warningVAC = 0;
@@ -235,7 +238,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             jsonData.simData.warningFuelLeft = 0;
             jsonData.simData.warningFuelRight = 0;
             jsonData.simData.warningFuel = 0;
-            
+
             if (jsonData.simData.electricalBusVoltage>0) {
                 if (jsonData.simData.fuelLeftQuantity<8) {
                     jsonData.simData.warningFuelLeft = 1;
@@ -245,7 +248,7 @@ define(['jquery','const'],function(jquery, sysconst) {
                     jsonData.simData.warningFuelRight = 1;
                     jsonData.simData.warningFuel = 1;
                 }
-                
+
                 if (jsonData.simData.engineOilPressure*144 < 2880) {
                     jsonData.simData.warningOilPressure = 1;
                 }
@@ -282,12 +285,30 @@ define(['jquery','const'],function(jquery, sysconst) {
                 jsonData.simData.attitudeGyroOff = 0;
             }
 
+            if (!jsonData.simData.hsiCDINeedleValid) {
+                jsonData.simData.hsiCDINeedle=0;
+            }
+            if (!jsonData.simData.hsiGSINeedleValid) {
+                jsonData.simData.hsiGSINeedle=0;
+            }
+
+            var dmePrefix = "dme";
+            if (dmeSrc!=1) {
+                dmePrefix="dme2";
+            }
+
             var dmeDistance = "";
-            if (jsonData.simData.dmeIsAvailable && jsonData.simData.dmeSignal>0) {
-                dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
+            if (dmeSrc==1 && jsonData.simData.gpsDriveNav1) {
+                jsonData.simData.dmesrc = "GPS";
+                dmeDistance = (jsonData.simData.hsiDistance / 10).toFixed(1);
+            } else {
+                jsonData.simData.dmesrc = "DME"+dmeSrc;
+                if (jsonData.simData[dmePrefix+"IsAvailable"] && jsonData.simData[dmePrefix+"Signal"]>0) {
+                    dmeDistance = (jsonData.simData[dmePrefix+"Distance"] / 10).toFixed(1);
+                }
             }
             jsonData.simData.dmeDistance=dmeDistance;
-            
+
             jsonData.simData.xpdr = jsonData.simData.xpdr.toString(16).padStart(4, '0');
 
             var engineHour = jsonData.simData.engineElapsedTime.toString().padStart(5, "0");
@@ -303,7 +324,11 @@ define(['jquery','const'],function(jquery, sysconst) {
                 if (jsonData.simData.apHeadingLock != 0) {
                     apStatus1 = "HDG";
                 } else if (jsonData.simData.apNavLock != 0) {
-                    apStatus1 = "NAV";
+                    if (jsonData.simData.gpsDriveNav1) {
+                        apStatus1 = "GPS";
+                    } else {
+                        apStatus1 = "NAV";
+                    }
                 } else if (jsonData.simData.apApproachHold != 0) {
                     apStatus1 = "APR";
                 } else if (jsonData.simData.apRevHold != 0) {
@@ -426,61 +451,61 @@ define(['jquery','const'],function(jquery, sysconst) {
         ],
         defaultOfflineData:{
             "simData": {
-                "fuelLeftQuantity": 14,
-                "fuelRightQuantity": 14,
-                "engineEGT": 320.9671,
-                "engineFuelFlow": 0,
-                "engineOilTemp": 512.87164,
-                "engineOilPressure": 0,
-                "vac": 0,
-                "batteryAmp": 0,
-                "ias": 0,
+                "fuelLeftQuantity": 8.314525,
+                "fuelRightQuantity": 8.314525,
+                "engineEGT": 999.73083,
+                "engineFuelFlow": 0.28339642,
+                "engineOilTemp": 592.5059,
+                "engineOilPressure": 40.906788,
+                "vac": 4.2493258,
+                "batteryAmp": 2.9471688,
+                "ias": 0.000015874195,
                 "tasAdj": 0,
-                "attitudePitch": -6.334923,
-                "attitudeBank": 8.500202,
+                "attitudePitch": 1.7488129,
+                "attitudeBank": -0.0148600275,
                 "attitudeBarPosition": 0,
-                "altitude": 3151.518,
+                "altitude": 994.72656,
                 "nav1Obs": 0,
                 "nav1ToFrom": 0,
                 "nav1GSFlag": 0,
                 "nav1CDI": 0,
                 "nav1GSI": 0,
-                "tcBallPos": 27,
-                "tcRate": 0,
-                "heading": 135,
+                "tcBallPos": -5,
+                "tcRate": 0.5249859,
+                "heading": 324,
                 "headingBug": 0,
-                "vsi": -3.4085623e-8,
+                "vsi": -13.162168,
                 "nav2Obs": 0,
                 "nav2ToFrom": 0,
                 "nav2GSFlag": 0,
                 "nav2CDI": 0,
                 "nav2GSI": 0,
-                "engineRPM": 0,
+                "engineRPM": 631,
                 "adfCard": 0,
                 "adfRadial": 90,
-                "switchBCN": 0,
-                "switchLAND": 0,
+                "switchBCN": 1,
+                "switchLAND": 1,
                 "switchTAXI": 0,
-                "switchNAV": 0,
-                "switchSTROBE": 0,
+                "switchNAV": 1,
+                "switchSTROBE": 1,
                 "switchPitotHeat": 0,
-                "switchAlternator": 0,
-                "switchBatteryMaster": 0,
-                "switchAvionics1": 0,
-                "switchAvionics2": 0,
-                "leftMagnetoState": 0,
-                "rightMagnetoState": 0,
+                "switchAlternator": 1,
+                "switchBatteryMaster": 1,
+                "switchAvionics1": 1,
+                "switchAvionics2": 1,
+                "leftMagnetoState": 1,
+                "rightMagnetoState": 1,
                 "flapsPosition": 0,
                 "switchFuelPump": 0,
                 "gyroDriftError": 0,
                 "qnh": 16212,
                 "engineStarter": 0,
-                "electricalBusVoltage": 0,
+                "electricalBusVoltage": 28,
                 "fuelSelector": 1,
                 "parkingBrake": 0,
-                "fuelValve": 0,
-                "atcId": "N97SA",
-                "com1ActiveFreq": 124850,
+                "fuelValve": 1,
+                "atcId": "9H-AHS",
+                "com1ActiveFreq": 127850,
                 "com1StandbyFreq": 124850,
                 "com2ActiveFreq": 124850,
                 "com2StandbyFreq": 124850,
@@ -500,23 +525,63 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "apApproachHold": 0,
                 "apRevHold": 0,
                 "apGSHold": 0,
-                "dmeDistance": 0,
-                "xpdrSwitch": 0,
-                "xpdr": 28672,
+                "dmeDistance": -0.005399568,
+                "xpdrSwitch": 4,
+                "xpdr": 0,
                 "refEGT": 0,
-                "generalPanelOn": 0,
+                "generalPanelOn": 1,
                 "com1tx": 1,
                 "com1rx": 1,
                 "com2tx": 0,
                 "com2rx": 0,
                 "nav1rx": 0,
                 "nav2rx": 0,
-                "adfrx": 0
+                "adfrx": 0,
+                "gpsDriveNav1": 1,
+                "dmeSpeed": -1.9438444,
+                "dmeSignal": 0,
+                "dmeIsAvailable": 0,
+                "dme2Distance": -0.005399568,
+                "dme2Speed": -1.9438444,
+                "dme2Signal": 0,
+                "dme2IsAvailable": 0,
+                "pressureAltitude": 994.72656,
+                "adfVolume": 100,
+                "simulationTime": 173,
+                "com1Volume": 100,
+                "nav1Volume": 100,
+                "com2Volume": 100,
+                "nav2Volume": 100,
+                "qnh2": 16212,
+                "audioPanelVolume": 100,
+                "markerTestMute": 0,
+                "markerIsHighSensitivity": 0,
+                "intercomMode": 2,
+                "markerSoundOn": 1,
+                "intercomActive": 0,
+                "dmeSoundOn": 0,
+                "speakerActive": 0,
+                "com3tx": 0,
+                "pilotTx": 0,
+                "copilotTxType": 0,
+                "insideMarkerOn": 0,
+                "middleMarkerOn": 0,
+                "outsideMarkerOn": 0,
+                "pilotTxing": 0,
+                "copilotTxing": 0,
+                "isGearRetractable": 0,
+                "gearHandlePosition": 0,
+                "engineElapsedTime": 673,
+                "hsiCDINeedle": 0,
+                "hsiGSINeedle": 0,
+                "hsiCDINeedleValid": 0,
+                "hsiGSINeedleValid": 0,
+                "hsiDistance": -10
             },
             "isPaused": false,
             "isSimRunning": true,
             "isSimConnected": true,
-            "aircraftType": "C172"
+            "aircraftFolder": "Asobo_C172sp_classic"
         }
     };
 });

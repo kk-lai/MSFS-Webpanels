@@ -6,6 +6,11 @@ This is a touch panel web application that allows users to control and view the 
 
 When I play MSFS, I face a problem where I need to move the view of the game to see some of the gauges. One of the most common solutions is to extend the screen with an extra monitor. However, my desk cannot fit one more monitor. There are solutions to extend PC screen with an iPad, but I think they are not good enough. If the second screen can accept input, it will be good. So, I developed this application. I looked for similar solutions on the internet, but some of them are not free. For free solutions, they do not fit me. Therefore, I decided to do it myself. My design goal is to find a balance between realism and usability. Thanks to project flightgear (https://www.flightgear.org/), I got readily made good quality images of gauges. These images make the panel look like a “real” panel. Instead of using knobs to change the input, my design is to drag the gauges directly because using knobs for input is difficult. After implementing all gauges and switches, I found that the auto-pilot and radio should be added too. My first thought was to implement the radio panel and show it when the user taps a button. However, changing the frequency or altitude with knobs is difficult, so I implemented a number pad interface to input these numbers. For now, only Cessna 172 panel is implemented. In the future, I plan to develop more panels for other aircraft.
 
+Version 1.2.0 Update:
+A320neo FCU panel is implemented,
+Cessna 172 added GPS support.
+
+
 Prerequisites
 =============
 ASP.NET Core 7.0 Runtime
@@ -18,6 +23,7 @@ Installation
 ============
 1. Install runtime libraries stated in prerequisites section
 2. Unzip MSFS-Webpanels.zip into any location you wanted
+3. Copy folder "wasimcommander-module" into "Community" folder of MSFS
 
 Configuration
 =============
@@ -41,10 +47,8 @@ Please remove existing icon from "Home Screen" and clear browsing data of the br
 
 Future Plans
 ============
-1. Fix problem when "Magneto from R to off" the engine doesn't stop
-2. Rewrite front-end to be more modularized
-3. Separate one panel to left, main, radio, bottom panels
-4. Write panels for other aircrafts
+1. Enhance A320neo panels with EFIS
+2. Add support for A320NX
 
 Source Code
 ===========
@@ -56,6 +60,8 @@ Release Notes
 =============
 1.0.2 - Initial release
 1.1.0 - DME distance bug fix, add gear up/down switch, engine hours recorder, logging
+1.1.1 - Add version code in js and html files for better support
+1.2.0 - Add support to A320neo FCU, C172 panel add GPS support. Enhanced buttons
 
 License
 =======
@@ -66,7 +72,8 @@ GPLv3
 1. jquery (https://jquery.com/)
 2. jquery-ui (https://jqueryui.com/)
 3. requirejs (https://requirejs.org/)
-4. Zen Barcode https://www.nuget.org/packages/Zen.Barcode.Rendering.Framework
+4. Zen Barcode (https://www.nuget.org/packages/Zen.Barcode.Rendering.Framework)
+5. WASimCommander (https://github.com/mpaperno/WASimCommander)
 
 Image Credits
 =============
@@ -97,56 +104,17 @@ https://www.freepik.com/free-vector/mobile-background-with-qr-code_1023723.htm#q
 Monitor (by rawpixel.com)
 https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=12&from_view=search&track=sph
 
-Application Icon
-https://www.flaticon.com/free-icon/altitude-indicator_10403534
+Attitude Indicator (Freepik - Flaticon)
+https://www.flaticon.com/free-icon/altitude-indicator_10403534?term=altitude+indicator&page=1&position=4&origin=tag&related_id=10403534
 
-7-segment font
-https://github.com/keshikan/DSEG
+Buttons (AP)
+https://www.freepik.com/free-vector/black-silver-tv-remote-controllers-different-models-realistic-set-isolated-vector-illustration_39927903.htm#query=TV%20remote%20controller%20RC%20realistic%20set&position=1&from_view=search&track=ais&uuid=9350a4bf-19d6-4e96-9efa-de53b41e6637
 
-Volume knob
-https://www.pngwing.com/en/free-png-zsndf
+Buttons (Numeric pad)
+https://www.freepik.com/free-vector/stationery-realistic-composition-with-isolated-image-calculator-blank-background-vector-illustration_23128887.htm?query=calculator#from_view=detail_alsolike
 
-Altitude, ADF Knob
-https://www.pngwing.com/en/free-png-zrgdi
-
-Transponder Knob
-https://www.pngwing.com/en/free-png-vatts
-
-LED
-https://www.pngwing.com/en/free-png-zhkmj
-
-Screws
-https://www.pngwing.com/en/free-png-awqdy
-
-DME knob
-https://www.pngwing.com/en/free-png-stxtt
-
-Com transceiver knob
-https://www.freepik.com/free-vector/realistic-set-circle-shiny-metallic-regulator-buttons-level-adjustment-transparent-background-isolated-vector-illustration_26763710.htm#query=control%20knob&position=1&from_view=search&track=ais&uuid=cf0bb9f9-4378-4642-860a-107cf52890ba
-
-LED light effect
-https://www.pngwing.com/en/free-png-bxvkg
-
-Radio icon
-https://www.freepik.com/icon/radio_1376241#fromView=search&term=radio+panel&page=4&position=34&track=ais
-
-Map Icon
-https://www.flaticon.com/free-icon/treasure-map_475489?term=map&page=1&position=38&origin=search&related_id=475489
-
-Menu Icon
-<a href="https://www.freepik.com/icon/menu_4458493#fromView=search&term=menu&page=20&position=14&track=ais&uuid=1c4ec3af-c29b-4051-a741-5b2802a2ad11">Icon by Rizki Ahmad Fauzi</a>
-
-?
-https://www.flaticon.com/free-icon/plane_10133867?term=airplane&page=7&position=14&origin=tag&related_id=10133867
+Button (A320 FCU SPD MACH)
+https://www.freepik.com/free-vector/set-nine-blank-colorful-round-buttons-website-internet-applications-with-eight-small-points-around-two-ones_11242766.htm#page=4&query=black%20circle%20button&position=9&from_view=search&track=ais&uuid=55f6f39a-a992-462f-a03d-f25a937e0031
 
 
-Propeller Plane SVG Vector
-https://www.svgrepo.com/svg/481021/propeller-plane
-
-https://www.svgrepo.com/svg/480733/jumbo-plane
-
-
-https://www.shareicon.net/bottom-view-military-helicopter-helicopter-plane-army-helicopter-transport-659389
-
-https://www.svgrepo.com/svg/128811/helicopter-bottom-view-silhouette
 

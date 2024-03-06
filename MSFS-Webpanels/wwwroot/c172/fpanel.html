@@ -10,14 +10,18 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<link rel="apple-touch-icon" href="img/panel-icon.png" />
-<link rel="icon" type="image/x-icon" href="img/panel-icon.png" />
+<link rel="apple-touch-icon" href="../img/panel-icon.png" />
+<link rel="icon" type="image/x-icon" href="../img/panel-icon.png" />
 <link id="ui-theme" rel="stylesheet" href="../3rdparty/jquery-ui-themes-1.11.2/themes/smoothness/jquery-ui.min.css" />
 <link href="../3rdparty/fontawesome/css/fontawesome.min.css" rel="stylesheet">
 <link href="../3rdparty/fontawesome/css/brands.min.css" rel="stylesheet">
 <link href="../3rdparty/fontawesome/css/solid.min.css" rel="stylesheet">
-<link href="css/fpanel.css" rel="stylesheet" />
 </head>
+<style>
+.hide {
+    display:none;
+}
+</style>
 <body>
 <div class="wrapper">
     <div class="container hide">
@@ -25,6 +29,9 @@
             <div class="font-xxlarge" id="sys-message" >Webpanel is not started</div>
         </div>
         <div id="help-screen-overlay" class="help-screen-overlay hide">
+        </div>
+        <div class="version-code-wrapper text-container">
+            <div class="version-code help-overlay font-larger2 hide">Version: x.x.x</div>
         </div>
         <div class="top-panel">
             <div class="registration-container text-container ui-fullscreen">
@@ -48,39 +55,41 @@
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ap-button ui-pbutton text-container" target="btnvsinc"><div class="center-div font-larger">VS+</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
             </div><div class="ap-button ui-pbutton text-container" target="btnvsdec"><div class="center-div font-larger">VS-</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup com1-radio-info radio-info text-container" target="com1" >
+            <!-- </div><div class="ap-button ui-pbutton text-container" target="togglegpsdrivenav1"><div class="center-div font-larger">NAV<br/>GPS</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div> -->
+            </div><div class="ui-popup com1-radio-info com-radio-info radio-info text-container" target="com1" >
                 <div class="hide radio-tx ctl-com1tx simvar-com1tx"></div>
                 <div class="hide radio-rx ctl-com1rx simvar-com1rx"></div>
                 <div class="radio-name">COM1</div>
                 <div class="radio-active-freq simvar-com1activefreq ctl-com1activefreq" func="showFreq" type="com"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-com1standbyfreq ctl-com1standbyfreq" func="showFreq" type="com"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup radio-info text-container" target="com2" >
+            </div><div class="ui-popup radio-info com-radio-info text-container" target="com2" >
                 <div class="hide radio-tx ctl-com2tx simvar-com2tx"></div>
                 <div class="hide radio-rx ctl-com2rx simvar-com2rx"></div>
                 <div class="radio-name">COM2</div>
                 <div class="radio-active-freq simvar-com2activefreq ctl-com2activefreq" func="showFreq" type="com"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-com2standbyfreq ctl-com2standbyfreq" func="showFreq" type="com"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup radio-info text-container" target="nav1" >
+            </div><div class="ui-popup radio-info nav-radio-info text-container" target="nav1" >
                 <div class="hide radio-rx ctl-nav1rx simvar-nav1rx"></div>
                 <div class="radio-name">NAV1</div>
                 <div class="radio-active-freq simvar-nav1activefreq ctl-nav1activefreq" func="showFreq" type="nav"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-nav1standbyfreq ctl-nav1standbyfreq" func="showFreq" type="nav"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="dme-info text-container">
+            </div><div class="dme-info text-container ui-dmeselector">
                 <div class="dme-row">
-                    <div class="center-div dme-label font-larger2">DME</div>
+                    <div class="center-div dme-label font-larger2 simvar-dmesrc" func="showText">DME</div>
                 </div><div class="dme-row">
                     <div class="center-div dme-distance font-larger2 simvar-dmedistance" func="showText"></div>
-                </div>
-            </div><div class="ui-popup radio-info text-container" target="nav2" >
+                </div><!--
+                --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
+            </div><div class="ui-popup radio-info nav-radio-info text-container" target="nav2" >
                 <div class="hide radio-rx ctl-nav2rx simvar-nav2rx"></div>
                 <div class="radio-name">NAV2</div>
                 <div class="radio-active-freq simvar-nav2activefreq ctl-nav2activefreq" func="showFreq" type="nav"></div>
                 <div class="radio-standby-freq numeric-input-target simvar-nav2standbyfreq ctl-nav2standbyfreq" func="showFreq" type="nav"></div><!--
                 --><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div>
-            </div><div class="ui-popup radio-info text-container" target="adf" >
+            </div><div class="ui-popup radio-info adf-radio-info text-container" target="adf" >
                 <div class="hide radio-rx ctl-adfrx simvar-adfrx"></div>
                 <div class="radio-name">ADF</div>
                 <div class="radio-active-freq simvar-adfactivefreq ctl-adfactivefreq" func="showFreq" type="adf"></div>
@@ -139,7 +148,7 @@
                 <img src="img/att-gyro.png" class="att-gyro simvar-attitudegyrooff" alt="att-gyro" func="showHide" param="1" />
                 <img src="img/att-foreground.png" class="gauge-item att-foreground" alt="att-foreground"  />
                 <img src="img/gen-knob-01.png" class="att-knob" alt="gen-knob-01" />
-                <div class="ui-vshifter ui-att-plane ctl-attitudebarposition" min="-100" max="100" target="simvar-attitudebarposition" /></div>                
+                <div class="ui-vshifter ui-att-plane ctl-attitudebarposition" min="-100" max="100" target="simvar-attitudebarposition" /></div>
                 <div class="help-att-plane">
                     <div class="help-overlay text-container hide"><!--
                         --><div class="help-up-down-arrow"><i class="center-div fa-regular fa-arrows-up-down"></i></div></div>
@@ -147,6 +156,7 @@
             </div><div class="gauge alt-guage">
                 <img src="img/alt-pressure.png" class="gauge-item alt-pressure simvar-qnh" alt="alt-pressure" func="generic" rotateScaleFactor="-0.1845617765" rotateOffset="112" max="17104" min="15168" />
                 <img src="img/alt-backplate.png" class="gauge-item alt-backplate" alt="alt-backplate" />
+                <div class="alt-bolt-cover"></div>
                 <img src="img/alt-10k-needle.png" class="alt-10k-needle simvar-altitude" alt="alt-10k-needle" func="generic" rotateScaleFactor="0.0036"  />
                 <img src="img/alt-1k-needle.png" class="alt-1k-needle simvar-altitude" alt="alt-1k-needle" func="generic" rotateScaleFactor="0.036" />
                 <img src="img/alt-needle.png" class="alt-needle simvar-altitude" alt="alt-needle" func="generic" rotateScaleFactor="0.36"   />
@@ -160,16 +170,19 @@
                 <img src="img/nav-from.png" class="nav-to-from simvar-nav1tofrom" alt="nav-from" func="showHide" param="2" />
                 <img src="img/nav-to.png" class="nav-to-from simvar-nav1tofrom" alt="nav-to" func="showHide" param="1" />
                 <img src="img/nav-gs.png" class="nav-gs simvar-nav1gsflag" alt="nav-gs" func="showHide" param="1" />
-                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-top simvar-nav1cdi" alt="nav-needle-motor" func="generic" rotateScaleFactor="-0.2519685039" rotateOffset="90" />
-                <img src="img/nav-needle.png" class="nav-needle simvar-nav1cdi" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />
-                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-gs simvar-nav1gsi" alt="nav-needle-motor" func="generic" rotateScaleFactor="0.2941176470" />
-                <img src="img/nav-gs-needle.png" class="nav-gs-needle simvar-nav1gsi" alt="nav-gs-needle" func="generic" rotateScaleFactor="0.2941176470" />
+                <img src="img/nav-gps.png" class="nav-gps simvar-gpsdrivenav1" alt="nav-gps" func="showHide" param="1" />
+                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-top simvar-hsicdineedle" alt="nav-needle-motor" func="generic" rotateScaleFactor="-0.2519685039" rotateOffset="90" />
+                <img src="img/nav-needle.png" class="nav-needle simvar-hsicdineedle" alt="nav-needle" func="generic" rotateScaleFactor="-0.2519685039" />
+                <img src="img/nav-needle-motor.png" class="nav-needle-motor nav-needle-motor-gs simvar-hsigsineedle" alt="nav-needle-motor" func="generic" rotateScaleFactor="0.2941176470" />
+                <img src="img/nav-gs-needle.png" class="nav-gs-needle simvar-hsigsineedle" alt="nav-gs-needle" func="generic" rotateScaleFactor="0.2941176470" />
                 <img src="img/gen-radial.png" class="gauge-item nav-radial simvar-nav1obs" alt="gen-radial" func="generic" rotateScaleFactor="-1" />
                 <img src="img/nav-arrow-up.png" class="nav-arrow-up" alt="nav-arrow-up" />
                 <img src="img/nav-arrow-down.png" class="nav-arrow-down" alt="nav-arrow-down" />
                 <img src="img/gen-foreground-01.png" class="gauge-item gen-foreground-01" alt="gen-foreground-01" />
+                <div class="nav1-bolt-cover"></div>
                 <img src="img/nav-obs-knob.png" class="nav-obs-knob simvar-nav1obs" alt="nav-obs-knob" func="generic" rotateScaleFactor="20" />
                 <div class="ui-dial ctl-nav1obs" target="simvar-nav1obs" ></div>
+                <div class="gps-button ui-pbutton text-container" target="togglegpsdrivenav1"><div class="center-div font-larger">NAV<br/>GPS</div><div class="help-overlay hide"><div class="center-div help-button" ><i class="fa-solid fa-circle"></i></div></div></div>
                 <div class="help-overlay text-container hide"><!--
                     --><div class="help-arrow"><i class="center-div fa-regular fa-arrow-rotate-left"></i></div></div>
             </div><div class="gauge trn-guage">
@@ -178,7 +191,7 @@
                 <img src="img/trn-on-ind.png" class="trn-ind trn-off-ind simvar-tconoff" alt="trn-on-ind" func="showHide" param="1" />
                 <img src="img/trn-off-ind.png" class="trn-ind trn-on-ind simvar-tconoff" alt="trn-off-ind" func="showHide" param="0" />
                 <img src="img/trn-foreground.png" class="gauge-item trn-foreground" alt="trn-foreground" />
-                <img src="img/trn-plane.png" class="trn-plane simvar-tcrate" alt="trn-plane" func="generic" rotateOffset="-90" rotateScaleFactor="6.666666666666667" max="7.5" min="-7.5" />                 
+                <img src="img/trn-plane.png" class="trn-plane simvar-tcrate" alt="trn-plane" func="generic" rotateOffset="-90" rotateScaleFactor="6.666666666666667" max="7.5" min="-7.5" />
             </div><div class="gauge hdg-guage">
                 <img src="img/hdg-backplate.png" class="gauge-item hdg-backplate simvar-heading ctl-heading" alt="hdg-backplate" func="generic" rotateScaleFactor="-1" />
                 <img src="img/hdg-bug.png" class="hdg-bug simvar-hdgbug" alt="hdg-bug" func="hdgBug" />
@@ -464,7 +477,7 @@
                         <div class="freq-type font-larger2">ACTIVE</div><div class="freq-number font-larger2 freq-active">000.000</div>
                     </div>
                     <div class="freq-number-row freq-standby-row">
-                        <div class="freq-type font-larger2">STANDBY</div><div class="freq-number freq-standby font-larger2">000.000</div>                    
+                        <div class="freq-type font-larger2">STANDBY</div><div class="freq-number freq-standby font-larger2">000.000</div>
                     </div>
                 </div><!--
                 --><div class="freq-number-right">
@@ -515,15 +528,28 @@
             </div>
             <div class="radio-panel-close text-container">
                 <p class="font-larger2"><i class="fa-solid fa-circle-xmark"></i></p>
-            </div>            
+            </div>
         </div>
         <div class="help-container">
-            <a href="index.html"><img src="img/menu-icon.png" alt="menu-icon" /></a>
-            <img class="ui-reload" src="img/refresh-icon.png" alt="refresh-icon" />
-            <img class="ui-help" src="img/information-icon.png" alt="help-icon" />
+            <a class="menu-link hide" href="index.html"><img src="../img/menu-icon.png" alt="menu-icon" /></a>
+            <img class="ui-reload" src="../img/refresh-icon.png" alt="refresh-icon" />
+            <img class="ui-help" src="../img/information-icon.png" alt="help-icon" />
         </div>
     </div>
 </div>
 </body>
-<script type="text/javascript" async="async" data-main="./fpanel" src="../3rdparty/require/require.js"></script>
+<!-- <script type="text/javascript" async="async" data-main="./fpanel" src="../3rdparty/require/require.js"></script> -->
+<script src="../3rdparty/require/require.js"></script>
+<script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var urlArgs = "";
+    if (urlParams.has('v')) {
+        urlArgs="v="+urlParams.get('v');
+    }
+    require.config({
+        waitSeconds: 15,
+        urlArgs: urlArgs
+    });
+    require( ["./fpanel"]);
+</script>
 </html>

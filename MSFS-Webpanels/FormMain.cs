@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.VisualBasic;
+using NetFwTypeLib;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net;
@@ -15,6 +17,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Encodings.Web;
+using System.Windows.Forms;
 using Zen.Barcode;
 
 
@@ -29,6 +32,7 @@ namespace MSFS_Webpanels
         private System.Windows.Forms.Timer timer;
         private String hostAddress = "localhost";
 
+
         public FormMain()
         {
             InitializeComponent();
@@ -37,7 +41,13 @@ namespace MSFS_Webpanels
             timer.Interval = 500;
             timer.Start();
 
-            _logger.Info("MSFS-Webpanels (version:" + Application.ProductVersion + ") Start");
+#if DEBUG
+            //btnTroubleshoot.Visible = true;
+            btnSend.Visible = true;
+            txtEventInput.Visible = true;
+#endif
+
+            _logger.Info(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + " (version:" + Application.ProductVersion + ") Start");
 
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
             {
@@ -57,9 +67,8 @@ namespace MSFS_Webpanels
                     }
                 }
             }
-            
 
-            this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion + ")";
+            this.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + " (version:" + Application.ProductVersion + ")";
         }
 
 
@@ -90,7 +99,11 @@ namespace MSFS_Webpanels
             {
                 _logger.Info("Start connecting MSFS");
                 simConnectClient.Disconnect();
-                simConnectClient.Connect(this.Handle);
+                String result = simConnectClient.Connect(this.Handle);
+                if (!result.Equals("Success"))
+                {
+                    MessageBox.Show(result, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
@@ -109,7 +122,7 @@ namespace MSFS_Webpanels
                     var uri = new Uri(address);
                     var port = uri.Port;
 
-                    String webUrl = "http://" + hostAddress + ":" + port + "/";
+                    String webUrl = "http://" + hostAddress + ":" + port + "/?v=" + Application.ProductVersion;
                     linkPanel.Text = webUrl;
                     CodeQrBarcodeDraw qrCode = BarcodeDrawFactory.CodeQr;
                     pictureQRcode.Image = qrCode.Draw(webUrl, pictureQRcode.Height);
@@ -121,26 +134,6 @@ namespace MSFS_Webpanels
                     _logger.Info("Web Server " + webUrl + " Started");
                 }
             }
-
-        }
-
-        private void buttonTest_Click(object sender, EventArgs e)
-        {
-            /*
-            uint val = 0;
-            if (textboxInput.Text.Trim().Length > 0)
-            {
-                val = uint.Parse(textboxInput.Text.Trim());
-            }
-            simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SET_ATTITUDE_BAR_POSITION, 0, val);
-            */
-            uint[] val = new uint[2];
-            val[0] = 5000;
-            val[1] = 1;
-            uint evt = SimConnectClient.EVENT.AP_ALT_VAR_SET - SimConnectClient.EVENT.SET_EGT_REF;
-
-
-            SimConnectClient.getSimConnectClient().transmitEvent(evt, val);
         }
 
         private void linkPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -152,6 +145,79 @@ namespace MSFS_Webpanels
         {
             AboutBox aboutBox = new AboutBox();
             aboutBox.ShowDialog();
+        }
+
+        private void btnTroubleshoot_Click(object sender, EventArgs e)
+        {
+            Type NetFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
+            INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(NetFwMgrType);
+            bool firewallEnabled = mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
+            String appPath = Path.GetFullPath(Application.ExecutablePath);
+
+            Boolean fwBlocked = true;
+
+            if (firewallEnabled)
+            {
+                Type NetFwPolicyType = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
+                INetFwPolicy2 fwPolicy2 = (INetFwPolicy2)Activator.CreateInstance(NetFwPolicyType);
+                INetFwRules rules = fwPolicy2.Rules;
+                int activeProfile = fwPolicy2.CurrentProfileTypes;
+                foreach (INetFwRule rule in rules)
+                {
+                    if (rule.ApplicationName == null)
+                    {
+                        continue;
+                    }
+                    String ruleAppPath = Path.GetFullPath(rule.ApplicationName);
+
+
+                    if (appPath.Equals(ruleAppPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if ((activeProfile & rule.Profiles) > 0 && rule.Enabled && rule.Action == NET_FW_ACTION_.NET_FW_ACTION_ALLOW)
+                        {
+                            fwBlocked = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                fwBlocked = false;
+            }
+            if (fwBlocked)
+            {
+                _logger.Info("Firewall blocked incoming connection");
+                MessageBox.Show("Windows Firewall blocked this application from incoming connection, please configure Windows Firewall.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                MessageBox.Show("Firewall configured properly", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+#if DEBUG
+            if (txtEventInput.Text.Trim().Length > 0)
+            {
+                string[] fields = txtEventInput.Text.Trim().Split(",");
+                string evt = "";
+                uint[] vals = null;
+                if (fields.Length > 0)
+                {
+                    evt = fields[0].Trim();
+                    vals = new uint[fields.Length - 1];
+                    for (int i = 1; i < fields.Length; i++)
+                    {
+                        vals[i - 1] = uint.Parse(fields[i]);
+                    }
+                }
+                simConnectClient.sendCustomEvent(evt, vals);
+            } else
+            {
+                simConnectClient.testSimvar();
+            }
+#endif
         }
     }
 }

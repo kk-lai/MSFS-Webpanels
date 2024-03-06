@@ -1,4 +1,5 @@
-﻿using MSFS_Webpanels;
+﻿using Microsoft.FlightSimulator.SimConnect;
+using MSFS_Webpanels;
 using System;
 using System.Runtime.InteropServices;
 
@@ -156,6 +157,11 @@ public class C172SimData : SimData
         private Int32 isGearRetractable;
         private Int32 gearHandlePosition;
         private Int32 engineElapsedTime;
+        private Int32 hsiCDINeedle;
+        private Int32 hsiGSINeedle;
+        private Int32 hsiCDINeedleValid;
+        private Int32 hsiGSINeedleValid;
+        private float hsiDistance;
 
 
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
@@ -281,16 +287,192 @@ public class C172SimData : SimData
         public int IsGearRetractable { get => isGearRetractable; set => isGearRetractable = value; }
         public int GearHandlePosition { get => gearHandlePosition; set => gearHandlePosition = value; }
         public Int32 EngineElapsedTime { get => engineElapsedTime; set => engineElapsedTime = value; }
+        public int HsiCDINeedle { get => hsiCDINeedle; set => hsiCDINeedle = value; }
+        public int HsiGSINeedle { get => hsiGSINeedle; set => hsiGSINeedle = value; }
+        public int HsiCDINeedleValid { get => hsiCDINeedleValid; set => hsiCDINeedleValid = value; }
+        public int HsiGSINeedleValid { get => hsiGSINeedleValid; set => hsiGSINeedleValid = value; }
+        public float HsiDistance { get => hsiDistance; set => hsiDistance = value; }
     }
     private C172Data c172data = new C172Data();
 
     public C172Data simData { get => c172data; set => c172data = value; }
 
-    public C172SimData(SimData data)
-	{
-		IsSimConnected = data.IsSimConnected;
-		IsSimRunning = data.IsSimRunning;
-		IsPaused = data.IsPaused;
-        AircraftFolder = data.AircraftFolder;
+    public C172SimData(SimData data) : base(data)
+    {
+
+    }
+
+    public static void defineSimVarDefintion(SimConnect simConnect, Enum defId)
+    {
+        uint fieldId = 0;
+        simConnect.AddToDataDefinition(defId, "ATC ID", null, SIMCONNECT_DATATYPE.STRING256, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "FUEL LEFT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "FUEL RIGHT QUANTITY", "gallon", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "ENG EXHAUST GAS TEMPERATURE GES:1", "percent scaler 32k", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ENG EXHAUST GAS TEMPERATURE:1", "Rankine", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ENG FUEL FLOW GPH:1", "Gallons per hour", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG OIL TEMPERATURE:1", "Rankine", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG OIL PRESSURE:1", "psi", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "SUCTION PRESSURE", "inHg", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ELECTRICAL BATTERY LOAD", "Amperes", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "AIRSPEED INDICATED", "Knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AIRSPEED TRUE CALIBRATE", "Degrees", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "ATTITUDE INDICATOR PITCH DEGREES", "degree", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ATTITUDE INDICATOR BANK DEGREES", "degree", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ATTITUDE BARS POSITION", "percent", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "INDICATED ALTITUDE", "ft", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "KOHLSMAN SETTING MB", "millibar scaler 16", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "NAV OBS:1", "Degrees", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV TOFROM:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV GS FLAG:1", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV CDI:1", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV GSI:1", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "TURN COORDINATOR BALL", "Position 128", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ELECTRICAL MAIN BUS VOLTAGE:1", "volts", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "TURN INDICATOR RATE", "degrees per second", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "CIRCUIT GENERAL PANEL ON", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "HEADING INDICATOR", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT HEADING LOCK DIR", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "GYRO DRIFT ERROR", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "VERTICAL SPEED", "feet/minute", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "NAV OBS:2", "Degrees", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV TOFROM:2", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV GS FLAG:2", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV CDI:2", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV GSI:2", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG RPM:1", "RPM", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "ADF CARD", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ADF RADIAL:1", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG FUEL PUMP SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "LIGHT BEACON", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "LIGHT LANDING", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "LIGHT TAXI", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "LIGHT NAV", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "LIGHT STROBE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "PITOT HEAT SWITCH:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG MASTER ALTERNATOR:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ELECTRICAL MASTER BATTERY", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "AVIONICS MASTER SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AVIONICS MASTER SWITCH:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG STARTER:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "RECIP ENG LEFT MAGNETO:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "RECIP ENG RIGHT MAGNETO:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "FLAPS HANDLE INDEX", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "FUEL TANK SELECTOR:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG FUEL VALVE:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "BRAKE PARKING POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "COM ACTIVE FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM STANDBY FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM ACTIVE FREQUENCY:2", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM STANDBY FREQUENCY:2", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "NAV ACTIVE FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV STANDBY FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV ACTIVE FREQUENCY:2", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV STANDBY FREQUENCY:2", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "ADF ACTIVE FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ADF STANDBY FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT ALTITUDE LOCK VAR", "Feet", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT MASTER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT HEADING LOCK", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT NAV1 LOCK", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT ALTITUDE LOCK", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT VERTICAL HOLD", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT VERTICAL HOLD VAR", "feet/minute", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT APPROACH HOLD", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT BACKCOURSE HOLD", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "AUTOPILOT GLIDESLOPE HOLD", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "NAV DME:1", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV DMESPEED:1", "Knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV SIGNAL:1", "Number", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV HAS DME:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV DME:2", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV DMESPEED:2", "Knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV SIGNAL:2", "Number", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV HAS DME:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "TRANSPONDER CODE:1", "Bco16", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "TRANSPONDER STATE:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "COM TRANSMIT:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM RECEIVE EX1:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM TRANSMIT:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM RECEIVE EX1:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV SOUND:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV SOUND:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ADF SOUND:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "GPS DRIVES NAV1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "INDICATED ALTITUDE:3", "Feet", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "ADF VOLUME:1", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "SIMULATION TIME", "second", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM VOLUME:1", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV VOLUME:1", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COM VOLUME:2", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "NAV VOLUME:2", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "KOHLSMAN SETTING MB:2", "millibar scaler 16", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+
+        // VOL
+        simConnect.AddToDataDefinition(defId, "AUDIO PANEL VOLUME", "percent", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        // HI/LO/TM EVT MARKER_BEACON_TEST_MUTE MARKER_BEACON_SENSITIVITY_HIGH
+        simConnect.AddToDataDefinition(defId, "MARKER BEACON TEST MUTE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "MARKER BEACON SENSITIVITY HIGH", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        // ISO ALL CREW, EVT = INTERCOM_MODE_SET
+        simConnect.AddToDataDefinition(defId, "INTERCOM MODE", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "MARKER SOUND", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        // ICS ?
+        simConnect.AddToDataDefinition(defId, "INTERCOM SYSTEM ACTIVE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        // AUX Missing?
+        simConnect.AddToDataDefinition(defId, "DME SOUND", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "SPEAKER ACTIVE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        // COM3/2/1 COM1/2 COM2/1 TEL
+        simConnect.AddToDataDefinition(defId, "COM TRANSMIT:3", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "PILOT TRANSMITTING", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COPILOT TRANSMITTING", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "PILOT TRANSMITTER TYPE", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "COPILOT TRANSMITTER TYPE", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "INNER MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "MIDDLE MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "OUTER MARKER", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        simConnect.AddToDataDefinition(defId, "IS GEAR RETRACTABLE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "GEAR HANDLE POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "GENERAL ENG ELAPSED TIME:1", "hours over 10", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "HSI CDI NEEDLE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "HSI GSI NEEDLE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "HSI CDI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "HSI GSI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "HSI DISTANCE", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.RegisterDataDefineStruct<C172SimData.C172Data>(defId);
     }
 }
