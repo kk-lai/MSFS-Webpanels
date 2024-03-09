@@ -12,6 +12,13 @@ namespace MSFS_Webpanels
 {
     public class A20NSimData : SimData
     {
+        public enum BAROMODE
+        {
+            QFE = 0,
+            QNH = 1,
+            STD = 2
+        };
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         public struct A20NData
         {
@@ -43,6 +50,21 @@ namespace MSFS_Webpanels
             private float gpsGroundTrack;
             private float gpsGroundSpeed;
             private Int32 autoPilotGlideslopeHold;
+            private Int32 baroMode;
+            private Int32 isPressureSelectedUnitsHPA;
+            private float pressureValueHg;
+            private float pressureValueMB;
+            private Int32 ndMode;
+            private Int32 ndRange;
+            private Int32 autoPilotFlightDirectorActive;
+            private Int32 btnLSActive;
+            private Int32 btnCSTRActive;
+            private Int32 btnWPTActive;
+            private Int32 btnVORDActive;
+            private Int32 btnNDBActive;
+            private Int32 btnARPTActive;
+            private Int32 autoPilotNavAidState1;
+            private Int32 autoPilotNavAidState2;
 
             public int IsCircuitGeneralPanelOn { get => isCircuitGeneralPanelOn; set => isCircuitGeneralPanelOn = value; }
             public int IsMachActive { get => isMachActive; set => isMachActive = value; }
@@ -72,6 +94,21 @@ namespace MSFS_Webpanels
             public float GpsGroundTrack { get => gpsGroundTrack; set => gpsGroundTrack = value; }
             public float GpsGroundSpeed { get => gpsGroundSpeed; set => gpsGroundSpeed = value; }
             public int AutoPilotGlideslopeHold { get => autoPilotGlideslopeHold; set => autoPilotGlideslopeHold = value; }
+            public int BaroMode { get => baroMode; set => baroMode = value; }
+            public int IsPressureSelectedUnitsHPA { get => isPressureSelectedUnitsHPA; set => isPressureSelectedUnitsHPA = value; }
+            public float PressureValueHg { get => pressureValueHg; set => pressureValueHg = value; }
+            public float PressureValueMB { get => pressureValueMB; set => pressureValueMB = value; }
+            public int NdMode { get => ndMode; set => ndMode = value; }
+            public int NdRange { get => ndRange; set => ndRange = value; }
+            public int AutoPilotFlightDirectorActive { get => autoPilotFlightDirectorActive; set => autoPilotFlightDirectorActive = value; }
+            public int BtnLSActive { get => btnLSActive; set => btnLSActive = value; }
+            public int BtnCSTRActive { get => btnCSTRActive; set => btnCSTRActive = value; }
+            public int BtnWPTActive { get => btnWPTActive; set => btnWPTActive = value; }
+            public int BtnVORDActive { get => btnVORDActive; set => btnVORDActive = value; }
+            public int BtnNDBActive { get => btnNDBActive; set => btnNDBActive = value; }
+            public int BtnARPTActive { get => btnARPTActive; set => btnARPTActive = value; }
+            public int AutoPilotNavAidState1 { get => autoPilotNavAidState1; set => autoPilotNavAidState1 = value; }
+            public int AutoPilotNavAidState2 { get => autoPilotNavAidState2; set => autoPilotNavAidState2 = value; }
         }
 
         private A20NData a20NData = new A20NData();
@@ -114,6 +151,22 @@ namespace MSFS_Webpanels
             simConnect.AddToDataDefinition(defId, "GPS GROUND MAGNETIC TRACK", "degree", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "GPS GROUND SPEED", "knots", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "AUTOPILOT GLIDESLOPE HOLD", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:XMLVAR_Baro1_Mode", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:XMLVAR_Baro_Selector_HPA_1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "KOHLSMAN SETTING HG", "inches of mercury", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "KOHLSMAN SETTING MB", "Millibars", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:A320_Neo_MFD_NAV_MODE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:A320_Neo_MFD_Range", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "AUTOPILOT FLIGHT DIRECTOR ACTIVE:1", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:BTN_LS_FILTER_ACTIVE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:BTN_CSTR_FILTER_ACTIVE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:BTN_WPT_FILTER_ACTIVE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:BTN_VORD_FILTER_ACTIVE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:BTN_NDB_FILTER_ACTIVE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:BTN_ARPT_FILTER_ACTIVE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:XMLVAR_NAV_AID_SWITCH_L1_State", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:XMLVAR_NAV_AID_SWITCH_L2_State", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
             simConnect.RegisterDataDefineStruct<A20NSimData.A20NData>(defId);
         }
     }
