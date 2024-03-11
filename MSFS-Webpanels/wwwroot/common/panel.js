@@ -148,7 +148,7 @@ function(jquery, SysParam) {
                         errMessage="";
                     }
                     if (jsonData.hasOwnProperty("simData")) {
-                        this.simvarsOrg = JSON.parse(JSON.stringify(jsonData));
+                        this.simvarsOrg = JSON.parse(JSON.stringify(jsonData.simData));
                         this.aircraftFolder = jsonData.aircraftFolder;
                         var keys = Object.keys(jsonData.simData);
                         var ct = Date.now();
