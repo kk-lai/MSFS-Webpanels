@@ -27,6 +27,8 @@ function(jquery, SysParam) {
             this.queueTimerId = null;
             this.aspectRatio=aspectRatio;
             this.aircraftFolder = "";
+            this.refreshPeriod = SysParam.refreshPeriod;
+            this.coolDownTime = SysParam.defaultCoolDown;
             this.logger = {
                 info:function(txt) {
                     this._log(1,txt);
@@ -118,7 +120,7 @@ function(jquery, SysParam) {
             }, this));
 
             jquery(".container").removeClass("hide");
-            setInterval(jquery.proxy(this.timerFunc,this), SysParam.refreshPeriod);
+            setInterval(jquery.proxy(this.timerFunc,this), this.refreshPeriod);
         }
 
         loadCss(url)
@@ -312,7 +314,7 @@ function(jquery, SysParam) {
 
         onSimVarChange(simVar, val, sendEvent = true) {
             if (this.simvarsOrg.hasOwnProperty(simVar)) {
-                var coolDownTime = Date.now() + SysParam.defaultCoolDown;
+                var coolDownTime = Date.now() + this.coolDownTime;
                 this.displayVal[simVar] = val;
                 this.coolDownTimeout[simVar] = coolDownTime;
             }

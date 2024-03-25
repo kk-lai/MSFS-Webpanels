@@ -20,6 +20,7 @@ require([
         class A20NGlareshieldPanel extends A20NPanel {
             constructor() {
                 super(1024/748);
+                this.refreshPeriod=500; // refresh every 0.5s
             }
         }
 
