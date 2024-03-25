@@ -59,8 +59,8 @@ function(jquery, SysParam, StaticPropertyHelper) {
             var thisClass=this;
             htmlPromise.then(function(html) {
                jquery(rootElm).append(html);
-               thisClass.bindControls();
                thisClass.onScreenResize();
+               thisClass.bindControls();
             });
         }
 

@@ -70,10 +70,53 @@ body
     visibility:hidden;
 }
 
-.fcu
+.center-div
+{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.row
 {
     width:100%;
-    height:48.0366692131398;
+    height:46.6155361675%;
+}
+
+.fcu-padding
+{
+    display:inline-block;
+    position:relative;
+    width:2.95843377%;
+    height:100%;
+}
+
+.fcu
+{
+    display:inline-block;
+    position:relative;
+    width:97.04156623%;
+    height:100%;
+    vertical-align: top;
+}
+
+.efis-padding
+{
+    display:inline-block;
+    position:relative;
+    width:42.5969923%;
+    height:100%;
+}
+
+.efis
+{
+    display:inline-block;
+    position:relative;
+    width:57.4030077%;
+    height:100%;
+    vertical-align: top;
 }
 
 .bottom-panel

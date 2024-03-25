@@ -26,7 +26,7 @@ function(jquery, Instrument) {
 
         init()
         {
-            this.aspectRatio=184.32/49.95468617;
+            this.aspectRatio=153.6/49.95468617;
             this.htmlFile="../c172/instruments/simple-fuel-selector/simple-fuel-selector-template.html";
             this.cssFile="../c172/instruments/simple-fuel-selector/simple-fuel-selector.css";
         }
@@ -34,7 +34,7 @@ function(jquery, Instrument) {
         refreshInstrument()
         {
             var state= this.displayVal[this.IDX_FUELSELECTOR];
-            jquery(this.rootElm).find(".lever").removeClass("lever-state-0 lever-state-1 lever-state-2").addClass("lever-state-"+state);
+            jquery(this.rootElm).find(".lever").removeClass("lever-state-1 lever-state-2 lever-state-3").addClass("lever-state-"+state);
         }        
     }
 

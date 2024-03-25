@@ -187,13 +187,12 @@
     width:100%;
 }
 
-
-
 .a20n-fcu  .ind-btn
 {
     position:absolute;
     top:13%;
-    width:100%;
+    left:30%;
+    width:40%;
     text-align: center;
     transform: scaleX(2.5);
 }

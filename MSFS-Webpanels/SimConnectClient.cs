@@ -32,7 +32,13 @@ public class SimConnectClient
         "simvar-istrkmode",
         "simvar-autopilotaltinc",
         "simvar-autopilot1status",
-        "simvar-autopilot2status"
+        "simvar-autopilot2status",
+        "simvar-ndmode",
+        "simvar-ndrange",
+        "simvar-autopilotnavaidstate1",
+        "simvar-autopilotnavaidstate2",
+        "simvar-ispressureselectedunitshpa",
+        "simvar-baromode"
     };
 
     public readonly static string[] SimEvents =
@@ -127,7 +133,8 @@ public class SimConnectClient
         "simvar-autopilotselectedairspeedholdvalue", // AP_SPD_VAR_SET
         "simvar-autopilotselectedverticalspeedholdvalue",  // AP_VS_VAR_SET_ENGLISH
         "simvar-autopilotapprhold",   // AP_LOC_HOLD
-        "simvar-autopilotthrottlearm"  // AUTO_THROTTLE_ARM
+        "simvar-autopilotthrottlearm",  // AUTO_THROTTLE_ARM
+        "simvar-autopilotflightdirectoractive" // TOGGLE_FLIGHT_DIRECTOR
     };
 
     private readonly string[] WritableSimVarsDef =
@@ -138,7 +145,13 @@ public class SimConnectClient
         "L:XMLVAR_TRK_FPA_MODE_ACTIVE", "Number",
         "L:XMLVAR_Autopilot_Altitude_Increment", "Number",
         "L:XMLVAR_Autopilot_1_Status","Number",
-        "L:XMLVAR_Autopilot_2_Status","Number"
+        "L:XMLVAR_Autopilot_2_Status","Number",
+        "L:A320_Neo_MFD_NAV_MODE","Number",
+        "L:A320_Neo_MFD_Range","Number",
+        "L:XMLVAR_NAV_AID_SWITCH_L1_State","Number",
+        "L:XMLVAR_NAV_AID_SWITCH_L2_State","Number",
+        "L:XMLVAR_Baro_Selector_HPA_1","Number",
+        "L:XMLVAR_Baro1_Mode","Number"
     };
 
     public readonly static string[] RPNEvents =
@@ -155,7 +168,19 @@ public class SimConnectClient
         "simvar-a20nvshold",
         "simvar-a20nvszero",
         "simvar-a20nvschanged",
-        "simvar-a20nexped"
+        "simvar-a20nexped",
+        "simvar-btnlsactive",
+        "simvar-pfdlsactive",
+        "simvar-btncstractive",
+        "simvar-pfdcstractive",
+        "simvar-btnwptactive",
+        "simvar-pfdwptactive",
+        "simvar-btnvordactive",
+        "simvar-pfdvordactive",
+        "simvar-btnndbactive",
+        "simvar-pfdndbactive",
+        "simvar-btnarptactive",
+        "simvar-pfdarptactive"
     };
 
     public readonly static string[] RPNScripts =
@@ -172,7 +197,19 @@ public class SimConnectClient
         "(>H:A320_Neo_FCU_VS_HOLD)",
         "(>H:A320_Neo_FCU_VS_ZERO)",
         "(>H:A320_Neo_FCU_VS_INC)",
-        "(>H:A320_Neo_EXPEDITE_MODE)"
+        "(>H:A320_Neo_EXPEDITE_MODE)",
+        "(>H:A320_Neo_MFD_BTN_LS)",
+        "(>H:A320_Neo_PFD_BTN_LS)",
+        "(>H:A320_Neo_MFD_BTN_CSTR)",
+        "(>H:A320_Neo_PFD_BTN_CSTR)",
+        "(>H:A320_Neo_MFD_BTN_WPT)",
+        "(>H:A320_Neo_PFD_BTN_WPT)",
+        "(>H:A320_Neo_MFD_BTN_VORD)",
+        "(>H:A320_Neo_PFD_BTN_VORD)",
+        "(>H:A320_Neo_MFD_BTN_NDB)",
+        "(>H:A320_Neo_PFD_BTN_NDB)",
+        "(>H:A320_Neo_MFD_BTN_ARPT)",
+        "(>H:A320_Neo_PFD_BTN_ARPT)"
     };
 
     enum QUEUEITEM_TYPE
@@ -314,7 +351,8 @@ public class SimConnectClient
         AP_SPD_VAR_SET,
         AP_VS_VAR_SET_ENGLISH,
         AP_LOC_HOLD,
-        AUTO_THROTTLE_ARM
+        AUTO_THROTTLE_ARM,
+        TOGGLE_FLIGHT_DIRECTOR
 #if DEBUG
         , CUSTOM_EVENT1
 #endif
@@ -543,6 +581,7 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.AP_VS_VAR_SET_ENGLISH, "AP_VS_VAR_SET_ENGLISH");
             simConnect.MapClientEventToSimEvent(EVENT.AP_LOC_HOLD, "AP_LOC_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.AUTO_THROTTLE_ARM, "AUTO_THROTTLE_ARM");
+            simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_FLIGHT_DIRECTOR, "TOGGLE_FLIGHT_DIRECTOR");
 
             _logger.Info("End calling SimConnect");
             return "Success";

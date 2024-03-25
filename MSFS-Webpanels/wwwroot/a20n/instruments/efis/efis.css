@@ -1,0 +1,505 @@
+.a20n-efis
+{
+    width:100%;
+    height:100%;
+    position:relative;
+    background-color:#41556d;
+    font-size: 32%;
+}
+
+.a20n-efis .mockup
+{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background: url("efis-mockup.jpg") no-repeat;
+    background-size: cover;
+    visibility: hidden;
+}
+
+.a20n-efis .backplate
+{
+    position:absolute;
+    width:100%;
+    height:100%;
+    opacity: 1;
+    top:0;
+    left:0;
+}
+
+.a20n-efis .wrapper
+{
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+}
+
+.a20n-efis .itm-wrapper
+{
+    position:absolute;
+}
+
+.a20n-efis .btn
+{
+    position:relative;
+    width:100%;
+    height:100%;
+    background-color: black;
+}
+
+.a20n-efis .btn-small
+{
+    border-radius: 10.86956522%;
+}
+
+.a20n-efis .ind
+{
+    position:absolute;
+    line-height:normal;
+}
+
+.a20n-efis .ind-num
+{
+    font-family: DSEG7Classic;
+    text-align: right;
+    font-size: 179.8873102634878%;
+    letter-spacing:0.1em;
+}
+
+.a20n-efis .ind.state-1
+{
+    color:#dc8632;
+}
+
+.a20n-efis .ind.state-0
+{
+    color:#40270f;
+}
+
+.a20n-efis .lbl
+{
+    line-height:normal;
+    text-align:center;
+    position:absolute;
+    color:white;
+}
+
+.a20n-efis .btn-small .lbl-btn
+{
+    top:52.27272727%;
+    height:56.81818182%;
+    width:100%;
+}
+
+.a20n-efis .ind-btn
+{
+    position:absolute;
+    top:13%;
+    left:30%;
+    width:40%;
+    text-align: center;
+    transform: scaleX(2.5);
+}
+
+.a20n-efis .ind-btn.state-0
+{
+    color:#686e7a;
+}
+
+.a20n-efis .ind-btn.state-1
+{
+    color: #33d736;
+}
+
+.a20n-efis .efis-display-wrapper
+{
+    width:19.3786982248521%; 	height:16.2094763092269%; 	left:11.2426035502959%; 	top:24.6882793017456%;
+    position:absolute;
+    border-radius: 10%/15%;
+    background-color: #211b1b;
+}
+
+.a20n-efis .btn-cstr-wrapper
+{
+    width:10.3550295857988%; 	height:11.2219451371571%; 	left:36.5384615384615%; 	top:17.9551122194514%;
+}
+
+.a20n-efis .btn-wpt-wrapper
+{
+    width:10.3550295857988%; 	height:11.2219451371571%; 	left:61.5384615384615%; 	top:17.9551122194514%;
+}
+
+.a20n-efis .btn-vor-wrapper
+{
+    width:10.3550295857988%; 	height:11.2219451371571%; 	left:48.8165680473373%; 	top:17.9551122194514%;
+}
+
+.a20n-efis .btn-ndb-wrapper
+{
+    width:10.3550295857988%; 	height:11.2219451371571%; 	left:73.6686390532544%; 	top:17.9551122194514%;
+}
+
+.a20n-efis .btn-arpt-wrapper
+{
+    width:10.3550295857988%; 	height:11.2219451371571%; 	left:86.3905325443787%; 	top:17.9551122194514%;
+}
+
+.a20n-efis .btn-fd-wrapper
+{
+    width:10.3550295857988%; 	height:11.2219451371571%; 	left:10.207100591716%; 	top:82.7930174563591%;
+}
+
+.a20n-efis .btn-ls-wrapper
+{
+    width:10.3550295857988%; 	height:11.2219451371571%; 	left:22.4852071005917%; 	top:82.7930174563591%;
+}
+
+.a20n-efis .ind-qnh
+{
+    left:20.7100591715976%; 	top:25.4364089775561%;
+}
+
+.a20n-efis .ind-qfe
+{
+    left:13.3136094674556%;  	top:25.4364089775561%;
+}
+
+.a20n-efis .val-qnh
+{
+    left:12.2781065088757%; 	top:30.6733167082294%;
+}
+
+.a20n-efis .lbl-ls
+{
+    left:36.094674556213%; 	top:54.6134663341646%;
+}
+
+.a20n-efis .lbl-vor
+{
+    left:38.7573964497041%; 	top:39.4014962593516%;
+}
+
+.a20n-efis .lbl-nav
+{
+    left:47.9289940828402%; 	top:33.6658354114713%;
+}
+
+.a20n-efis .lbl-arc
+{
+    left:57.6923076923077%; 	top:38.1546134663342%;
+}
+
+.a20n-efis .lbl-plan
+{
+    left:61.8343195266272%; 	top:54.1147132169576%;
+}
+
+.a20n-efis .lbl-rose
+{
+    left:36.5384615384615%; 	top:34.1645885286783%;
+}
+
+.a20n-efis .lbl-d10
+{
+    left:69.8224852071006%;  	top:54.6134663341646%;
+}
+
+.a20n-efis .lbl-d20
+{
+    left:73.2248520710059%; 	top:39.1521197007481%;
+}
+
+.a20n-efis .lbl-d40
+{
+    left:82.5443786982248%; 	top:33.9152119700748%;
+}
+
+.a20n-efis .lbl-d80
+{
+    left:91.5680473372781%; 	top:38.9027431421446%;
+}
+
+.a20n-efis .lbl-d160
+{
+    left:94.9704142011834%; 	top:54.1147132169576%;
+}
+
+.a20n-efis .lbl-d320
+{
+    left:92.4556213017752%; 	top:67.3316708229426%;
+}
+
+.a20n-efis .lbl-nav1
+{
+    left:49.112426035503%; 	top:73.5660847880299%;
+}
+
+.a20n-efis .lbl-adf1
+{
+    left:39.4970414201183%; 	top:77%;
+}
+
+.a20n-efis .lbl-vor1
+{
+    left:54.4378698224852%; 	top:77%;
+}
+
+.a20n-efis .lbl-off1
+{
+    left:47.189349112426%; 	top:92.5187032418953%;
+}
+
+.a20n-efis .lbl-nav2
+{
+    left:82.6923076923077%; 	top:73.5660847880299%;
+}
+
+.a20n-efis .lbl-adf2
+{
+    left:73.6686390532544%; 	top:77%;
+}
+
+.a20n-efis .lbl-vor2
+{
+    left:88.3136094674556%; 	top:77%;
+}
+
+.a20n-efis .lbl-off2
+{
+    left:80.9171597633136%; 	top:92.5187032418953%;
+}
+
+.a20n-efis .small-lbl
+{
+    font-size:80%;
+}
+
+.a20n-efis .lbl-inhg
+{
+    left:9.9112426035503%; 	top:47.1321695760599%;
+}
+
+.a20n-efis .lbl-hpa
+{
+    left:28.1065088757396%; 	top:47.1321695760599%;
+}
+
+.a20n-efis .knb-qnh
+{
+    width:14.4970414201183%; 	height:24.4389027431421%; 	left:14.0532544378698%; 	top:51.3715710723192%;
+}
+
+.a20n-efis .btn-circle
+{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+.a20n-efis .img-qnh-knob
+{
+    background: url(efis.png) 0 0;
+    background-size: 200% 400%;
+    text-align:center;
+}
+
+.a20n-efis .img-qnh-select
+{
+    background: url(efis.png) 100% 0;
+    background-size: 200% 400%;
+}
+
+.a20n-efis .knb-qnhsel.state-1
+{
+    transform:rotate(42deg);
+}
+
+.a20n-efis .knb-qnhsel.state-0
+{
+    transform:rotate(-39deg);
+}
+
+.a20n-efis .knb-rose
+{
+    width:16.2721893491124%; 	height:27.431421446384%; 	left:42.4556213017751%; 	top:43.142144638404%;
+}
+
+.a20n-efis .knb-range
+{
+    width:16.2721893491124%; 	height:27.431421446384%; 	left:75.5917159763314%; 	top:43.142144638404%;
+}
+
+.a20n-efis .toggle-switch
+{
+    width:17.0118343195266%; 	height:11.9700748129676%;
+}
+
+.a20n-efis .sw-nav1
+{
+    left:41.5680473372781%; 	top:79.8004987531172%;
+}
+
+.a20n-efis .sw-nav2
+{
+    left:75.1479289940828%; 	top:79.8004987531172%;
+}
+
+.a20n-efis .img-selector
+{
+    background: url(efis.png) 100% 33.3333333333%;
+    background-size: 200% 400%;
+}
+
+.a20n-efis .toggle-switch.state-0
+{
+    background: url(efis.png) 0% 39.5856052344602%;
+    background-size: 200% 957.0093457943925%;
+}
+
+.a20n-efis .toggle-switch.state-1
+{
+    background: url(efis.png) 0% 27.91712104689204%;
+    background-size: 200% 957.0093457943925%;
+}
+
+.a20n-efis .toggle-switch.state-2
+{
+    background: url(efis.png) 0% 51.25408942202835%;
+    background-size: 200% 957.0093457943925%;
+}
+
+.a20n-efis .rose-arc
+{
+    width:15.4201183431953%; 	height:25.4339152119701%; 	left:34.6153846153846%; 	top:30.9226932668329%;
+    border-top-left-radius: 100%;
+    border-left: solid 0.3em white;
+    border-top: solid 0.3em white;
+}
+
+.a20n-efis .rose-arc-inner
+{
+    width:17.0118343195266%; 	height:14.33915211970075%; 	left:41.1242603550296%; 	top:40.6483790523691%;
+
+    border-top-left-radius: 50% 100%;
+    border-top-right-radius: 50% 100%;
+
+    border-top: solid 0.375em white;
+    border-left: solid 0.375em white;
+    border-right: solid 0.375em white;
+}
+
+.a20n-efis .range-arc-1
+{
+    width:17.0118343195266%; 	height:28.6783042394015%;  	left:74.112426035503%; 	top:40.6483790523691%;
+
+    border-radius: 100%;
+    border: solid 0.375em white;
+
+}
+
+.a20n-efis .mask-1
+{
+    width:16.5680473372781%; 	height:15.9600997506234%; 	left:73.0769230769231%; 	top:57.356608478803%;
+    background-color:#41556d;
+}
+
+.a20n-efis .mask-2
+{
+    width:1.4792899408284%; 	height:14.214463840399%; 	left:80.7692307692308%; 	top:54.8628428927681%;
+    background-color:#41556d;
+}
+
+.a20n-efis .knob-ctl
+{
+    position:absolute;
+    width:7.547169811320755%;	height:12.72529017163965%;
+    border-radius:50%;
+}
+
+.a20n-efis .ip-qnh-dec
+{
+    top:57.22837736%;
+    left:10.27966953%;
+}
+
+.a20n-efis .ip-qnh-inc
+{
+    top:57.22837736%;
+    left:24.77671095%;
+}
+
+.a20n-efis .ip-qnh-push
+{
+    top:45.00892599%;
+    left:17.52819024%;
+}
+
+.a20n-efis .ip-qnh-pull
+{
+    top:69.44782873%;
+    left:17.52819024%;
+}
+
+.a20n-efis .ip-rose-dec
+{
+    top:50.49521028%;
+    left:34.15373451%;
+}
+
+.a20n-efis .ip-rose-inc
+{
+    top:50.49521028%;
+    left:59.48252763%;
+}
+
+.a20n-efis .ip-range-dec
+{
+    top:50.49521028%;
+    left:67.28982918%;
+}
+
+.a20n-efis .ip-range-inc
+{
+    top:50.49521028%;
+    left:92.61862231%;
+}
+
+.a20n-efis .ip-nav1-dec
+{
+    top:79.42289107%;
+    left:38.54917941%;
+}
+
+.a20n-efis .ip-nav1-inc
+{
+    top:79.42289107%;
+    left:54.05157977%;
+}
+
+.a20n-efis .ip-nav2-dec
+{
+    top:79.42289107%;
+    left:72.12906107%;
+}
+
+.a20n-efis .ip-nav2-inc
+{
+    top:79.42289107%;
+    left:87.63146143%;
+}
+
+.a20n-efis .ip-unit-dec
+{
+    top:43.73639697%;
+    left:9.524952549%;
+}
+
+.a20n-efis .ip-unit-inc
+{
+    top:43.73639697%;
+    left:25.90878642%;
+}
