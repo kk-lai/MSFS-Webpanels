@@ -49,6 +49,12 @@
     background-color: black;
 }
 
+.a20n-efis .btn-tapped
+{
+    background-color:yellow;
+    opacity: 0.5;
+}
+
 .a20n-efis .btn-small
 {
     border-radius: 10.86956522%;

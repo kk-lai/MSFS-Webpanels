@@ -122,6 +122,7 @@ function(jquery, SysParam, StaticPropertyHelper) {
         onScreenResize() {
             var elm=this.rootElm;
             var w = jquery(elm).width();
+            this.panel.logger.debug("resize "+ this.constructor.name + " w:"+w);
             var h = w / this.aspectRatio;
             jquery(elm).css("height",h);
             jquery(elm).css("font-size", h/7);

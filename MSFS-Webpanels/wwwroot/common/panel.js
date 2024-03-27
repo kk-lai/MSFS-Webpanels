@@ -84,6 +84,7 @@ function(jquery, SysParam) {
             }
             jquery(".container").css("width", fw);
             jquery(".container").css("height", fh);
+            this.logger.debug("resize panel from "+ww+"x"+wh + " to " +fw +"x"+fh);
 
             for(var i=0;i<this.instruments.length;i++) {
                 this.instruments[i].onScreenResize();
@@ -115,22 +116,30 @@ function(jquery, SysParam) {
                 this.resizePanel();
             }, this));
 
-            jquery(document).ready(jquery.proxy(function() {
-                this.resizePanel();
-            }, this));
-
-            jquery(".container").removeClass("hide");
+            var that = this;
+            this.cssPromise.then(function() {
+                jquery(".container").removeClass("hide");
+                that.resizePanel();
+            })
+            
             setInterval(jquery.proxy(this.timerFunc,this), this.refreshPeriod);
         }
 
         loadCss(url)
         {
+            var that = this;
+            this.cssPromise = new Promise(function(resolve) {
             var head = jquery("head").first();
             var link = document.createElement("link");
             link.rel="stylesheet";
             link.type="text/css";
             link.href=url + "?v="+SysParam.versionCode;
+                link.onload = function() {
+                    that.logger.debug("css loaded");
+                    resolve();
+                };
             head.append(link);
+            });
         }
 
         refreshDisplay(jsonData)
