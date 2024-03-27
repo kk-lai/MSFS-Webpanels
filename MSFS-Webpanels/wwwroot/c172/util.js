@@ -4,11 +4,8 @@ require.config({
         jquery : '../3rdparty/jquery/jquery-1.11.2.min',
         'const' : 'const'
     },
-    urlArgs: "v=1.1.1",
     waitSeconds : 30,
 });
-
-// Version: 1.1.1
 
 define(['jquery','const'],function(jquery, sysconst) {
     return {
@@ -229,7 +226,7 @@ define(['jquery','const'],function(jquery, sysconst) {
             }
             return deg;
         },
-        postProcessSimData: function (jsonData) {
+        postProcessSimData: function (jsonData, dmeSrc) {
             jsonData.simData.warningVACLeft = 0;
             jsonData.simData.warningVACRight = 0;
             jsonData.simData.warningVAC = 0;
@@ -285,9 +282,27 @@ define(['jquery','const'],function(jquery, sysconst) {
                 jsonData.simData.attitudeGyroOff = 0;
             }
 
+            if (!jsonData.simData.hsiCDINeedleValid) {
+                jsonData.simData.hsiCDINeedle=0;
+            }
+            if (!jsonData.simData.hsiGSINeedleValid) {
+                jsonData.simData.hsiGSINeedle=0;
+            }
+
+            var dmePrefix = "dme";
+            if (dmeSrc!=1) {
+                dmePrefix="dme2";
+            }
+
             var dmeDistance = "";
-            if (jsonData.simData.dmeIsAvailable && jsonData.simData.dmeSignal>0) {
-                dmeDistance = (jsonData.simData.dmeDistance / 10).toFixed(1);
+            if (dmeSrc==1 && jsonData.simData.gpsDriveNav1) {
+                jsonData.simData.dmesrc = "GPS";
+                dmeDistance = (jsonData.simData.hsiDistance / 10).toFixed(1);
+            } else {
+                jsonData.simData.dmesrc = "DME"+dmeSrc;
+                if (jsonData.simData[dmePrefix+"IsAvailable"] && jsonData.simData[dmePrefix+"Signal"]>0) {
+                    dmeDistance = (jsonData.simData[dmePrefix+"Distance"] / 10).toFixed(1);
+                }
             }
             jsonData.simData.dmeDistance=dmeDistance;
             
@@ -306,7 +321,11 @@ define(['jquery','const'],function(jquery, sysconst) {
                 if (jsonData.simData.apHeadingLock != 0) {
                     apStatus1 = "HDG";
                 } else if (jsonData.simData.apNavLock != 0) {
+                    if (jsonData.simData.gpsDriveNav1) {
+                        apStatus1 = "GPS";
+                    } else {
                     apStatus1 = "NAV";
+                    }
                 } else if (jsonData.simData.apApproachHold != 0) {
                     apStatus1 = "APR";
                 } else if (jsonData.simData.apRevHold != 0) {
@@ -429,36 +448,36 @@ define(['jquery','const'],function(jquery, sysconst) {
         ],
         defaultOfflineData:{
             "simData": {
-                "fuelLeftQuantity": 11.131718,
-                "fuelRightQuantity": 11.131718,
-                "engineEGT": 1989.7908,
-                "engineFuelFlow": 9.689736,
-                "engineOilTemp": 659.932,
-                "engineOilPressure": 66.66662,
-                "vac": 4.8278136,
-                "batteryAmp": -9.414141,
-                "ias": 110.639275,
+                "fuelLeftQuantity": 8.314525,
+                "fuelRightQuantity": 8.314525,
+                "engineEGT": 999.73083,
+                "engineFuelFlow": 0.28339642,
+                "engineOilTemp": 592.5059,
+                "engineOilPressure": 40.906788,
+                "vac": 4.2493258,
+                "batteryAmp": 2.9471688,
+                "ias": 0.000015874195,
                 "tasAdj": 0,
-                "attitudePitch": -0.15863921,
-                "attitudeBank": -0.03801066,
+                "attitudePitch": 1.7488129,
+                "attitudeBank": -0.0148600275,
                 "attitudeBarPosition": 0,
-                "altitude": 2494.9834,
+                "altitude": 994.72656,
                 "nav1Obs": 0,
                 "nav1ToFrom": 0,
                 "nav1GSFlag": 0,
                 "nav1CDI": 0,
                 "nav1GSI": 0,
-                "tcBallPos": 21,
-                "tcRate": -0.1230283,
-                "heading": 37,
+                "tcBallPos": -5,
+                "tcRate": 0.5249859,
+                "heading": 324,
                 "headingBug": 0,
-                "vsi": 12.4248495,
+                "vsi": -13.162168,
                 "nav2Obs": 0,
                 "nav2ToFrom": 0,
                 "nav2GSFlag": 0,
                 "nav2CDI": 0,
                 "nav2GSI": 0,
-                "engineRPM": 2470,
+                "engineRPM": 631,
                 "adfCard": 0,
                 "adfRadial": 90,
                 "switchBCN": 1,
@@ -475,15 +494,15 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "rightMagnetoState": 1,
                 "flapsPosition": 0,
                 "switchFuelPump": 0,
-                "gyroDriftError": -3,
-                "qnh": 16209.598,
+                "gyroDriftError": 0,
+                "qnh": 16212,
                 "engineStarter": 0,
                 "electricalBusVoltage": 28,
                 "fuelSelector": 1,
                 "parkingBrake": 0,
                 "fuelValve": 1,
-                "atcId": "N97SA",
-                "com1ActiveFreq": 118650,
+                "atcId": "9H-AHS",
+                "com1ActiveFreq": 127850,
                 "com1StandbyFreq": 124850,
                 "com2ActiveFreq": 124850,
                 "com2StandbyFreq": 124850,
@@ -492,21 +511,21 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "nav2ActiveFreq": 110500,
                 "nav2StandbyFreq": 113900,
                 "adfActiveFreq": 890,
-                "adfStandbyFreq": 367,
-                "apAltitude": 2500,
-                "apMaster": 1,
+                "adfStandbyFreq": 1400,
+                "apAltitude": 0,
+                "apMaster": 0,
                 "apHeadingLock": 0,
                 "apNavLock": 0,
-                "apAltitudeLock": 1,
+                "apAltitudeLock": 0,
                 "apVerticalHold": 0,
-                "apVerticalHoldSpeed": 500,
+                "apVerticalHoldSpeed": 0,
                 "apApproachHold": 0,
                 "apRevHold": 0,
                 "apGSHold": 0,
                 "dmeDistance": -0.005399568,
                 "xpdrSwitch": 4,
-                "xpdr": 28672,
-                "refEGT": 16727,
+                "xpdr": 0,
+                "refEGT": 0,
                 "generalPanelOn": 1,
                 "com1tx": 1,
                 "com1rx": 1,
@@ -523,14 +542,14 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "dme2Speed": -1.9438444,
                 "dme2Signal": 0,
                 "dme2IsAvailable": 0,
-                "pressureAltitude": 2494.9834,
+                "pressureAltitude": 994.72656,
                 "adfVolume": 100,
-                "simulationTime": 1662,
+                "simulationTime": 173,
                 "com1Volume": 100,
                 "nav1Volume": 100,
                 "com2Volume": 100,
                 "nav2Volume": 100,
-                "qnh2": 16209.598,
+                "qnh2": 16212,
                 "audioPanelVolume": 100,
                 "markerTestMute": 0,
                 "markerIsHighSensitivity": 0,
@@ -547,14 +566,19 @@ define(['jquery','const'],function(jquery, sysconst) {
                 "outsideMarkerOn": 0,
                 "pilotTxing": 0,
                 "copilotTxing": 0,
-                "isGearRetractable": 1,
-                "gearHandlePosition": 1,
-                "engineElapsedTime": 5
+                "isGearRetractable": 0,
+                "gearHandlePosition": 0,
+                "engineElapsedTime": 673,
+                "hsiCDINeedle": 0,
+                "hsiGSINeedle": 0,
+                "hsiCDINeedleValid": 0,
+                "hsiGSINeedleValid": 0,
+                "hsiDistance": -10
             },
             "isPaused": false,
-            "isSimRunning": false,
-            "isSimConnected": false,
-            "aircraftFolder": "Asobo_C172SP_Classic_Floats"
+            "isSimRunning": true,
+            "isSimConnected": true,
+            "aircraftFolder": "Asobo_C172sp_classic"
         }
     };
 });

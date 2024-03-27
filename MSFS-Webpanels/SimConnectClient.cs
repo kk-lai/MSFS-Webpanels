@@ -18,32 +18,137 @@ using System.Xml.Serialization;
 public class SimConnectClient
 {
     private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+	
+	public readonly static string[] WritableSimVars =
+    {
+        "simvar-xpdrswitch",
+        "simvar-apaltitude"
+    };
+	
+	public readonly static string[] SimEvents =
+    {
+        "simvar-refegt", //SET_EGT_REF,
+        "simvar-tasadj", //SET_TAS_ADJ,
+        "simvar-attitudebarposition", //SET_ATTITUDE_BAR_POSITION,
+        
+        "simvar-headingbug", //SET_HEADING_BUG,
+        "simvar-nav1obs", //SET_NAV1_OBS,
+        "simvar-nav2obs", //SET_NAV2_OBS,
+        "simvar-adfcard", //SET_ADF_CARD,
+        "simvar-qnh", //SET_QNH,
+
+        "simvar-switchfuelpump", //SET_SWITCH_FUELPUMP,
+        "simvar-switchbcn", //SET_SWITCH_BCN,
+        "simvar-switchland", //SET_SWITCH_LAND,
+        "simvar-switchtaxi", //SET_SWITCH_TAXI,
+        "simvar-switchnav", //SET_SWITCH_NAV,
+        "simvar-switchstrobe", //SET_SWITCH_STROBE,
+        "simvar-switchpitotheat", //SET_SWITCH_PITOT_HEAT,
+        "simvar-switchalternator", //SET_SWITCH_ALTERNATOR,
+        "simvar-switchbatterymaster", //SET_SWITCH_BATTERY_MASTER,
+        "simvar-switchavionics1", //SET_SWITCH_AVIONICS1,
+        "simvar-switchavionics2", //SET_SWITCH_AVIONICS2,
+        "simvar-parkingbrake",  //SET_SWITCH_PARKING_BRAKE,
+        "simvar-fuelvalve", //SET_FUEL_VALVE_ENG1,                
+        
+        "simvar-com1standbyfreq", //SET_COM1_STANDBY,
+        "simvar-com2standbyfreq", //SET_COM2_STANDBY,
+        "simvar-nav1standbyfreq", //SET_NAV1_STANDBY,
+        "simvar-nav2standbyfreq", //SET_NAV2_STANDBY,
+        "simvar-adfstandbyfreq", //SET_ADF_STANDBY,
+        "simvar-com1freqswap", //SWAP_COM1_FREQ,
+        "simvar-com2freqswap", //SWAP_COM2_FREQ,
+        "simvar-nav1freqswap", //SWAP_NAV1_FREQ,
+        "simvar-nav2freqswap", //SWAP_NAV2_FREQ,
+        "simvar-adffreqswap", //SWAP_ADF_FREQ,
+
+        "simvar-btnap", //BTN_AP,
+        "simvar-btnhdg", //BTN_HDG,
+        "simvar-btnnav", //BTN_NAV,
+        "simvar-btnapr", //BTN_APR,
+        "simvar-btnrev", //BTN_REV,
+        "simvar-btnalt", //BTN_ALT,
+        "simvar-btnvsinc", //BTN_VS_INC,
+        "simvar-btnvsdec", //BTN_VS_DEC,
+        "simvar-xpdr", //SET_XPDR_CODE,       
+        
+        "simvar-fuelselectorleft", //SET_FUEL_SELECTOR_LEFT,
+        "simvar-fuelselectorall", //SET_FUEL_SELECTOR_ALL,
+        "simvar-fuelselectorright", //SET_FUEL_SELECTOR_RIGHT,        
+
+        "simvar-magnetodec", // MAGNETO_INCR
+        "simvar-magnetoinc", // MAGNETO_DECR
+
+        "simvar-flapspositiondec", //FLAPS_DECR,
+        "simvar-flapspositioninc", //FLAPS_INCR,
+
+        "simvar-gyrodrifterrorex", // GYRO_DRIFT_SET_EX1
+        "simvar-headinggyroset", // HEADING_GYRO_SET
+
+        "simvar-com1rx", // COM1_RECEIVE_SELECT
+        "simvar-com2rx", // COM2_RECEIVE_SELECT
+        "simvar-pilottx", // PILOT_TRANSMITTER_SET
+        "simvar-nav1rx", // RADIO_VOR1_IDENT_TOGGLE
+        "simvar-nav2rx", // RADIO_VOR2_IDENT_TOGGLE
+        "simvar-adfrx", // RADIO_ADF_IDENT_TOGGLE
+
+        "simvar-vsholdset", // AP_PANEL_VS_SET
+        "simvar-apaltvarset", // AP_ALT_VAR_SET
+        "simvar-togglegpsdrivenav1", // TOGGLE_GPS_DRIVES_NAV1
+        "simvar-appanelvson", // AP_PANEL_VS_ON
+        "simvar-xpdridentset", // XPNDR_IDENT_SET
+        "simvar-com1volume",
+        "simvar-nav1volume",
+        "simvar-com2volume",
+        "simvar-nav2volume",
+        "simvar-adfvolume",
+        "simvar-audiopanelvolume", // AUDIO_PANEL_VOLUME_SET
+        "simvar-markertestmute", // MARKER_BEACON_TEST_MUTE
+        "simvar-markerishighsensitivity", // MARKER_BEACON_SENSITIVITY_HIGH
+        "simvar-intercommode", // INTERCOM_MODE_SET
+        "simvar-markersoundon", // MARKER_SOUND_TOGGLE
+        "simvar-intercomactive", // TOGGLE_ICS
+        "simvar-dmesoundon", // RADIO_DME1_IDENT_TOGGLE
+        "simvar-speakeractive", // TOGGLE_SPEAKER
+        "simvar-copilottxtype", // COPILOT_TRANSMITTER_SET
+        "simvar-gearhandleposition"
+    };
+    
+    private readonly string[] WritableSimVarsDef =
+	{
+        "TRANSPONDER STATE:1", "Enum", 
+        "AUTOPILOT ALTITUDE LOCK VAR", "Feet"
+    };
+	
+	enum QUEUEITEM_TYPE
+    {
+        SIM_VARSET,
+        SIM_EVENT
+    };
+
     class QueueItem
     {
-        EVENT evt;
+        QUEUEITEM_TYPE queueItemType;
+        uint offset;        
         uint[] iParams;
 
-        public EVENT Evt { get => evt; set => evt = value; }
         public uint[] IParams { get => iParams; set => iParams = value; }
+        public uint Offset { get => offset; set => offset = value; }
+        public QUEUEITEM_TYPE QueueItemType { get => queueItemType; set => queueItemType = value; }
     }
 
     enum REQUEST
     {
         AIRCRAFT_LOADED,
         AIRCRAFT_STATE,
-        PLANE_INFO_REQ,
-        ACTIVE_FLIGHT_PLAN,
-        AI_AIRCRAFT_LIST,
-        AI_AIRCRAFT
+        PLANE_INFO_REQ
     };
 
     enum DEFINITION
     {
         C172_FPANEL,
-        TRANSPONDER_STATE,
-        AP_ALTITUDE_LOCK,
+        SIM_VAR,
         GENERAL_PLANE_DATA,
-        AI_AIRCRAFT_LIST        
     };
 
     public enum EVENT
@@ -148,14 +253,9 @@ public class SimConnectClient
         DEFAULT_GROUP
     }
 
-    struct TransponderState
+    struct WritableSimVarStruct
     {
-        public uint state;
-    }
-
-    struct APAltitudeHold
-    {
-        public uint altitude;
+        public Int32 simVar;
     }
 
     private SimConnect simConnect = null;
@@ -363,18 +463,15 @@ public class SimConnectClient
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "IS GEAR RETRACTABLE", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GEAR HANDLE POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "GENERAL ENG ELAPSED TIME:1", "hours over 10", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI CDI NEEDLE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI GSI NEEDLE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI CDI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI GSI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(DEFINITION.C172_FPANEL, "HSI DISTANCE", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
 
             simConnect.RegisterDataDefineStruct<C172SimData.C172Data>(DEFINITION.C172_FPANEL);
             simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.C172_FPANEL, SimConnect.SIMCONNECT_OBJECT_ID_USER,
                 SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
-
-            fieldId = 0;
-            simConnect.AddToDataDefinition(DEFINITION.TRANSPONDER_STATE, "TRANSPONDER STATE:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, 0);
-            //simConnect.RegisterDataDefineStruct<TransponderState>(DEFINITION.TRANSPONDER_STATE);
-
-            fieldId = 0;
-            simConnect.AddToDataDefinition(DEFINITION.AP_ALTITUDE_LOCK, "AUTOPILOT ALTITUDE LOCK VAR", "Feet", SIMCONNECT_DATATYPE.INT32, 0, 0);
-            //simConnect.RegisterDataDefineStruct<APAltitudeHold>(DEFINITION.AP_ALTITUDE_LOCK);
 
             fieldId = 0;
             simConnect.AddToDataDefinition(DEFINITION.GENERAL_PLANE_DATA, "ATC ID", "degree latitude", SIMCONNECT_DATATYPE.STRING64, 0, fieldId++);
@@ -490,7 +587,6 @@ public class SimConnectClient
            simConnect.MapClientEventToSimEvent(EVENT.GEAR_TOGGLE, "GEAR_TOGGLE");
 
             simConnect.RequestSystemState(REQUEST.AIRCRAFT_LOADED, "AircraftLoaded");
-           simConnect.RequestSystemState(REQUEST.ACTIVE_FLIGHT_PLAN, "FlightPlan");
             _logger.Info("End calling SimConnect");
         }
         catch (COMException ex)
@@ -536,6 +632,11 @@ public class SimConnectClient
     {
         _logger.Info("MSFS OnRecvQuit");
         simData.IsSimConnected = false;
+        if (simConnect!=null)
+        {
+            simConnect.Dispose();
+            simConnect = null;
+        }  
     }
 
     private void OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
@@ -557,23 +658,41 @@ public class SimConnectClient
             }
             ndata.simData = (C172SimData.C172Data)data.dwData[0];
             this.simData = ndata;
-        }
-        if (data.dwDefineID == (uint)DEFINITION.GENERAL_PLANE_DATA)
-        {
-            simConnect.RequestDataOnSimObjectType(REQUEST.AI_AIRCRAFT_LIST, DEFINITION.GENERAL_PLANE_DATA, 200000, SIMCONNECT_SIMOBJECT_TYPE.AIRCRAFT);
-        }
+        }       
         while (updateQueue.Count > 0)
         {
             QueueItem itm;
             if (updateQueue.TryDequeue(out itm))
             {
-                uint[] scParams = new uint[5];
-                for(int i=0;i<itm.IParams.Length;i++)
+                if (itm.QueueItemType==QUEUEITEM_TYPE.SIM_EVENT)
                 {
-                    scParams[i]= itm.IParams[i];
-                }
-                simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, itm.Evt,
+                    uint[] scParams = new uint[5];
+                    for (int i = 0; i < itm.IParams.Length; i++)
+                    {
+                        scParams[i] = itm.IParams[i];
+                    }
+                    EVENT evt = (EVENT)(itm.Offset + (uint)EVENT.SET_EGT_REF);
+                    simConnect.TransmitClientEvent_EX1(SimConnect.SIMCONNECT_OBJECT_ID_USER, evt,
                      NOTIFICATIONGROUP.DEFAULT_GROUP, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY, scParams[0], scParams[1], scParams[2], scParams[3], scParams[4]);
+                } else if (itm.QueueItemType == QUEUEITEM_TYPE.SIM_VARSET)
+                {
+                    string vname;
+                    string vunit;
+                    uint offset = itm.Offset << 1;
+                    uint val = itm.IParams[0];
+
+                    vname = WritableSimVarsDef[offset];
+                    vunit = WritableSimVarsDef[offset + 1];
+
+                    simConnect.AddToDataDefinition(DEFINITION.SIM_VAR, vname, vunit, SIMCONNECT_DATATYPE.INT32, 0, 0);
+                    simConnect.RegisterDataDefineStruct<WritableSimVarStruct>(DEFINITION.SIM_VAR);
+                    simConnect.SetDataOnSimObject(DEFINITION.SIM_VAR,
+                        SimConnect.SIMCONNECT_OBJECT_ID_USER,
+                        SIMCONNECT_DATA_SET_FLAG.DEFAULT,
+                        new WritableSimVarStruct { simVar = (Int32)val }
+                    );
+                    simConnect.ClearDataDefinition(DEFINITION.SIM_VAR);
+                }
             }
         }
     }
@@ -619,31 +738,31 @@ public class SimConnectClient
             _logger.Info("OnRecvSystemStateHandler:"+data.szString);
         }
     }
-
-    public void transmitEvent(uint eventOffset,  uint[] iparams)
-    {
-        uint evt = (uint)EVENT.SET_EGT_REF + eventOffset;
-        QueueItem itm = new QueueItem();
-        itm.Evt = (EVENT)evt;
-        itm.IParams = iparams;
-        updateQueue.Enqueue(itm);
-    }
-
-    public void setTransponderSwitch(uint pos)
-    {
-        simConnect.SetDataOnSimObject(DEFINITION.TRANSPONDER_STATE,
-            SimConnect.SIMCONNECT_OBJECT_ID_USER,
-            SIMCONNECT_DATA_SET_FLAG.DEFAULT,
-            new TransponderState { state = pos }
-        );
-    }
-
-    public void setAPAltitudeHold(uint apaltitude)
+    
+    public int processWebRequest(string req, uint[] iparams)
     {        
-        simConnect.SetDataOnSimObject(DEFINITION.AP_ALTITUDE_LOCK,
-            SimConnect.SIMCONNECT_OBJECT_ID_USER,
-            SIMCONNECT_DATA_SET_FLAG.DEFAULT,
-            new APAltitudeHold { altitude = apaltitude }
-        );
+        int idx = Array.IndexOf(SimConnectClient.WritableSimVars, req);
+        QueueItem itm = new QueueItem();
+        itm.IParams = iparams;
+
+        if (idx >= 0)
+        {
+            itm.Offset = (uint)idx;
+            itm.QueueItemType = QUEUEITEM_TYPE.SIM_VARSET;
+
+        }
+        idx = Array.IndexOf(SimConnectClient.SimEvents, req);
+        if (idx >= 0)
+        {
+            itm.Offset = (uint)idx;
+            itm.QueueItemType = QUEUEITEM_TYPE.SIM_EVENT;
+
+        }        
+        if (itm.Offset>=0)
+        {
+            updateQueue.Enqueue(itm);
+            return 0;
+        }
+        return -1;
     }
 }

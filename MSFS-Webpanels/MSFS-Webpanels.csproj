@@ -12,10 +12,10 @@
     <Copyright>© 2023 Kevin King</Copyright>
     <RepositoryUrl>https://github.com/kk-lai/MSFS-Webpanels</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <Authors>Kevin King</Authors>
-    <FileVersion>1.1.1</FileVersion>
-    <AssemblyVersion>1.1.1</AssemblyVersion>
+    <FileVersion>1.1.2</FileVersion>
+    <AssemblyVersion>1.1.2</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

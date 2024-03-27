@@ -4,7 +4,12 @@
 </head>
 <body>
 <script>
-window.location.replace("c172/fpanel.html");
+    var urlParams = new URLSearchParams(window.location.search);
+    var urlArgs = "";
+    if (urlParams.has('v')) {
+        urlArgs="v="+urlParams.get('v');
+    }
+	window.location.replace("c172/fpanel.html?"+urlArgs);
 </script>
 Redirect to fpanel
 </body>

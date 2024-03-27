@@ -109,7 +109,7 @@ namespace MSFS_Webpanels
                     var uri = new Uri(address);
                     var port = uri.Port;
 
-                    String webUrl = "http://" + hostAddress + ":" + port + "/";
+                    String webUrl = "http://" + hostAddress + ":" + port + "/?v=" + Application.ProductVersion;
                     linkPanel.Text = webUrl;
                     CodeQrBarcodeDraw qrCode = BarcodeDrawFactory.CodeQr;
                     pictureQRcode.Image = qrCode.Draw(webUrl, pictureQRcode.Height);
@@ -126,21 +126,7 @@ namespace MSFS_Webpanels
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            /*
-            uint val = 0;
-            if (textboxInput.Text.Trim().Length > 0)
-            {
-                val = uint.Parse(textboxInput.Text.Trim());
-            }
-            simConnectClient.sendEventToSimulator(SimConnectClient.EVENT.SET_ATTITUDE_BAR_POSITION, 0, val);
-            */
-            uint[] val = new uint[2];
-            val[0] = 5000;
-            val[1] = 1;
-            uint evt = SimConnectClient.EVENT.AP_ALT_VAR_SET - SimConnectClient.EVENT.SET_EGT_REF;
 
-
-            SimConnectClient.getSimConnectClient().transmitEvent(evt, val);
         }
 
         private void linkPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

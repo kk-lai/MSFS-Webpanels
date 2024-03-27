@@ -5,7 +5,6 @@ require.config({
         util: 'util',
         'const' : 'const'
     },
-    urlArgs: "v=1.1.1",
     waitSeconds : 30,
 });
 
@@ -13,7 +12,7 @@ require([
          'jquery','util','const'
          ],
 function(jquery,util,sysconst) {
-    var versionCode = '1.1.1';
+    var versionCode = sysconst.versionCode;
     var isOffline = false;
     var isServerAppRunning = false;
     var refreshTimer = null;
@@ -28,6 +27,7 @@ function(jquery,util,sysconst) {
     var vsDisplayTimer = null;
     var isPauseQueue = false;
     var isProcessingQueue = false;
+    var dmeSrc = 1;
 
     function resizeContainer() {
 
@@ -90,7 +90,7 @@ function(jquery,util,sysconst) {
         if (!jsonData.isSimConnected || typeof jsonData.simData === "undefined" || jsonData.simData==null) {
             jsonData.simData = util.defaultOfflineData.simData;
         }
-        jsonData = util.postProcessSimData(jsonData);
+        jsonData = util.postProcessSimData(jsonData, dmeSrc);
 
         for(var key in jsonData.simData) {
             var simvar = "simvar-" + key.toLowerCase();
@@ -171,12 +171,28 @@ function(jquery,util,sysconst) {
     }
 
     jquery(document).ready(function() {
+
+        var head = jquery("head").first();
+        var link = document.createElement("link");
+        var ev, evMove, evTapEnd, evTapStart;
+
+        link.rel="stylesheet";
+        link.type="text/css";
+        link.href="css/fpanel.css?v="+sysconst.versionCode;
+        head.append(link);
+
+        jquery(".menu-link").attr('href',"../?v="+sysconst.versionCode+"&noRedirect=true");
+
         var touchDevice = ('ontouchstart' in document.documentElement);
         if (touchDevice) {
             ev='touchstart';
+            evTapStart='touchstart';
+            evTapEnd='touchend';
             evMove='touchstart touchmove touchend';
         } else {
             ev='click';
+            evTapStart='mousedown';
+            evTapEnd='mouseup mouseleave';
             evMove='mousedown mousemove mouseup mouseleave';
         }
         resizeContainer();
@@ -714,6 +730,14 @@ function(jquery,util,sysconst) {
             radioPanel.removeClass("hide");
         });
 
+        jquery(".ui-pbutton").on(evTapStart, function(e) {
+            jquery(this).addClass("btn-tapped");
+        });
+
+        jquery(".ui-pbutton").on(evTapEnd, function(e) {
+            jquery(this).removeClass("btn-tapped");
+        });
+
         jquery(".ui-pbutton").on(ev, function(e) {
             var target=jquery(this).attr("target");
             if (target=="headinggyroset") {
@@ -739,6 +763,11 @@ function(jquery,util,sysconst) {
                     jquery(".apaltitude-display").removeClass("hide");
                 }, 3000);
             }
+            e.preventDefault();
+        });
+
+        jquery(".ui-dmeselector").on(ev, function(e) {
+            dmeSrc=(2-dmeSrc)+1;
             e.preventDefault();
         });
 

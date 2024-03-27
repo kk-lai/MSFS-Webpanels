@@ -157,6 +157,12 @@ public class C172SimData : SimData
         private Int32 gearHandlePosition;
         private Int32 engineElapsedTime;
 
+        private Int32 hsiCDINeedle;
+        private Int32 hsiGSINeedle;
+        private Int32 hsiCDINeedleValid;
+        private Int32 hsiGSINeedleValid;
+        private float hsiDistance;
+
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
         public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
         public float EngineEGT { get => engineEGT; set => engineEGT = value; }
@@ -279,6 +285,11 @@ public class C172SimData : SimData
         public int IsGearRetractable { get => isGearRetractable; set => isGearRetractable = value; }
         public int GearHandlePosition { get => gearHandlePosition; set => gearHandlePosition = value; }
         public Int32 EngineElapsedTime { get => engineElapsedTime; set => engineElapsedTime = value; }
+        public int HsiCDINeedle { get => hsiCDINeedle; set => hsiCDINeedle = value; }
+        public int HsiGSINeedle { get => hsiGSINeedle; set => hsiGSINeedle = value; }
+        public int HsiCDINeedleValid { get => hsiCDINeedleValid; set => hsiCDINeedleValid = value; }
+        public int HsiGSINeedleValid { get => hsiGSINeedleValid; set => hsiGSINeedleValid = value; }
+        public float HsiDistance { get => hsiDistance; set => hsiDistance = value; }
     }
     private C172Data c172data = new C172Data();
 
