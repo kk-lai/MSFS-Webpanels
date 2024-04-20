@@ -65,6 +65,11 @@ namespace MSFS_Webpanels
             private Int32 btnARPTActive;
             private Int32 autoPilotNavAidState1;
             private Int32 autoPilotNavAidState2;
+            private Int32 masterWarningActive;
+            private Int32 masterWarningAck;
+            private Int32 masterCautionActive;
+            private Int32 masterCautionAck;
+            private Int32 lightTestActive;
 
             public int IsCircuitGeneralPanelOn { get => isCircuitGeneralPanelOn; set => isCircuitGeneralPanelOn = value; }
             public int IsMachActive { get => isMachActive; set => isMachActive = value; }
@@ -109,6 +114,11 @@ namespace MSFS_Webpanels
             public int BtnARPTActive { get => btnARPTActive; set => btnARPTActive = value; }
             public int AutoPilotNavAidState1 { get => autoPilotNavAidState1; set => autoPilotNavAidState1 = value; }
             public int AutoPilotNavAidState2 { get => autoPilotNavAidState2; set => autoPilotNavAidState2 = value; }
+            public int MasterWarningActive { get => masterWarningActive; set => masterWarningActive = value; }
+            public int MasterWarningAck { get => masterWarningAck; set => masterWarningAck = value; }
+            public int MasterCautionActive { get => masterCautionActive; set => masterCautionActive = value; }
+            public int MasterCautionAck { get => masterCautionAck; set => masterCautionAck = value; }
+            public int LightTestActive { get => lightTestActive; set => lightTestActive = value; }
         }
 
         private A20NData a20NData = new A20NData();
@@ -166,6 +176,11 @@ namespace MSFS_Webpanels
             simConnect.AddToDataDefinition(defId, "L:BTN_ARPT_FILTER_ACTIVE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:XMLVAR_NAV_AID_SWITCH_L1_State", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:XMLVAR_NAV_AID_SWITCH_L2_State", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "MASTER WARNING ACTIVE", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "MASTER WARNING ACKNOWLEDGED", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "MASTER CAUTION ACTIVE", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "MASTER CAUTION ACKNOWLEDGED", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:XMLVAR_LTS_Test", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
             simConnect.RegisterDataDefineStruct<A20NSimData.A20NData>(defId);
         }

@@ -9,6 +9,14 @@ require.config({
 });
 
 
+/*
+A32NX References
+VCockpit09 A320_Neo_FCU
+fcu/a320neo_fcu.js
+
+
+*/
+
 define([
          'jquery', 'Instrument','StaticPropertyHelper'
          ],
@@ -175,6 +183,78 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 displayData.knbaltsel = this.localDisplayVal.autoPilotAltInc==1000;
             } // End of Asobo A320Neo
 
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                this.isInstrumentOff=(!this.localDisplayVal.isCircuitGeneralPanelOn);
+
+                if (this.isInstrumentOff) {
+                    return;
+                }
+
+                // Speed
+                if (this.localDisplayVal.apSelectedSpeed<0) {
+                    displayData.valspd ="---";
+                } else {
+                    if (this.localDisplayVal.isMachActive) {
+                        displayData.indmach=true;
+                        displayData.valspd = this.localDisplayVal.apSelectedSpeed.toFixed(2);
+                    } else {
+                        displayData.indspd=true;
+                        displayData.valspd = this.localDisplayVal.apSelectedSpeed.toFixed(0).padStart(3, "0");
+                    }
+                }
+                displayData.indspdmanaged=this.localDisplayVal.isSpeedManaged;
+
+                // Heading
+                if (this.localDisplayVal.isHeadingDashed) {
+                    displayData.valhdg="---";
+                } else {
+                    displayData.valhdg=this.localDisplayVal.apSelectedHeading.toFixed(0).padStart(3,"0");
+                }
+                displayData.indhdgmanaged=this.localDisplayVal.isHeadingManaged;
+
+                // Altitude
+                displayData.valalt = (Math.floor(Math.max(100,this.localDisplayVal.autoPilotDisplayedAltitudeLockValueFeet))+'').padStart(5, "0");
+                displayData.indaltmanaged = this.localDisplayVal.isAltManaged;
+
+                // VS or FPA
+
+                if (this.localDisplayVal.fcuState!=0) { // fcu not idle
+                    if (this.localDisplayVal.isA32NXFPAModeActive) {
+                        displayData.valvs=(this.localDisplayVal.autoPilotSelectedFPAHoldValue < 0 ? '-' : '+')+Math.abs(this.localDisplayVal.autoPilotSelectedFPAHoldValue).toFixed(1);
+                    } else {
+                        if (this.localDisplayVal.fcuState==1) {
+                            displayData.valvs="00oo";
+                        } else {
+                            displayData.valvs=(this.localDisplayVal.autoPilotSelectedVerticalSpeedHoldValue < 0 ? '-' : '+')+
+                                Math.abs(this.localDisplayVal.autoPilotSelectedVerticalSpeedHoldValue/100).toFixed(0).padStart(2, "0") + "oo";
+                        }
+                    }
+                } else {
+                    displayData.valvs="---";
+                }
+                if (this.localDisplayVal.isA32NXFPAModeActive) {
+                    displayData.indtrk=true;
+                    displayData.indtrkc=true;
+                    displayData.indfpac=true;
+                    displayData.indfpa=true;
+                } else {
+                    displayData.indhdg=true;
+                    displayData.indhdgc=true;
+                    displayData.indvsc=true;
+                    displayData.indvs=true;
+                }
+
+                displayData.indloc=this.localDisplayVal.autoPilotLocHold;
+                displayData.indap1=this.localDisplayVal.autoPilot1Status;
+                displayData.indap2=this.localDisplayVal.autoPilot2Status;
+                displayData.indathr=this.localDisplayVal.autoPilotThrottleArm;
+
+                displayData.knbaltsel=this.localDisplayVal.autoPilotAltInc==1000;
+                displayData.indappr=this.localDisplayVal.autoPilotAPPRHold;
+                displayData.indexped=this.localDisplayVal.autoPilotExpediteActive;
+
+            } // End of FlyByWire_A320_NEO
+
             var ks=Object.keys(displayData);
 
             for(var i=0;i<ks.length;i++) {
@@ -191,92 +271,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
             }
         } // refreshInstrument
 
-        onTapEvent(elm,e)
-        {
-            var target = jquery(elm).attr("target");
-            if (jquery(elm).hasClass("toggle-switch")) {
-                var func = "on" + target + "Toggle";
-                this[func]();
-            } else if (jquery(elm).hasClass("ip-btn")) {
-                if (jquery(elm).hasClass("knob-ctl")) {
-                    jquery(elm).addClass("btn-tapped");
-                } else {
-                    jquery(elm).find(".btn").addClass("btn-tapped");
-                }
-                var func = "on" + target;
-                this[func]();
-            } else if (jquery(elm).hasClass("ip-inc") || jquery(elm).hasClass("ip-dec")) {
-                jquery(elm).addClass("btn-tapped");
-                if (this.timerId!=null) {
-                    clearInterval(this.timerId);
-                    this.timerId=null;
-                }
-                this.adjVal = 1;
-                if (jquery(elm).hasClass("ip-dec")) {
-                    this.adjVal = -1;
-                }
-                this.adjScaleFactor = 1;
-                this.ctlTarget = target;
-                this.rotateKnob();
-                var func = "on" + target + "Changed";
-                this[func]();
-                this.tapStartTimeStamp=Date.now();
-                this.timerId=setInterval(jquery.proxy(this.pressAndHoldTimerFunc,this), 250);
-            }
-        }
-
-        onTapEndEvent(elm, e) {
-            if (jquery(elm).hasClass("knob-ctl")) {
-                jquery(elm).removeClass("btn-tapped");
-            } else {
-                jquery(elm).find(".btn").removeClass("btn-tapped");
-            }
-            if (this.timerId!=null) {
-                clearInterval(this.timerId);
-                this.timerId=null;
-            }
-            this.ctlTarget=null;
-            this.adjVal = 0;
-            this.adjScaleFactor = 1;
-            this.tapStartTimeStamp = 0;
-        }
-
-        pressAndHoldTimerFunc() {
-            var ct = Date.now();
-            if (this.adjScaleFactor == 1 && ct - this.tapStartTimeStamp > 500) {
-                this.adjScaleFactor = 2;
-            }
-            if (this.adjScaleFactor == 2 && ct - this.tapStartTimeStamp > 3000) {
-                this.adjScaleFactor = 5;
-            }
-            this.rotateKnob();
-            var func = "on"+this.ctlTarget +"Changed";
-            this[func]();
-        }
-
-        onSpdMachToggle()
-        {
-            var isMachActive = 1-this.localDisplayVal.isMachActive;
-            this.onSimVarChange("isMachActive", isMachActive);
-            this.onSimVarChange("varismachactive", isMachActive);
-        }
-
-        onTrkFPAToggle()
-        {
-            var isTRKMode = 1-this.localDisplayVal.isTRKMode;
-            this.onSimVarChange("isTRKMode", isTRKMode);
-        }
-
-        onSpeedManaged()
-        {
-            this.panel.sendEvent("a20nairspeedmanaged",1);
-        }
-
-        onSpeedSelected()
-        {
-            this.panel.sendEvent("a20nairspeedselected",1);
-        }
-
+        // Asobo
         onSpeedHoldChanged()
         {
             this.panel.sendEvent("a20nairspeedchanged",1);
@@ -308,30 +303,11 @@ function(jquery, Instrument, StaticPropertyHelper) {
             }
         }
 
-        setSelectedSpeedToIndicatedSpeed()
-        {
-            if (this.localDisplayVal.isMachActive) {
-                this.onSimVarChange("autoPilotSelectedMachHoldValue", Math.round(this.localDisplayVal.indicatedSpeedMach*100)/100);
-            } else {
-                this.onSimVarChange("autoPilotSelectedAirspeedHoldValue", Math.round(this.localDisplayVal.indicatedSpeed));
-            }
-        }
-
-        onHeadingManaged()
-        {
-            this.panel.sendEvent("a20nheadingmanaged",1);
-        }
-
-        onHeadingSelected()
-        {
-            this.panel.sendEvent("a20nheadingselected",1);
-        }
-
         onHeadingHoldChanged()
         {
             var hdg = Math.round(this.localDisplayVal.autoPilotDisplayedHeadingLockValueDegrees);
             var newHdg = hdg + this.adjVal*this.adjScaleFactor;
-            if (newHdg>0) {
+            if (newHdg<0) {
                 newHdg = 360+newHdg;
             }
             newHdg = newHdg % 360;
@@ -348,34 +324,6 @@ function(jquery, Instrument, StaticPropertyHelper) {
         onAltManaged()
         {
             this.panel.sendEvent("a20naltmanaged",1);
-        }
-
-        onAltHoldChanged()
-        {
-            var alt = Math.round(this.localDisplayVal.autoPilotDisplayedAltitudeLockValueFeet);
-            var sf = this.localDisplayVal.autoPilotAltInc;
-            var newAlt = alt + this.adjVal * this.adjScaleFactor * sf;
-            if (newAlt<100) {
-                newAlt=100;
-            }
-            if (newAlt>49000) {
-                newAlt=49000;
-            }
-            if (newAlt!=alt) {
-                this.panel.sendEvent("apaltvarset", [newAlt, 3]);
-                this.onSimVarChange("autoPilotDisplayedAltitudeLockValueFeet", newAlt, false);
-                this.panel.sendEvent("a20naltchanged",1);
-            }
-        }
-
-        onAltSelect100()
-        {
-            this.onSimVarChange("autoPilotAltInc",100);
-        }
-
-        onAltSelect1000()
-        {
-            this.onSimVarChange("autoPilotAltInc",1000);
         }
 
         onVSHold()
@@ -444,15 +392,9 @@ function(jquery, Instrument, StaticPropertyHelper) {
             this.onSimVarChange("autoPilotGlideslopeHold", 0, false);
         }
 
-        onThrottleArm()
-        {
-            var newState = (this.localDisplayVal.autoPilotThrottleArm) ? 0 : 1;
-            this.onSimVarChange("autoPilotThrottleArm",newState);
-        }
-
         onExped()
         {
-            this.panel.sendEvent("exped",0);
+            //this.panel.sendEvent("exped",0);
         }
 
         onAPPRHold()
@@ -464,6 +406,292 @@ function(jquery, Instrument, StaticPropertyHelper) {
             }
             this.panel.sendEvent("btnapr",0);
             this.onSimVarChange("autoPilotGlideslopeHold", newState, false);
+        }
+
+        onIsUnitMetricToggle()
+        {
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                var newState = 1- this.localDisplayVal.isUnitMetric;
+                this.onSimVarChange("isUnitMetric", newState);
+            }
+        }
+
+        // A32NX
+        onA32NXSpeedHoldChanged()
+        {
+            var maxVal;
+            var minVal;
+            var sf ;
+            if (this.localDisplayVal.isMachActive) {
+                maxVal = 0.99;
+                minVal = 0.1;
+                sf = 0.01;
+            } else {
+                maxVal = 399;
+                minVal = 100;
+                sf = 1;
+            }
+            var currentVal = this.localDisplayVal.apSelectedSpeed;
+            var newVal;
+            newVal = currentVal + this.adjVal*this.adjScaleFactor*sf;
+            newVal = Math.round(newVal/sf)*sf;
+            if (newVal> maxVal) {
+                newVal = maxVal;
+            }
+            if (newVal< minVal) {
+                newVal = minVal;
+            }
+            if (newVal!=currentVal) {
+                if (this.localDisplayVal.isMachActive) {
+                    this.onSimVarChange("apSelectedSpeed",  Math.round(newVal*100));
+                    this.onSimVarChange("apSelectedSpeed",  newVal, false);
+                } else {
+                    this.onSimVarChange("apSelectedSpeed",  newVal);
+                }
+                this.onSimVarChange("apSelectedSpeedSet", 1);
+            }
+        }
+
+        onA32NXHeadingHoldChanged()
+        {
+            var hdg = this.localDisplayVal.apSelectedHeading;
+            var newHdg = hdg + this.adjVal*this.adjScaleFactor;
+            if (newHdg<0) {
+                newHdg = 360+newHdg;
+            }
+            newHdg = newHdg % 360;
+            this.onSimVarChange("apSelectedHeading", newHdg, true);
+            this.panel.sendEvent("a32nxheadingchanged",1);
+        }
+
+        onA32NXVSHoldChanged()
+        {
+            var sf;
+            var oldVal;
+            var maxVal;
+            var osf;
+
+            if (this.localDisplayVal.isA32NXFPAModeActive) {
+                sf = 0.1;
+                oldVal = this.localDisplayVal.autoPilotSelectedFPAHoldValue;
+                maxVal=9.9;
+                osf=10;
+            } else {
+                sf = 100;
+                oldVal = this.localDisplayVal.autoPilotSelectedVerticalSpeedHoldValue;
+                maxVal=6000;
+                osf=1;
+            }
+
+            var newVal = oldVal + this.adjVal*this.adjScaleFactor * sf;
+            if (Math.abs(newVal)<=maxVal) {
+                if (this.localDisplayVal.isA32NXFPAModeActive) {
+                    this.onSimVarChange("autoPilotSelectedFPAHoldValue",newVal,false);
+                } else {
+                    this.onSimVarChange("autoPilotSelectedVerticalSpeedHoldValue",newVal,false);
+                }
+                newVal = Math.round(newVal * osf);
+                this.onSimVarChange("apselectedvs",newVal);
+                this.onSimVarChange("a32nxvsfpschanged",1);
+                this.onSimVarChange("a32nxcduvs",1);
+            }
+        }
+
+        onA32NXVSHold()
+        {
+            this.onSimVarChange("a32nxvspull",1);
+            this.onSimVarChange("a32nxcduvs",1);
+        }
+
+        onA32NXVSZero()
+        {
+            this.onSimVarChange("a32nxvspush",1);
+            this.onSimVarChange("a32nxcduvs",1);
+        }
+
+        onA32NXLOCHold()
+        {
+            this.onSimVarChange("a32nxlocpush",1);
+        }
+
+        onA32NXAPPRHold()
+        {
+            this.onSimVarChange("a32nxapprpush",1);
+        }
+
+        onA32NXExped()
+        {
+            this.onSimVarChange("a32nxexpedpush",1);
+        }
+
+        onA32NXAutoPilot1Status()
+        {
+            this.onA32NXAutoPilotStatus(1);
+        }
+
+        onA32NXAutoPilot2Status()
+        {
+            this.onA32NXAutoPilotStatus(2);
+        }
+
+        onA32NXAutoPilotStatus(idx)
+        {
+            this.onSimVarChange("a32nxap"+idx+"push",1);
+        }
+
+        // Generic
+        onSpdMachToggle()
+        {
+            var isMachActive = 1-this.localDisplayVal.isMachActive;
+            this.onSimVarChange("isMachActive", isMachActive);
+            this.onSimVarChange("varismachactive", isMachActive);
+        }
+
+        onTrkFPAToggle()
+        {
+            var vname;
+
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                vname="isA32NXFPAModeActive";
+            } else {
+                vname="isTRKMode";
+            }
+            var newState = 1-this.localDisplayVal[vname];
+            this.onSimVarChange(vname, newState);
+        }
+
+        onSpeedManaged()
+        {
+            this.onGenericEvent("airspeedmanaged");
+        }
+
+        onSpeedSelected()
+        {
+            this.onGenericEvent("airspeedselected");
+        }
+
+        onHeadingManaged()
+        {
+            this.onGenericEvent("headingmanaged");
+        }
+
+        onHeadingSelected()
+        {
+            this.onGenericEvent("headingselected");
+        }
+
+        onAltHoldChanged()
+        {
+            var alt = Math.round(this.localDisplayVal.autoPilotDisplayedAltitudeLockValueFeet);
+            var sf = this.localDisplayVal.autoPilotAltInc;
+            var newAlt = alt + this.adjVal * this.adjScaleFactor * sf;
+            if (newAlt<100) {
+                newAlt=100;
+            }
+            if (newAlt>49000) {
+                newAlt=49000;
+            }
+            if (newAlt!=alt) {
+                this.panel.sendEvent("apaltvarset", [newAlt, 3]);
+                this.onSimVarChange("autoPilotDisplayedAltitudeLockValueFeet", newAlt, false);
+                this.panel.sendEvent("a20naltchanged",1);
+                return true;
+            }
+            return false;
+        }
+
+        onAltSelect100()
+        {
+            this.onSimVarChange("autoPilotAltInc",100);
+        }
+
+        onAltSelect1000()
+        {
+            this.onSimVarChange("autoPilotAltInc",1000);
+        }
+
+        onThrottleArm()
+        {
+            var newState = (this.localDisplayVal.autoPilotThrottleArm) ? 0 : 1;
+            this.onSimVarChange("autoPilotThrottleArm",newState);
+        }
+
+        onTapEvent(elm,e)
+        {
+            var target = jquery(elm).attr("target");
+            if (jquery(elm).hasClass("toggle-switch")) {
+                this.callFunction("on", target, "Toggle");
+            } else if (jquery(elm).hasClass("ip-btn")) {
+                if (jquery(elm).hasClass("knob-ctl")) {
+                    jquery(elm).addClass("btn-tapped");
+                } else {
+                    jquery(elm).find(".btn").addClass("btn-tapped");
+                }
+                this.callFunction("on", target, "");
+            } else if (jquery(elm).hasClass("ip-inc") || jquery(elm).hasClass("ip-dec")) {
+                jquery(elm).addClass("btn-tapped");
+                if (this.timerId!=null) {
+                    clearInterval(this.timerId);
+                    this.timerId=null;
+                }
+                this.adjVal = 1;
+                if (jquery(elm).hasClass("ip-dec")) {
+                    this.adjVal = -1;
+                }
+                this.adjScaleFactor = 1;
+                this.ctlTarget = target;
+                this.rotateKnob();
+                this.callFunction("on", target, "Changed");
+                this.tapStartTimeStamp=Date.now();
+                this.timerId=setInterval(jquery.proxy(this.pressAndHoldTimerFunc,this), 250);
+            }
+        }
+
+        callFunction(p,f,s)
+        {
+            var prefix = "";
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                prefix="A32NX";
+            }
+            var funcName = p+prefix+f+s;
+            if (typeof this[funcName] === 'function') {
+                this[funcName]();
+            } else {
+                this[p+f+s]();
+            }
+        }
+
+        onTapEndEvent(elm, e) {
+            if (jquery(elm).hasClass("knob-ctl")) {
+                jquery(elm).removeClass("btn-tapped");
+            } else {
+                jquery(elm).find(".btn").removeClass("btn-tapped");
+            }
+            if (this.timerId!=null) {
+                clearInterval(this.timerId);
+                this.timerId=null;
+            }
+            this.ctlTarget=null;
+            this.adjVal = 0;
+            this.adjScaleFactor = 1;
+            this.tapStartTimeStamp = 0;
+        }
+
+        pressAndHoldTimerFunc() {
+            var ct = Date.now();
+            if (this.adjScaleFactor == 1 && ct - this.tapStartTimeStamp > 500) {
+                this.adjScaleFactor = 2;
+            }
+            if (this.adjScaleFactor == 2 && ct - this.tapStartTimeStamp > 3000) {
+                this.adjScaleFactor = 5;
+            }
+            this.rotateKnob();
+            var prefix = "";
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                prefix="A32NX";
+            }
+            var func = "on"+prefix+this.ctlTarget +"Changed";
+            this[func]();
         }
 
         rotateKnob()
@@ -484,6 +712,14 @@ function(jquery, Instrument, StaticPropertyHelper) {
             angle = angle % 360;
             jquery(elm).attr("angle", angle);
             jquery(elm).css("transform", "rotate("+angle+"deg)");
+        }
+
+        onGenericEvent(ev) {
+            var prefix="a20n";
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                prefix="a32nx";
+            }
+            this.panel.sendEvent(prefix+ev,1);
         }
     }
 

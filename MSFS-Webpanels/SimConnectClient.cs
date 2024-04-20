@@ -38,7 +38,18 @@ public class SimConnectClient
         "simvar-autopilotnavaidstate1",
         "simvar-autopilotnavaidstate2",
         "simvar-ispressureselectedunitshpa",
-        "simvar-baromode"
+        "simvar-baromode",
+        "simvar-isa32nxfpamodeactive",
+        "simvar-isunitmetric",
+        "simvar-apselectedspeed",
+        "simvar-apselectedheading",
+        "simvar-apselectedvs",
+        "simvar-a32nxndmode",
+        "simvar-a32nxndrange",
+        "simvar-a32nxautopilotnavaidstate1",
+        "simvar-a32nxautopilotnavaidstate2",
+        "simvar-a32nxbtnlsactive",
+        "simvar-efisoption"
     };
 
     public readonly static string[] SimEvents =
@@ -134,7 +145,14 @@ public class SimConnectClient
         "simvar-autopilotselectedverticalspeedholdvalue",  // AP_VS_VAR_SET_ENGLISH
         "simvar-autopilotapprhold",   // AP_LOC_HOLD
         "simvar-autopilotthrottlearm",  // AUTO_THROTTLE_ARM
-        "simvar-autopilotflightdirectoractive" // TOGGLE_FLIGHT_DIRECTOR
+        "simvar-autopilotflightdirectoractive", // TOGGLE_FLIGHT_DIRECTOR
+        "simvar-masterwarningactive", // MASTER_WARNING_ACKNOWLEDGE
+        "simvar-mastercautionactive", // MASTER_CAUTION_ACKNOWLEDGE
+        "simvar-a32nxap1active", // A32NX.FCU_AP_1_PUSH
+        "simvar-a32nxap2active", // A32NX.FCU_AP_2_PUSH
+        "simvar-a32nxlocactive", // A32NX.FCU_LOC_PUSH
+        "simvar-a32nxappractive", // A32NX.FCU_APPR_PUSH
+        "simvar-a32nxexpedactive", // A32NX.FCU_EXPED_PUSH
     };
 
     private readonly string[] WritableSimVarsDef =
@@ -151,7 +169,18 @@ public class SimConnectClient
         "L:XMLVAR_NAV_AID_SWITCH_L1_State","Number",
         "L:XMLVAR_NAV_AID_SWITCH_L2_State","Number",
         "L:XMLVAR_Baro_Selector_HPA_1","Number",
-        "L:XMLVAR_Baro1_Mode","Number"
+        "L:XMLVAR_Baro1_Mode","Number",
+        "L:A32NX_TRK_FPA_MODE_ACTIVE", "Bool",
+        "L:A32NX_METRIC_ALT_TOGGLE","Bool",
+        "L:A320_Neo_FCU_SPEED_SET_DATA","Number",
+        "L:A320_Neo_FCU_HDG_SET_DATA","Number",
+        "L:A320_Neo_FCU_VS_SET_DATA","Number",
+        "L:A32NX_EFIS_L_ND_MODE","Number",
+        "L:A32NX_EFIS_L_ND_RANGE","Number",
+        "L:A32NX_EFIS_L_NAVAID_1_MODE","Number",
+        "L:A32NX_EFIS_L_NAVAID_2_MODE","Number",
+        "L:BTN_LS_1_FILTER_ACTIVE","Number",
+        "L:A32NX_EFIS_L_OPTION","Number"
     };
 
     public readonly static string[] RPNEvents =
@@ -180,7 +209,22 @@ public class SimConnectClient
         "simvar-btnndbactive",
         "simvar-pfdndbactive",
         "simvar-btnarptactive",
-        "simvar-pfdarptactive"
+        "simvar-pfdarptactive",
+        "simvar-apselectedspeedset",
+        "simvar-a32nxairspeedselected",
+        "simvar-a32nxairspeedmanaged",
+        "simvar-a32nxheadingchanged",
+        "simvar-a32nxheadingselected",
+        "simvar-a32nxheadingmanaged",
+        "simvar-a32nxvsfpschanged",
+        "simvar-a32nxcduvs",
+        "simvar-a32nxvspull",
+        "simvar-a32nxvspush",
+        "simvar-a32nxlocpush",
+        "simvar-a32nxapprpush",
+        "simvar-a32nxexpedpush",
+        "simvar-a32nxap1push",
+        "simvar-a32nxap2push"
     };
 
     public readonly static string[] RPNScripts =
@@ -209,7 +253,22 @@ public class SimConnectClient
         "(>H:A320_Neo_MFD_BTN_NDB)",
         "(>H:A320_Neo_PFD_BTN_NDB)",
         "(>H:A320_Neo_MFD_BTN_ARPT)",
-        "(>H:A320_Neo_PFD_BTN_ARPT)"
+        "(>H:A320_Neo_PFD_BTN_ARPT)",
+        "(>H:A320_Neo_FCU_SPEED_SET)",
+        "(>H:A320_Neo_FCU_SPEED_PULL)",
+        "(>H:A320_Neo_FCU_SPEED_PUSH)",
+        "(>H:A320_Neo_FCU_HDG_SET)",
+        "(>H:A320_Neo_FCU_HDG_PULL)",
+        "(>H:A320_Neo_FCU_HDG_PUSH)",
+        "(>H:A320_Neo_FCU_VS_SET)",
+        "(>H:A320_Neo_CDU_VS)",
+        "(>H:A320_Neo_FCU_VS_PULL)",
+        "(>H:A320_Neo_FCU_VS_PUSH)",
+        "(>H:A320_Neo_FCU_LOC_PUSH)",
+        "(>H:A320_Neo_FCU_APPR_PUSH)",
+        "(>H:A320_Neo_FCU_EXPED_PUSH)",
+        "(>H:A320_Neo_FCU_AP_1_PUSH)",
+        "(>H:A320_Neo_FCU_AP_2_PUSH)"
     };
 
     enum QUEUEITEM_TYPE
@@ -352,7 +411,14 @@ public class SimConnectClient
         AP_VS_VAR_SET_ENGLISH,
         AP_LOC_HOLD,
         AUTO_THROTTLE_ARM,
-        TOGGLE_FLIGHT_DIRECTOR
+        TOGGLE_FLIGHT_DIRECTOR,
+        MASTER_WARNING_ACKNOWLEDGE,
+        MASTER_CAUTION_ACKNOWLEDGE,
+        A32NX_FCU_AP_1_PUSH,
+        A32NX_FCU_AP_2_PUSH,
+        A32NX_FCU_LOC_PUSH,
+        A32NX_FCU_APPR_PUSH,
+        A32NX_FCU_EXPED_PUSH
 #if DEBUG
         , CUSTOM_EVENT1
 #endif
@@ -582,6 +648,14 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.AP_LOC_HOLD, "AP_LOC_HOLD");
             simConnect.MapClientEventToSimEvent(EVENT.AUTO_THROTTLE_ARM, "AUTO_THROTTLE_ARM");
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_FLIGHT_DIRECTOR, "TOGGLE_FLIGHT_DIRECTOR");
+            simConnect.MapClientEventToSimEvent(EVENT.MASTER_WARNING_ACKNOWLEDGE, "MASTER_WARNING_ACKNOWLEDGE");
+            simConnect.MapClientEventToSimEvent(EVENT.MASTER_CAUTION_ACKNOWLEDGE, "MASTER_CAUTION_ACKNOWLEDGE");
+
+            simConnect.MapClientEventToSimEvent(EVENT.A32NX_FCU_AP_1_PUSH, "A32NX.FCU_AP_1_PUSH");
+            simConnect.MapClientEventToSimEvent(EVENT.A32NX_FCU_AP_2_PUSH, "A32NX.FCU_AP_2_PUSH");
+            simConnect.MapClientEventToSimEvent(EVENT.A32NX_FCU_LOC_PUSH, "A32NX.FCU_LOC_PUSH");
+            simConnect.MapClientEventToSimEvent(EVENT.A32NX_FCU_APPR_PUSH, "A32NX.FCU_APPR_PUSH");
+            simConnect.MapClientEventToSimEvent(EVENT.A32NX_FCU_EXPED_PUSH, "A32NX.FCU_EXPED_PUSH");
 
             _logger.Info("End calling SimConnect");
             return "Success";
@@ -672,6 +746,10 @@ public class SimConnectClient
                 simData = new C172SimData(simData);
                 C172SimData pdata = (C172SimData)simData;
                 pdata.simData = (C172SimData.C172Data)data.dwData[0];
+            } else if (data.dwData[0].GetType() == typeof(A32NXSimData.A32NXData)) {
+                simData = new A32NXSimData(simData);
+                A32NXSimData pdata = (A32NXSimData)simData;
+                pdata.simData = (A32NXSimData.A32NXData)data.dwData[0];
             } else
             {
                 simData = new SimData(simData);
@@ -783,6 +861,12 @@ public class SimConnectClient
             if (("Asobo_A320_NEO").Equals(simData.AircraftFolder))
             {
                 A20NSimData.defineSimVarDefintion(simConnect, DEFINITION.PANEL_DATA);
+                simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.PANEL_DATA, SimConnect.SIMCONNECT_OBJECT_ID_USER,
+                    SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
+            }
+            else if (("FlyByWire_A320_NEO").Equals(simData.AircraftFolder))
+            {
+                A32NXSimData.defineSimVarDefintion(simConnect, DEFINITION.PANEL_DATA);
                 simConnect.RequestDataOnSimObject(REQUEST.AIRCRAFT_STATE, DEFINITION.PANEL_DATA, SimConnect.SIMCONNECT_OBJECT_ID_USER,
                     SIMCONNECT_PERIOD.VISUAL_FRAME, 0, 0, 0, 0);
             } else

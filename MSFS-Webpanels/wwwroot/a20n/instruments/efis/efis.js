@@ -23,6 +23,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
             this.adjScaleFactor = 1;
             this.ctlTarget = null;
             this.timerId = null;
+            this.a32nxBtnEnum = ["","CSTR","VORD","WPT","NDB","ARPT"];
         }
 
         init()
@@ -60,9 +61,25 @@ function(jquery, Instrument, StaticPropertyHelper) {
                     var kn=ks[ki];
                     displayData[kn]=this.localDisplayVal[kn];
                 }
-                displayData["pressureValueHg"]=this.localDisplayVal["pressureValueHg"].toFixed(2);
-                displayData["pressureValueMB"]=this.localDisplayVal["pressureValueMB"].toFixed(0);
-            }
+            } // Asobo_A320_NEO
+
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                if (this.localDisplayVal.efisOption>0) {
+                    var opt = "btn"+this.a32nxBtnEnum[this.localDisplayVal.efisOption]+"Active";
+                    displayData[opt]=1;
+                }
+                var opts = ["autoPilotFlightDirectorActive","btnLSActive","ndMode", "ndRange", "isPressureSelectedUnitsHPA","baroMode","autoPilotNavAidState1","autoPilotNavAidState2"];
+                for(var i=0;i<opts.length;i++) {
+                    if (typeof this.localDisplayVal["a32nx"+opts[i]] !== 'undefined') {
+                        displayData[opts[i]]=this.localDisplayVal["a32nx"+opts[i]];
+                    } else {
+                        displayData[opts[i]]=this.localDisplayVal[opts[i]];
+                    }
+                }
+            } // FlyByWire_A320_NEO
+
+            displayData["pressureValueHg"]=this.localDisplayVal["pressureValueHg"].toFixed(2);
+            displayData["pressureValueMB"]=this.localDisplayVal["pressureValueMB"].toFixed(0);
 
             var mapping={
                 "knb-qnhsel":{nstates:2, "v": "isPressureSelectedUnitsHPA"},
@@ -132,74 +149,34 @@ function(jquery, Instrument, StaticPropertyHelper) {
             jquery(this.rootElm).find(".val-qnh").html(txtQNH);
         }
 
-        onTapEvent(elm,e)
-        {
-            var target = jquery(elm).attr("target");
-            if (jquery(elm).hasClass("ip-btn")) {
-                if (jquery(elm).hasClass("knob-ctl")) {
-                    jquery(elm).addClass("btn-tapped");
-                    var func = "on"+target;
-                    this[func]();
-                } else {
-                    jquery(elm).find(".btn").addClass("btn-tapped");
-                    if (target=="FD") {
-                        this.onFD();
-                    } else {
-                        this.onButtonPressed(target);
-                    }
-                }
-            } else if (jquery(elm).hasClass("ip-inc") || jquery(elm).hasClass("ip-dec")) {
-                jquery(elm).addClass("btn-tapped");
-                if (target=="QNH" && this.localDisplayVal.baroMode==2) {
-                    return;
-                }
-                if (this.timerId!=null) {
-                    clearInterval(this.timerId);
-                    this.timerId=null;
-                }
-                this.adjVal = 1;
-                if (jquery(elm).hasClass("ip-dec")) {
-                    this.adjVal = -1;
-                }
-                if (jquery(elm).hasClass("ip-auto")) {
-                    this.ctlTarget=target;
-                    this.rotateKnob();
-                    var func = "on" + target + "Changed";
-                    this[func]();
-                    this.tapStartTimeStamp=Date.now();
-                    this.timerId=setInterval(jquery.proxy(this.pressAndHoldTimerFunc,this), 250);
-                } else {
-                    var func = "on" + target + "Changed";
-                    this[func]();
-                }
-            }
-        }
-
-        onTapEndEvent(elm, e) {
-            if (jquery(elm).hasClass("knob-ctl")) {
-                jquery(elm).removeClass("btn-tapped");
-            } else {
-                jquery(elm).find(".btn").removeClass("btn-tapped");
-            }
-            if (this.timerId!=null) {
-                clearInterval(this.timerId);
-                this.timerId=null;
-            }
-            this.ctlTarget=null;
-            this.adjVal = 0;
-            this.adjScaleFactor = 1;
-            this.tapStartTimeStamp = 0;
-        }
-
         onFD() {
             var newVal = (this.localDisplayVal["autoPilotFlightDirectorActive"]) ? 0 : 1;
             this.onSimVarChange("autoPilotFlightDirectorActive", newVal);
         }
 
         onButtonPressed(btnName) {
-            var newVal = (this.localDisplayVal["btn"+btnName+"Active"]) ? 0 : 1;
-            this.onSimVarChange("btn"+btnName+"Active", newVal);
-            this.onSimVarChange("pfd"+btnName+"Active", newVal);
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                if (btnName=="LS") {
+                    var newVal = (this.localDisplayVal["a32nxbtnLSActive"]) ? 0 : 1;
+                    this.onSimVarChange("a32nxbtnLSActive", newVal);
+                } else {
+                    var oldVal = this.localDisplayVal["efisOption"];
+                    var newVal;
+                    for(newVal=1;newVal<this.a32nxBtnEnum.length;newVal++) {
+                        if (this.a32nxBtnEnum[newVal]==btnName) {
+                            break;
+                        }
+                    }
+                    if (newVal==oldVal) {
+                        newVal = 0;
+                    }
+                    this.onSimVarChange("efisOption", newVal);
+                }
+            } else {
+                var newVal = (this.localDisplayVal["btn"+btnName+"Active"]) ? 0 : 1;
+                this.onSimVarChange("btn"+btnName+"Active", newVal);
+                this.onSimVarChange("pfd"+btnName+"Active", newVal);
+            }
         }
 
         onQNHPushed()
@@ -265,7 +242,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
         onRoseChanged()
         {
             var p= {
-                "simvar":"ndMode",
+                "simvar":this.getPrefix()+"ndMode",
                 "min":0,
                 "max":4
             };
@@ -275,7 +252,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
         onRangeChanged()
         {
             var p= {
-                "simvar":"ndRange",
+                "simvar":this.getPrefix()+"ndRange",
                 "min":0,
                 "max":5
             };
@@ -291,7 +268,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
         onNAV1Changed()
         {
             var p= {
-                "simvar":"autoPilotNavAidState1",
+                "simvar":this.getPrefix()+"autoPilotNavAidState1",
                 "min":0,
                 "max":2,
                 "convertFunc": this.navConvertFunc
@@ -302,7 +279,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
         onNAV2Changed()
         {
             var p= {
-                "simvar":"autoPilotNavAidState2",
+                "simvar":this.getPrefix()+"autoPilotNavAidState2",
                 "min":0,
                 "max":2,
                 "convertFunc": this.navConvertFunc
@@ -318,6 +295,72 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 "max":1
             };
             this.onInputChanged(p);
+        }
+
+        onTapEvent(elm,e)
+        {
+            var target = jquery(elm).attr("target");
+            if (jquery(elm).hasClass("ip-btn")) {
+                if (jquery(elm).hasClass("knob-ctl")) {
+                    jquery(elm).addClass("btn-tapped");
+                    this["on"+target]();
+                } else {
+                    jquery(elm).find(".btn").addClass("btn-tapped");
+                    if (target=="FD") {
+                        this["on"+target]();
+                    } else {
+                        this.onButtonPressed(target);
+                    }
+                }
+            } else if (jquery(elm).hasClass("ip-inc") || jquery(elm).hasClass("ip-dec")) {
+                jquery(elm).addClass("btn-tapped");
+                if (target=="QNH" && this.localDisplayVal.baroMode>=2) {
+                    return;
+                }
+                if (this.timerId!=null) {
+                    clearInterval(this.timerId);
+                    this.timerId=null;
+                }
+                this.adjVal = 1;
+                if (jquery(elm).hasClass("ip-dec")) {
+                    this.adjVal = -1;
+                }
+                if (jquery(elm).hasClass("ip-auto")) {
+                    this.ctlTarget=target;
+                    this.rotateKnob();
+                    var func = "on" + target + "Changed";
+                    this["on"+target+"Changed"]();
+                    this.tapStartTimeStamp=Date.now();
+                    this.timerId=setInterval(jquery.proxy(this.pressAndHoldTimerFunc,this), 250);
+                } else {
+                    this["on"+target+"Changed"]();
+                }
+            }
+        }
+
+        getPrefix()
+        {
+            var prefix = "";
+            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
+                prefix="a32nx";
+            }
+            return prefix;
+        }
+
+        onTapEndEvent(elm, e) {
+            if (jquery(elm).hasClass("knob-ctl")) {
+                jquery(elm).removeClass("btn-tapped");
+            } else {
+                jquery(elm).find(".btn").removeClass("btn-tapped");
+            }
+            if (this.timerId!=null) {
+                clearInterval(this.timerId);
+                this.timerId=null;
+            }
+            this.ctlTarget=null;
+            this.adjVal = 0;
+            this.adjScaleFactor = 1;
+            this.tapStartTimeStamp = 0;
         }
 
         onInputChanged(p)

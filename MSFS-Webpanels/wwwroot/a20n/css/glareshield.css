@@ -91,6 +91,7 @@ body
     position:relative;
     width:2.95843377%;
     height:100%;
+    background-color:#41556d;
 }
 
 .fcu
@@ -102,7 +103,7 @@ body
     vertical-align: top;
 }
 
-.efis-padding
+.warning
 {
     display:inline-block;
     position:relative;
