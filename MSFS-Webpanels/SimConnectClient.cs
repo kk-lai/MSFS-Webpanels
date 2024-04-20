@@ -120,7 +120,7 @@ public class SimConnectClient
         "simvar-adfrx", // RADIO_ADF_IDENT_TOGGLE
 
         "simvar-vsholdset", // AP_PANEL_VS_SET
-        "simvar-apaltvarset", // AP_ALT_VAR_SET
+        "simvar-apaltvarset", // AP_ALT_VAR_SET_ENGLISH
         "simvar-togglegpsdrivenav1", // TOGGLE_GPS_DRIVES_NAV1
         "simvar-appanelvson", // AP_PANEL_VS_ON
         "simvar-xpdridentset", // XPNDR_IDENT_SET
@@ -174,7 +174,7 @@ public class SimConnectClient
         "L:A32NX_METRIC_ALT_TOGGLE","Bool",
         "L:A320_Neo_FCU_SPEED_SET_DATA","Number",
         "L:A320_Neo_FCU_HDG_SET_DATA","Number",
-        "L:A320_Neo_FCU_VS_SET_DATA","Number",
+        "L:A320_Neo_FCU_VS_SET_DATA","Number", // apselectedvs
         "L:A32NX_EFIS_L_ND_MODE","Number",
         "L:A32NX_EFIS_L_ND_RANGE","Number",
         "L:A32NX_EFIS_L_NAVAID_1_MODE","Number",
@@ -224,7 +224,9 @@ public class SimConnectClient
         "simvar-a32nxapprpush",
         "simvar-a32nxexpedpush",
         "simvar-a32nxap1push",
-        "simvar-a32nxap2push"
+        "simvar-a32nxap2push",
+        "simvar-a32nxaltpull",
+        "simvar-a32nxaltpush"
     };
 
     public readonly static string[] RPNScripts =
@@ -268,7 +270,9 @@ public class SimConnectClient
         "(>H:A320_Neo_FCU_APPR_PUSH)",
         "(>H:A320_Neo_FCU_EXPED_PUSH)",
         "(>H:A320_Neo_FCU_AP_1_PUSH)",
-        "(>H:A320_Neo_FCU_AP_2_PUSH)"
+        "(>H:A320_Neo_FCU_AP_2_PUSH)",
+        "(>H:A320_Neo_FCU_ALT_PULL)",
+        "(>H:A320_Neo_FCU_ALT_PUSH)"
     };
 
     enum QUEUEITEM_TYPE
@@ -385,7 +389,7 @@ public class SimConnectClient
         TOGGLE_ADF_IDENT,
 
         AP_PANEL_VS_SET,
-        AP_ALT_VAR_SET,
+        AP_ALT_VAR_SET_ENGLISH,
         TOGGLE_GPS_DRIVES_NAV1,
         AP_PANEL_VS_ON,
         XPNDR_IDENT_SET,
@@ -438,7 +442,7 @@ public class SimConnectClient
 
     struct WritableSimVarStruct
     {
-        public Int32 simVar;
+        public float simVar;
     }
 
     private SimConnect simConnect = null;
@@ -618,7 +622,7 @@ public class SimConnectClient
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_ADF_IDENT, "RADIO_ADF_IDENT_TOGGLE");
             simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_SET, "AP_PANEL_VS_SET");
 
-            simConnect.MapClientEventToSimEvent(EVENT.AP_ALT_VAR_SET, "AP_ALT_VAR_SET_ENGLISH");
+            simConnect.MapClientEventToSimEvent(EVENT.AP_ALT_VAR_SET_ENGLISH, "AP_ALT_VAR_SET_ENGLISH");
             simConnect.MapClientEventToSimEvent(EVENT.TOGGLE_GPS_DRIVES_NAV1, "TOGGLE_GPS_DRIVES_NAV1");
 
             simConnect.MapClientEventToSimEvent(EVENT.AP_PANEL_VS_ON, "AP_PANEL_VS_ON");
@@ -800,16 +804,27 @@ public class SimConnectClient
                     string vunit;
                     uint offset = itm.Offset << 1;
                     uint val = itm.IParams[0];
+                    Int32 oval;
+                    uint mask = 0x7fffffff;
+
+                    if (val <= mask)
+                    {
+                        oval = (Int32)val;
+                    } else
+                    {
+                        val = val & mask;
+                        oval = -((Int32)mask) - 1 + (Int32)val;
+                    }
 
                     vname = WritableSimVarsDef[offset];
                     vunit = WritableSimVarsDef[offset + 1];
 
-                    simConnect.AddToDataDefinition(DEFINITION.SIM_VAR, vname, vunit, SIMCONNECT_DATATYPE.INT32, 0, 0);
+                    simConnect.AddToDataDefinition(DEFINITION.SIM_VAR, vname, vunit, SIMCONNECT_DATATYPE.FLOAT32, 0, 0);
                     simConnect.RegisterDataDefineStruct<WritableSimVarStruct>(DEFINITION.SIM_VAR);
                     simConnect.SetDataOnSimObject(DEFINITION.SIM_VAR,
                         SimConnect.SIMCONNECT_OBJECT_ID_USER,
                         SIMCONNECT_DATA_SET_FLAG.DEFAULT,
-                        new WritableSimVarStruct { simVar = (Int32)val }
+                        new WritableSimVarStruct { simVar = (float)oval }
                     );
                     simConnect.ClearDataDefinition(DEFINITION.SIM_VAR);
                 } else if (itm.QueueItemType == QUEUEITEM_TYPE.RPN_EXEC)

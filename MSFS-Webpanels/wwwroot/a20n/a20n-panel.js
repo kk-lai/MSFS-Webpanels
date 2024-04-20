@@ -22,6 +22,9 @@ define(['Panel','SysParam'],function(Panel,SysParam) {
                 this.logger.info("Aircraft is not A20N, redirect to index");
                 window.location.replace("../?v=" + SysParam.versionCode);
             }
+            if (jsonData.aircraftFolder=="FlyByWire_A320_NEO") {
+                jsonData.simData.apSelectedHeading=Math.max(jsonData.simData.apSelectedHeading,0) % 360;
+            }
         }
     }
 

@@ -134,7 +134,7 @@ function(jquery,util,sysconst) {
             url: sysconst.simVarUrl,
             success: function(jsonData, textStatus, jqXHR ){
                 isServerAppRunning=true;
-                if (jsonData.isSimConnected && jsonData.aircraftFolder=="Asobo_A320_NEO") {
+                if (jsonData.isSimConnected && (jsonData.aircraftFolder=="Asobo_A320_NEO" || jsonData.aircraftFolder=="FlyByWire_A320_NEO")) {
                     window.location.replace("../?v=" + sysconst.versionCode);
                     return;
                 }

@@ -130,7 +130,7 @@ namespace MSFS_Webpanels
             simConnect.AddToDataDefinition(defId, "L:A32NX_FCU_SPD_MANAGED_DOT", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_FCU_HDG_MANAGED_DOT", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
-            simConnect.AddToDataDefinition(defId, "L:A32NX_FCU_SPD_MANAGED_DASHES", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:A32NX_FCU_HDG_MANAGED_DASHES", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_FCU_ALT_MANAGED", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_FCU_VS_MANAGED", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:XMLVAR_Autopilot_Altitude_Increment", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
@@ -139,7 +139,7 @@ namespace MSFS_Webpanels
             simConnect.AddToDataDefinition(defId, "L:A32NX_AUTOPILOT_2_ACTIVE", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "AUTOPILOT FLIGHT DIRECTOR ACTIVE:1", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_AUTOPILOT_VS_SELECTED", "ft/min", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(defId, "AUTOPILOT THROTTLE ARM", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:A32NX_AUTOTHRUST_STATUS", "enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "AUTOPILOT ALTITUDE LOCK VAR:3", "feet", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
             simConnect.AddToDataDefinition(defId, "L:A32NX_AUTOPILOT_FPA_SELECTED", "Degree", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);

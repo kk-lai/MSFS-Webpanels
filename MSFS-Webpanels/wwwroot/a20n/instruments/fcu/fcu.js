@@ -464,6 +464,18 @@ function(jquery, Instrument, StaticPropertyHelper) {
             this.panel.sendEvent("a32nxheadingchanged",1);
         }
 
+        onA32NXAltSelected()
+        {
+            this.panel.sendEvent("a20naltselected",1);
+            this.panel.sendEvent("a32nxaltpull",1);
+        }
+
+        onA32NXAltManaged()
+        {
+            this.panel.sendEvent("a20naltmanaged",1);
+            this.panel.sendEvent("a32nxaltpush",1);
+        }
+
         onA32NXVSHoldChanged()
         {
             var sf;
@@ -686,12 +698,7 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 this.adjScaleFactor = 5;
             }
             this.rotateKnob();
-            var prefix = "";
-            if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
-                prefix="A32NX";
-            }
-            var func = "on"+prefix+this.ctlTarget +"Changed";
-            this[func]();
+            this.callFunction("on", this.ctlTarget, "Changed");
         }
 
         rotateKnob()

@@ -53,9 +53,9 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 "autoPilotNavAidState1": 0,
                 "autoPilotNavAidState2": 0
             };
-            if (this.panel.aircraftFolder=="Asobo_A320_NEO") {
-                this.isInstrumentOff=(!this.localDisplayVal.isCircuitGeneralPanelOn);
+            this.isInstrumentOff=(!this.localDisplayVal.isCircuitGeneralPanelOn);
 
+            if (this.panel.aircraftFolder=="Asobo_A320_NEO") {
                 var ks=Object.keys(displayData);
                 for(var ki=0;ki<ks.length;ki++) {
                     var kn=ks[ki];
