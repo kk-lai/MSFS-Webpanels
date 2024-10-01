@@ -40,18 +40,20 @@ function(jquery, Instrument, StaticPropertyHelper) {
         init()
         {
             this.aspectRatio = 1120/393;
-            this.htmlFile="../a20n/instruments/fcu/fcu-template.html"+window.location.search;
-            this.cssFile="../a20n/instruments/fcu/fcu.css"+window.location.search;
+            this.htmlFile="../a20n/instruments/fcu/fcu-template.html";
+            this.cssFile="../a20n/instruments/fcu/fcu.css";
         }
 
         preprocessLocalDisplayVal()
         {
-            this.localDisplayVal.isSpdManaged = this.localDisplayVal.autoPilotAirspeedSlotIndex==2;
-            this.localDisplayVal.showSelectedSpeed = this.localDisplayVal.showSelectedSpeed==1;
-            this.localDisplayVal.isHdgManaged = (this.localDisplayVal.autoPilotHeadingSlotIndex==2) || (this.localDisplayVal.autoPilotAPPRHold);
-            this.localDisplayVal.showSelectedHeading = this.localDisplayVal.showSelectedHeading && (!this.localDisplayVal.autoPilotGlideslopeHold);
-            this.localDisplayVal.isAltManaged = (this.localDisplayVal.autoPilotAltitudeManaged== 2);
-            this.localDisplayVal.isVSManaged = (this.localDisplayVal.fcuState==0);
+            if (this.panel.aircraftFolder=="Asobo_A320_NEO") {
+                this.localDisplayVal.isSpdManaged = this.localDisplayVal.autoPilotAirspeedSlotIndex==2;
+                this.localDisplayVal.showSelectedSpeed = this.localDisplayVal.showSelectedSpeed==1;
+                this.localDisplayVal.isHdgManaged = (this.localDisplayVal.autoPilotHeadingSlotIndex==2) || (this.localDisplayVal.autoPilotAPPRHold);
+                this.localDisplayVal.showSelectedHeading = this.localDisplayVal.showSelectedHeading && (!this.localDisplayVal.autoPilotGlideslopeHold);
+                this.localDisplayVal.isAltManaged = (this.localDisplayVal.autoPilotAltitudeManaged== 2);
+                this.localDisplayVal.isVSManaged = (this.localDisplayVal.fcuState==0);
+            }
         }
 
         refreshInstrument()
@@ -95,13 +97,13 @@ function(jquery, Instrument, StaticPropertyHelper) {
                 valvs:"---"
             };
 
+            this.isInstrumentOff=(!this.localDisplayVal.isCircuitGeneralPanelOn);
+
+            if (this.isInstrumentOff) {
+                return;
+            }
+
             if (this.panel.aircraftFolder=="Asobo_A320_NEO") {
-                this.isInstrumentOff=(!this.localDisplayVal.isCircuitGeneralPanelOn);
-
-                if (this.isInstrumentOff) {
-                    return;
-                }
-
                 // Speed
                 if (this.localDisplayVal.isMachActive) {
                     displayData.indmach=true;
@@ -184,12 +186,6 @@ function(jquery, Instrument, StaticPropertyHelper) {
             } // End of Asobo A320Neo
 
             if (this.panel.aircraftFolder=="FlyByWire_A320_NEO") {
-                this.isInstrumentOff=(!this.localDisplayVal.isCircuitGeneralPanelOn);
-
-                if (this.isInstrumentOff) {
-                    return;
-                }
-
                 // Speed
                 if (this.localDisplayVal.apSelectedSpeed<0) {
                     displayData.valspd ="---";
@@ -416,6 +412,12 @@ function(jquery, Instrument, StaticPropertyHelper) {
             }
         }
 
+        onThrottleArm()
+        {
+            var newState = (this.localDisplayVal.autoPilotThrottleArm) ? 0 : 1;
+            this.onSimVarChange("autoPilotThrottleArm",newState);
+        }
+
         // A32NX
         onA32NXSpeedHoldChanged()
         {
@@ -551,6 +553,13 @@ function(jquery, Instrument, StaticPropertyHelper) {
             this.onSimVarChange("a32nxap"+idx+"push",1);
         }
 
+        onA32NXThrottleArm()
+        {
+            var newState = (this.localDisplayVal.autoPilotThrottleArm) ? 0 : 1;
+            this.onSimVarChange("autoPilotThrottleArm",newState,false);
+            this.onSimVarChange("a32nxathrpush",1);
+        }
+
         // Generic
         onSpdMachToggle()
         {
@@ -620,12 +629,6 @@ function(jquery, Instrument, StaticPropertyHelper) {
         onAltSelect1000()
         {
             this.onSimVarChange("autoPilotAltInc",1000);
-        }
-
-        onThrottleArm()
-        {
-            var newState = (this.localDisplayVal.autoPilotThrottleArm) ? 0 : 1;
-            this.onSimVarChange("autoPilotThrottleArm",newState);
         }
 
         onTapEvent(elm,e)

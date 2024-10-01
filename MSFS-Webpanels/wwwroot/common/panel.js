@@ -29,6 +29,7 @@ function(jquery, SysParam) {
             this.aircraftFolder = "";
             this.refreshPeriod = SysParam.refreshPeriod;
             this.coolDownTime = SysParam.defaultCoolDown;
+            this.isDebug = false;
             this.logger = {
                 info:function(txt) {
                     this._log(1,txt);
@@ -121,7 +122,7 @@ function(jquery, SysParam) {
                 jquery(".container").removeClass("hide");
                 that.resizePanel();
             })
-            
+
             setInterval(jquery.proxy(this.timerFunc,this), this.refreshPeriod);
         }
 
@@ -129,22 +130,31 @@ function(jquery, SysParam) {
         {
             var that = this;
             this.cssPromise = new Promise(function(resolve) {
-            var head = jquery("head").first();
-            var link = document.createElement("link");
-            link.rel="stylesheet";
-            link.type="text/css";
-            link.href=url + "?v="+SysParam.versionCode;
+                var head = jquery("head").first();
+                var link = document.createElement("link");
+                link.rel="stylesheet";
+                link.type="text/css";
+                link.href=url + window.location.search;
+
                 link.onload = function() {
-                    that.logger.debug("css loaded");
                     resolve();
                 };
-            head.append(link);
+                head.append(link);
             });
         }
 
         refreshDisplay(jsonData)
         {
             var errMessage = "Webpanel is not started";
+            if (jsonData.isDebug) {
+                // check query string
+                var urlParams = new URLSearchParams(window.location.search);
+                if (!urlParams.has('t')) {
+                    var url = window.location.href+"&t="+Date.now();
+                    window.location.replace(url);
+                }
+            }
+            this.isDebug=jsonData.isDebug;
 
             if (this.isServerAppRunning) {
                 this.latestSimData = jsonData;

@@ -29,8 +29,8 @@ function(jquery, Instrument, StaticPropertyHelper) {
         init()
         {
             this.aspectRatio = 676/401;
-            this.htmlFile="../a20n/instruments/efis/efis-template.html"+window.location.search;
-            this.cssFile="../a20n/instruments/efis/efis.css"+window.location.search;
+            this.htmlFile="../a20n/instruments/efis/efis-template.html";
+            this.cssFile="../a20n/instruments/efis/efis.css";
         }
 
         refreshInstrument()

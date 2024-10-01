@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8" />
-<title>C172 Webpanel</title>
+<title>MSFS-Webpanels</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="C172 Webpanel">
+<meta name="apple-mobile-web-app-title" content="MSFS-Webpanels">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -545,6 +545,9 @@
     var urlArgs = "";
     if (urlParams.has('v')) {
         urlArgs="v="+urlParams.get('v');
+    }
+    if (urlParams.has("t")) {
+        urlArgs="&t="+Date.now();
     }
     require.config({
         waitSeconds: 15,

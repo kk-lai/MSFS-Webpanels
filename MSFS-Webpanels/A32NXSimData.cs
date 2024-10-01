@@ -104,6 +104,9 @@ namespace MSFS_Webpanels
             public int A32nxbtnLSActive { get => a32nxbtnLSActive; set => a32nxbtnLSActive = value; }
             public int A32nxndMode { get => a32nxndMode; set => a32nxndMode = value; }
             public int A32nxndRange { get => a32nxndRange; set => a32nxndRange = value; }
+            public int AutoPilotAutoLandWarning { get => autoPilotAutoLandWarning; set => autoPilotAutoLandWarning = value; }
+            public int MasterWarningActive { get => masterWarningActive; set => masterWarningActive = value; }
+            public int MasterCautionActive { get => masterCautionActive; set => masterCautionActive = value; }
         }
 
         private A32NXData a32nxdata = new A32NXData();
@@ -156,7 +159,7 @@ namespace MSFS_Webpanels
             simConnect.AddToDataDefinition(defId, "L:A32NX_EFIS_L_NAVAID_1_MODE", "number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_EFIS_L_NAVAID_2_MODE", "number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_AUTOPILOT_AUTOLAND_WARNING", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-            simConnect.AddToDataDefinition(defId, "L:Generic_Master_Warning_Active", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "L:Generic_Master_Warning_Active", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);            
             simConnect.AddToDataDefinition(defId, "L:Generic_Master_Caution_Active", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_OVHD_INTLT_ANN", "number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
             simConnect.AddToDataDefinition(defId, "L:A32NX_FCDC_1_PRIORITY_LIGHT_CAPT_GREEN_ON", "Boolean", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);

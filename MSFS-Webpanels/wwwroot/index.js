@@ -25,6 +25,9 @@ function($,sysParam) {
                 } else {
                     url = "c172/" + "?v="+sysParam.versionCode;
                 }
+                if (jsonData.isDebug) {
+                    url = url + "&t="+Date.now();
+                }
                 window.location.replace(url);
             },
             error: function(jqXHR, textStatus, errorThrown ) {

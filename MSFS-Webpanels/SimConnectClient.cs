@@ -18,6 +18,7 @@ using static SimData;
 using System.Windows.Forms.VisualStyles;
 using WASimCommander.CLI.Client;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 
 public class SimConnectClient
@@ -49,7 +50,12 @@ public class SimConnectClient
         "simvar-a32nxautopilotnavaidstate1",
         "simvar-a32nxautopilotnavaidstate2",
         "simvar-a32nxbtnlsactive",
-        "simvar-efisoption"
+        "simvar-efisoption",
+        "simvar-a32nxmastercautionack",
+        "simvar-a32nxmastercautionpush",
+        "simvar-a32nxmasterwarningack",
+        "simvar-a32nxmasterwarningpush",
+        "simvar-a32nxdcduatcmsgack"
     };
 
     public readonly static string[] SimEvents =
@@ -180,7 +186,12 @@ public class SimConnectClient
         "L:A32NX_EFIS_L_NAVAID_1_MODE","Number",
         "L:A32NX_EFIS_L_NAVAID_2_MODE","Number",
         "L:BTN_LS_1_FILTER_ACTIVE","Number",
-        "L:A32NX_EFIS_L_OPTION","Number"
+        "L:A32NX_EFIS_L_OPTION","Number",
+        "L:A32NX_MASTER_CAUTION","Number",
+        "L:PUSH_AUTOPILOT_MASTERCAUT_L","Number",
+        "L:A32NX_MASTER_WARNING","Number",
+        "L:PUSH_AUTOPILOT_MASTERAWARN_L","Number",
+        "L:A32NX_DCDU_ATC_MSG_ACK","Number"
     };
 
     public readonly static string[] RPNEvents =
@@ -226,7 +237,9 @@ public class SimConnectClient
         "simvar-a32nxap1push",
         "simvar-a32nxap2push",
         "simvar-a32nxaltpull",
-        "simvar-a32nxaltpush"
+        "simvar-a32nxaltpush",
+        "simvar-a32nxathrpush",
+        "simvar-a32nxchronopush"
     };
 
     public readonly static string[] RPNScripts =
@@ -272,7 +285,9 @@ public class SimConnectClient
         "(>H:A320_Neo_FCU_AP_1_PUSH)",
         "(>H:A320_Neo_FCU_AP_2_PUSH)",
         "(>H:A320_Neo_FCU_ALT_PULL)",
-        "(>H:A320_Neo_FCU_ALT_PUSH)"
+        "(>H:A320_Neo_FCU_ALT_PUSH)",
+        "(>K:AUTO_THROTTLE_ARM)",
+        "(>H:A32NX_EFIS_L_CHRONO_PUSHED)"
     };
 
     enum QUEUEITEM_TYPE
@@ -758,6 +773,9 @@ public class SimConnectClient
             {
                 simData = new SimData(simData);
             }
+#if DEBUG
+            simData.IsDebug = true;
+#endif
         }
         if (data.dwDefineID == (uint)DEFINITION.GENERAL_PLANE_DATA)
         {
@@ -819,6 +837,8 @@ public class SimConnectClient
                     vname = WritableSimVarsDef[offset];
                     vunit = WritableSimVarsDef[offset + 1];
 
+                    _logger.Debug("Set SimVar " + vname + ":" + oval);
+
                     simConnect.AddToDataDefinition(DEFINITION.SIM_VAR, vname, vunit, SIMCONNECT_DATATYPE.FLOAT32, 0, 0);
                     simConnect.RegisterDataDefineStruct<WritableSimVarStruct>(DEFINITION.SIM_VAR);
                     simConnect.SetDataOnSimObject(DEFINITION.SIM_VAR,
@@ -843,6 +863,7 @@ public class SimConnectClient
                         s = s + " ";
                     }
                     s = s + RPNScripts[itm.Offset];
+                    _logger.Debug("Exec RPN Script:" + s);
                     waSimClient.executeCalculatorCode(s);
                 }
             }
