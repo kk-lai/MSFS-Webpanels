@@ -54,6 +54,8 @@ public class SimData
     private bool isPaused;
     private string? aircraftFolder;
     private bool isDebug;
+    private UInt32 msfsMajorVersion;
+    private UInt32 msfsMinorVersion;
 
     public SimData()
     {
@@ -74,4 +76,6 @@ public class SimData
     public bool IsSimConnected { get => isSimConnected; set => isSimConnected = value; }
     public string? AircraftFolder { get => aircraftFolder; set => aircraftFolder = value; }
     public bool IsDebug { get => isDebug; set => isDebug = value; }
+    public uint MsfsMajorVersion { get => msfsMajorVersion; set => msfsMajorVersion = value; }
+    public uint MsfsMinorVersion { get => msfsMinorVersion; set => msfsMinorVersion = value; }
 }
