@@ -84,6 +84,10 @@ img
     transform: translate(-50%, -50%);
 }
 
+.nowordbreak {
+    word-break:keep-all;
+}
+
 .wrapper
 {
     position: relative;

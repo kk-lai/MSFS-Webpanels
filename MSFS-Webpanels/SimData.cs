@@ -53,6 +53,7 @@ public class SimData
     private bool isSimRunning;
     private bool isPaused;
     private string? aircraftFolder;
+    private bool isDebug;
 
     public SimData()
     {
@@ -65,10 +66,12 @@ public class SimData
         this.isSimRunning = data.isSimRunning;
         this.isSimConnected = data.isSimConnected;
         this.aircraftFolder = data.aircraftFolder;
+        this.isDebug = data.isDebug;
     }
 
     public bool IsPaused { get => isPaused; set => isPaused = value; }
     public bool IsSimRunning { get => isSimRunning; set => isSimRunning = value; }
     public bool IsSimConnected { get => isSimConnected; set => isSimConnected = value; }
     public string? AircraftFolder { get => aircraftFolder; set => aircraftFolder = value; }
+    public bool IsDebug { get => isDebug; set => isDebug = value; }
 }

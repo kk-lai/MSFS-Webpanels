@@ -163,6 +163,7 @@ public class C172SimData : SimData
         private Int32 hsiGSINeedleValid;
         private float hsiDistance;
 
+
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
         public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
         public float EngineEGT { get => engineEGT; set => engineEGT = value; }
@@ -282,6 +283,7 @@ public class C172SimData : SimData
         public int OutsideMarkerOn { get => outsideMarkerOn; set => outsideMarkerOn = value; }
         public int PilotTxing { get => pilotTxing; set => pilotTxing = value; }
         public int CopilotTxing { get => copilotTxing; set => copilotTxing = value; }
+
         public int IsGearRetractable { get => isGearRetractable; set => isGearRetractable = value; }
         public int GearHandlePosition { get => gearHandlePosition; set => gearHandlePosition = value; }
         public Int32 EngineElapsedTime { get => engineElapsedTime; set => engineElapsedTime = value; }

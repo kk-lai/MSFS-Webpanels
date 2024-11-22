@@ -1,0 +1,33 @@
+.generic-vertical-speed-indicator
+{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+.generic-vertical-speed-indicator .backplate
+{
+    position: absolute;
+    left:0%;
+    top:0;
+    width:100%;
+    height:100%;
+    background: url(vertical-speed-indicator.png) 0% 0%;
+    background-size: 200% 200%;
+}
+
+.generic-vertical-speed-indicator .needle-wrapper
+{
+    position: absolute;
+    width: 46.875%;
+    height: 9.375%;
+    padding: 45.3125% 37.5% 45.3125% 15.625%;
+}
+
+.generic-vertical-speed-indicator .needle
+{
+    width:100%;
+    height:100%;
+    background: url(vertical-speed-indicator.png) 65.3061224489796% 0%;
+    background-size: 426.666666666667% 2133.33333333333%;
+}

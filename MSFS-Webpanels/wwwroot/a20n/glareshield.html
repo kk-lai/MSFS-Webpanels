@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8" />
-<title>A320Neo glareshield Webpanel</title>
+<title>MSFS-Webpanels</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="A320Neo glareshield Webpanel">
+<meta name="apple-mobile-web-app-title" content="MSFS-Webpanels">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -29,15 +29,18 @@
         <div class="error-overlay">
             <div id="sys-message" >Webpanel is not started</div>
         </div>
-        <div id="help-screen-overlay" class="help-screen-overlay hide"></div>
-        <div class="fcu"></div>
+        <div id="help-screen-overlay" class="help-screen-overlay hide"></div><div class="row">
+            <div class="warning"></div><div class="efis"></div>
+        </div><div class="row">
+            <div class="fcu-padding"></div><div class="fcu"></div>
+        </div>
         <div class="bottom-panel"><div class="version-lbl">MSFS-Webpanels (Version:<span id="version-code"></span>)</div></div>
         <div class="help-container">
             <a class="menu-link hide" href="../index.html"><img src="../img/menu-icon.png" alt="menu-icon" /></a><!--
             --><img class="reload-icon" src="../img/refresh-icon.png" alt="refresh-icon" /><!--
             --><img class="help-icon" src="../img/information-icon.png" alt="help-icon" />
         </div>
-        <div id="log-window hide"></div>
+        <div id="log-windowhide"></div>
     </div>
 </div>
 </body>
@@ -47,6 +50,9 @@
     var urlArgs = "";
     if (urlParams.has('v')) {
         urlArgs="v="+urlParams.get('v');
+    }
+    if (urlParams.has("t")) {
+        urlArgs=urlArgs+"&t="+Date.now();
     }
     require.config({
         waitSeconds: 15,

@@ -1,0 +1,91 @@
+.c172-asi
+{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+.c172-asi .alt-wrapper
+{
+    position: absolute;
+    width: 56.25%;
+    height: 34.375%;
+    padding: 13.671875% 13.671875% 51.953125% 30.078125%;
+}
+
+.c172-asi .alt
+{
+    width:100%; 
+    height: 100%;
+    background: url(asi.png) 0% 60.377358490566%;
+    background-size: 355.555555555556% 581.818181818182%;
+}
+
+.c172-asi .backplate
+{
+    top:0;
+    left:0;
+    position:absolute;
+    width:100%;
+    height:100%;
+    background: url(asi.png) 0 0;
+    background-size: 200% 200%;
+}
+
+.c172-asi .tas-wrapper
+{
+    top:0;
+    left:0;
+    position: absolute;
+    width: 59.375%;
+    height: 21.09375%;
+    padding: 75% 21.2890625% 3.90625% 19.3359375%;
+}
+
+.c172-asi .tas
+{
+    width:100%; 
+    height: 100%;
+    background: url(asi.png) 40% 55.8951965065502%;
+    background-size: 336.842105263158% 948.148148148148%;
+}
+
+.c172-asi .foreground
+{
+    top:0;
+    left:0;
+    position:absolute;
+    width:100%;
+    height:100%;
+    background: url(asi.png) 100% 0%;
+    background-size: 200% 200%;
+}
+
+.c172-asi .needle-wrapper
+{
+    top:0;
+    left:0;
+    position: absolute;
+    width: 10.9375%;
+    height: 53.125%;
+    padding: 12.3046875% 44.53125% 34.5703125% 44.53125%;
+}
+
+.c172-asi .needle
+{
+    width:100%; 
+    height: 100%;
+    background: url(asi.png) 61.1570247933884% 68.0851063829787%;
+    background-size: 1828.57142857143% 376.470588235294%;
+}
+
+.c172-asi .knob
+{
+    position: absolute;
+    left:6%;
+    top:79%;
+    width:18.75%;
+    height:18.75%;
+    background: url(asi.png) 69.2307692307692% 54.7008547008547%;
+    background-size: 1163.63636363636% 1163.63636363636%;
+}

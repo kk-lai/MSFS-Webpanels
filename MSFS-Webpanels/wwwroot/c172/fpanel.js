@@ -28,6 +28,7 @@ function(jquery,util,sysconst) {
     var isPauseQueue = false;
     var isProcessingQueue = false;
     var dmeSrc = 1;
+    var isDebug = false;
 
     function resizeContainer() {
 
@@ -72,6 +73,15 @@ function(jquery,util,sysconst) {
     function refreshDisplay(jsonData) {
         latestSimData = jsonData;
         var errMessage = "Webpanel is not started";
+        if (jsonData.isDebug) {
+            // check query string
+            var urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.has('t')) {
+                var url = window.location.href+"&t="+Date.now();
+                window.location.replace(url);
+            }
+        }
+        isDebug=jsonData.isDebug;
 
         if (isServerAppRunning) {
             if (!jsonData.isSimConnected) {
@@ -134,8 +144,8 @@ function(jquery,util,sysconst) {
             url: sysconst.simVarUrl,
             success: function(jsonData, textStatus, jqXHR ){
                 isServerAppRunning=true;
-                if (jsonData.isSimConnected && jsonData.aircraftFolder=="Asobo_A320_NEO") {
-                    window.location.replace("../?v=" + sysconst.versionCode);
+                if (jsonData.isSimConnected && (jsonData.aircraftFolder=="Asobo_A320_NEO" || jsonData.aircraftFolder=="FlyByWire_A320_NEO")) {
+                    window.location.replace("../" + window.location.search);
                     return;
                 }
                 refreshDisplay(jsonData);

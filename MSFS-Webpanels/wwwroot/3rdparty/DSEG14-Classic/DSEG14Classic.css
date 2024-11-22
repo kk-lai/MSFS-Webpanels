@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'DSEG14Classic';
+    font-style: 'normal';
+    src: url('DSEG14Classic-Regular.woff2') format('woff2'), 
+         url('DSEG14Classic-Regular.woff') format('woff'),
+         url('DSEG14Classic-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DSEG14Classic';
+    font-style: 'italic';
+    src: url('DSEG14Classic-Italic.woff2') format('woff2'), 
+         url('DSEG14Classic-Italic.woff') format('woff'),
+         url('DSEG14Classic-Italic.ttf') format('truetype');
+}

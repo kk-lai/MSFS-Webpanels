@@ -46,6 +46,7 @@
     background-size: 200% 400%;
 }
 
+/*
 .a20n-fcu .mockup
 {
     position:absolute;
@@ -55,6 +56,7 @@
     background-size: cover;
     visibility: hidden;
 }
+*/
 
 .a20n-fcu .wrapper
 {
@@ -187,13 +189,12 @@
     width:100%;
 }
 
-
-
 .a20n-fcu  .ind-btn
 {
     position:absolute;
     top:13%;
-    width:100%;
+    left:30%;
+    width:40%;
     text-align: center;
     transform: scaleX(2.5);
 }
@@ -226,17 +227,17 @@
 
 .a20n-fcu .btn-spdmch-wrapper
 {
-    left:1.1607142857%; 	top:35.1145038168%; 	width:6.1607142857%; 	height:17.5572519084%;
+    left:1.1607142857%; 	top:33.1145038168%; 	width:6.1607142857%; 	height:17.5572519084%;
 }
 
 .a20n-fcu .btn-hdgtrk-wrapper
 {
-    left:47.1428571429%; 	top:35.3689567430%; 	width:5.7142857143%; 	height:16.2849872774%;
+    left:47.1428571429%; 	top:33.3689567430%; 	width:5.7142857143%; 	height:16.2849872774%;
 }
 
 .a20n-fcu .btn-metricalt-wrapper
 {
-    left:75.4464285714%; 	top:35.3689567430%; 	width:5.7142857143%; 	height:16.2849872774%;
+    left:75.4464285714%; 	top:33.3689567430%; 	width:5.7142857143%; 	height:16.2849872774%;
 }
 
 .a20n-fcu .btn-ap1-wrapper

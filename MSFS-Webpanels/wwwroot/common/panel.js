@@ -27,6 +27,9 @@ function(jquery, SysParam) {
             this.queueTimerId = null;
             this.aspectRatio=aspectRatio;
             this.aircraftFolder = "";
+            this.refreshPeriod = SysParam.refreshPeriod;
+            this.coolDownTime = SysParam.defaultCoolDown;
+            this.isDebug = false;
             this.logger = {
                 info:function(txt) {
                     this._log(1,txt);
@@ -82,6 +85,7 @@ function(jquery, SysParam) {
             }
             jquery(".container").css("width", fw);
             jquery(".container").css("height", fh);
+            this.logger.debug("resize panel from "+ww+"x"+wh + " to " +fw +"x"+fh);
 
             for(var i=0;i<this.instruments.length;i++) {
                 this.instruments[i].onScreenResize();
@@ -113,27 +117,44 @@ function(jquery, SysParam) {
                 this.resizePanel();
             }, this));
 
-            jquery(document).ready(jquery.proxy(function() {
-                this.resizePanel();
-            }, this));
+            var that = this;
+            this.cssPromise.then(function() {
+                jquery(".container").removeClass("hide");
+                that.resizePanel();
+            })
 
-            jquery(".container").removeClass("hide");
-            setInterval(jquery.proxy(this.timerFunc,this), SysParam.refreshPeriod);
+            setInterval(jquery.proxy(this.timerFunc,this), this.refreshPeriod);
         }
 
         loadCss(url)
         {
-            var head = jquery("head").first();
-            var link = document.createElement("link");
-            link.rel="stylesheet";
-            link.type="text/css";
-            link.href=url + "?v="+SysParam.versionCode;
-            head.append(link);
+            var that = this;
+            this.cssPromise = new Promise(function(resolve) {
+                var head = jquery("head").first();
+                var link = document.createElement("link");
+                link.rel="stylesheet";
+                link.type="text/css";
+                link.href=url + window.location.search;
+
+                link.onload = function() {
+                    resolve();
+                };
+                head.append(link);
+            });
         }
 
         refreshDisplay(jsonData)
         {
             var errMessage = "Webpanel is not started";
+            if (jsonData.isDebug) {
+                // check query string
+                var urlParams = new URLSearchParams(window.location.search);
+                if (!urlParams.has('t')) {
+                    var url = window.location.href+"&t="+Date.now();
+                    window.location.replace(url);
+                }
+            }
+            this.isDebug=jsonData.isDebug;
 
             if (this.isServerAppRunning) {
                 this.latestSimData = jsonData;
@@ -312,7 +333,7 @@ function(jquery, SysParam) {
 
         onSimVarChange(simVar, val, sendEvent = true) {
             if (this.simvarsOrg.hasOwnProperty(simVar)) {
-                var coolDownTime = Date.now() + SysParam.defaultCoolDown;
+                var coolDownTime = Date.now() + this.coolDownTime;
                 this.displayVal[simVar] = val;
                 this.coolDownTimeout[simVar] = coolDownTime;
             }

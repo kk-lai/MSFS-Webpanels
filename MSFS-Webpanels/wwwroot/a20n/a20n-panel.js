@@ -18,9 +18,12 @@ define(['Panel','SysParam'],function(Panel,SysParam) {
             if (!jsonData.isSimConnected) {
                 return;
             }
-            if (jsonData.aircraftFolder!="Asobo_A320_NEO") {
+            if (jsonData.aircraftFolder!="Asobo_A320_NEO" && jsonData.aircraftFolder!="FlyByWire_A320_NEO") {
                 this.logger.info("Aircraft is not A20N, redirect to index");
                 window.location.replace("../?v=" + SysParam.versionCode);
+            }
+            if (jsonData.aircraftFolder=="FlyByWire_A320_NEO") {
+                jsonData.simData.apSelectedHeading=Math.max(jsonData.simData.apSelectedHeading,0) % 360;
             }
         }
     }

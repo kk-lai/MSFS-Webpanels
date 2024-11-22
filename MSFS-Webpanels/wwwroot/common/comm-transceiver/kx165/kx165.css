@@ -1,0 +1,229 @@
+.kx165-panel
+{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+.kx165-panel > img
+{
+    width: 100%;
+    height: 100%;
+}
+
+
+.kx165-panel .backplate
+{
+    width:100%;
+    height:100%;
+    background: url(kx165.png) 0 0;
+    background-size: cover;
+}
+
+.kx165-panel .freq
+{
+    position:absolute;
+    color: #ff4130;
+    font-size:90%;
+    font-family: DSEG7Classic;
+    transform: skewX(-5deg);
+}
+
+.kx165-panel .com-activefreq
+{
+    left:5%;
+    top:13%;
+}
+
+.kx165-panel .com-standbyfreq
+{
+    left:26.5%;
+    top:13%;
+}
+
+.kx165-panel .nav-activefreq
+{
+    left:54.3%;
+    top:13%;
+}
+
+.kx165-panel .nav-standbyfreq
+{
+    left:75.5%;
+    top:13%;
+}
+
+.kx165-panel .knob-mhz
+{
+    position:absolute;
+    width: 10.25390625%;
+    height: 32.01219512%;
+    background: url(kx165.png) 0 35.69096844%;
+    background-size: 975.2380952% 975.2380952%;
+}
+
+.kx165-panel .knob-khz
+{
+    position:absolute;
+    width: 6.640625%;
+    height: 20.73170732%;
+    background: url(kx165.png) 10.9832636% 34.30962343%;
+    background-size: 1505.882353% 1505.882353%;
+}
+
+.kx165-panel .knob-volume
+{
+    position:absolute;
+    width: 4.58984375%;
+    height: 14.32926829%;
+    background: url(kx165.png) 17.70726714% 33.57215967%;
+    background-size: 2178.723404% 2178.723404%;
+}
+
+.kx165-panel .knob-com.knob-mhz
+{
+    left:31.34765625%;
+    top:54.57317073%;
+}
+
+.kx165-panel .knob-com.knob-khz
+{
+    left:33.203125%;
+    top:60.06097561%;
+}
+
+.kx165-panel .knob-com.knob-volume
+{
+    left:8.69140625%;
+    top:72.25609756%;
+}
+
+.kx165-panel .knob-nav.knob-mhz
+{
+    left:82.32421875%;
+    top:54.87804878%;
+}
+
+.kx165-panel .knob-nav.knob-khz
+{
+    left:84.1796875%;
+    top:60.36585366%;
+}
+
+.kx165-panel .knob-nav.knob-volume
+{
+    left:58.984375%;
+    top:73.17073171%;
+}
+
+.kx165-panel .btn
+{
+    position:absolute;
+    width: 7.36328125%;
+    height: 16.46341463%;
+}
+
+.kx165-panel .btn-com
+{
+    left:17.21679688%;
+    top:47.56097561%;
+}
+
+.kx165-panel .btn-nav
+{
+    left:67.70507813%;
+    top:47.86585366%;
+}
+
+.kx165-panel .dot-com-volume
+{
+    position:absolute;
+    left:7.543945313%;
+    top:68.67378049%;
+    width:6.884765625%;
+    height:21.49390244%;
+    color:red;
+    text-align:center;
+    font-size:50%;
+}
+
+.kx165-panel .ctl-com-volume
+{
+    position:absolute;
+    left:6.396484375%;
+    top:65.09146341%;
+    width:9.1796875%;
+    height:28.65853659%;
+}
+
+.kx165-panel  .dot-com-mhz
+{
+    position:absolute;
+    width:11.279296875%; height:35.2134146341463%; left:30.8349609375%; top:53.2774390243902%;   
+    color:green;
+    text-align:center;
+    font-size:50%;    
+}
+
+.kx165-panel  .dot-com-khz
+{
+    position:absolute;
+    width:8.203125%; height:25.609756097561%; left:32.373046875%; top:58.0792682926829%;        
+    color:red;
+    text-align:center;
+    font-size:40%;    
+    transform:rotate(180deg);
+}
+
+.kx165-panel .ctl-com-knob
+{
+    position:absolute;
+    width:16.40625%; height:51.219512195122%; left:28.271484375%; top:44.969512195122%;
+}
+
+.kx165-panel .dot-nav-volume
+{
+    position:absolute;
+    left:57.83691406%;
+    top:69.58841463%;
+    width:6.884765625%;
+    height:21.49390244%;
+    color:red;
+    text-align:center;
+    font-size:50%;
+}
+
+.kx165-panel .ctl-nav-knob
+{
+    position:absolute;
+    width:16.40625%; height:51.219512195122%; left:79.248046875%; top:45.2743902439024%;
+}
+
+.kx165-panel  .dot-nav-mhz
+{
+    position:absolute;
+    width:11.279296875%; height:35.2134146341463%; left:81.8115234375%; top:53.2774390243902%;
+    color:green;
+    text-align:center;
+    font-size:50%;
+}
+
+.kx165-panel  .dot-nav-khz
+{
+    position:absolute;
+    width:8.203125%; height:25.609756097561%; left:83.349609375%; top:58.0792682926829%;
+    color:red;
+    text-align:center;
+    font-size:40%;
+    transform:rotate(180deg);
+}
+
+.kx165-panel .ctl-nav-volume
+{
+    position:absolute;
+    left:56.68945313%;
+    top:66.00609756%;
+    width:9.1796875%;
+    height:28.65853659%;
+}
+

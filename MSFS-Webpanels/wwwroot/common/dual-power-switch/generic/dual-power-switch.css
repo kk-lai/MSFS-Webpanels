@@ -1,0 +1,83 @@
+.generic-dual-power-switch
+{
+    position: relative;
+    width:100%;
+    height:100%;
+    color: white;
+    line-height: normal;
+    font-size: 62.72094879689816%;
+    line-height: 1em;
+}
+
+.generic-dual-power-switch .switch-label
+{
+    text-align:center;
+}
+
+.generic-dual-power-switch .power-switch-wrapper
+{
+    position:relative;
+    width:100%;
+    height:74.91124260%;
+    background: url(dual-power-switch.png) 0 0;
+    background-size: 262.5641025641026% 242.654028436019%;
+}
+
+.generic-dual-power-switch.red-switch .switch-state-0
+{
+    background: url(dual-power-switch.png) 44.01805869074492% 0;
+    background-size: 742.0289855072464% 328.2051282051282%;
+}
+
+.generic-dual-power-switch.red-switch .switch-state-1
+{
+    background: url(dual-power-switch.png) 59.59367945823928% 0;
+    background-size: 742.0289855072464% 328.2051282051282%;
+}
+
+.generic-dual-power-switch.white-switch .switch-state-0
+{
+    background: url(dual-power-switch.png) 75.16930022573363% 0;
+    background-size: 742.0289855072464% 328.2051282051282%;
+}
+
+.generic-dual-power-switch.white-switch .switch-state-1
+{
+    background: url(dual-power-switch.png) 90.74492099322799% 0;
+    background-size: 742.0289855072464% 328.2051282051282%;
+}
+
+.generic-dual-power-switch .switch-label-left
+{
+    padding-left:10%;
+    width:40%;
+    text-align:center;
+    display:inline-block;
+}
+
+.generic-dual-power-switch .switch-label-right
+{
+    width:40%;
+    text-align:center;
+    display:inline-block;
+}
+
+.generic-dual-power-switch .single-switch-wrapper
+{
+    position: absolute;
+    width: 35.384615385%;
+    height: 73.93364929%;
+}
+
+.generic-dual-power-switch .switch-left
+{
+    left: 12.82051282%;
+    top: 12.79620853%;
+}
+
+.generic-dual-power-switch .switch-right
+{
+    left: 50%;
+    top: 12.79620853%;
+}
+

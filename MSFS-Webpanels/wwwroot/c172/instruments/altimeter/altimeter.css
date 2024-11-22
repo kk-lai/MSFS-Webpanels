@@ -1,0 +1,90 @@
+.c172-altimeter
+{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+.c172-altimeter .pressure-card
+{
+    width:100%;
+    height:100%;
+    background: url(altimeter.png) 0 0;
+    background-size: 200% 200%;    
+}
+
+.c172-altimeter .backplate
+{
+    position:absolute;
+    top:0;
+    width:100%; 
+    height: 100%;
+    background: url(altimeter.png) 100% 0%;
+    background-size: 200% 200%;
+
+}
+
+.c172-altimeter .needle-10k-wrapper
+{
+    width: 43.75%;
+    height: 50%;
+    padding: 25% 28.125% 25% 28.125%;
+    position: absolute;
+    top:0; 
+    left:0;
+}
+
+.c172-altimeter .needle-10k
+{
+    width:100%;
+    height:100%;
+    background: url(altimeter.png) 0% 66.6666666666667%;
+    background-size: 457.142857142857% 400%;
+}
+
+.c172-altimeter .needle-1k-wrapper
+{
+    width: 11.71875%;
+    height: 50%;
+    padding: 18.75% 44.140625% 31.25% 44.140625%;
+    position: absolute;
+    top:0; 
+    left:0;
+}
+
+.c172-altimeter .needle-1k
+{
+    width:100%;
+    height:100%;
+    background: url(altimeter.png) 23.2365145228216% 63.681592039801%;
+    background-size: 1706.66666666667% 465.454545454545%;
+}
+
+.c172-altimeter .needle-100-wrapper
+{
+    width: 10.9375%;
+    height: 45.703125%;
+    padding: 16.796875% 44.53125% 37.5% 44.53125%;
+    position: absolute;
+    top:0; 
+    left:0;
+}
+
+.c172-altimeter .needle-100
+{
+    width:100%;
+    height:100%;
+    background: url(altimeter.png) 29.3388429752066% 64.8101265822785%;
+    background-size: 1828.57142857143% 437.606837606838%;
+}
+
+.c172-altimeter .knob
+{
+    position: absolute;
+    left:4.296875%;
+    top:79.6875%;
+    width:16.015625%;
+    height:16.015625%;
+    background: url(altimeter.png) 36.3247863247863% 54.7008547008547%;
+    background-size: 1163.63636363636% 1163.63636363636%;
+}

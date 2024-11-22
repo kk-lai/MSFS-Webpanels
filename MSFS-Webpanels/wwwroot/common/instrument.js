@@ -17,17 +17,23 @@ function(jquery, SysParam, StaticPropertyHelper) {
     return class Instrument {
 
         loadCss(url) {
-            var head = jquery("head").first();
-            var link = document.createElement("link");
-            link.rel="stylesheet";
-            link.type="text/css";
-            link.href=url;
-            head.append(link);
+            var that = this;
+            this.cssPromise = new Promise(function(resolve) {
+                var head = jquery("head").first();
+                var link = document.createElement("link");
+                link.rel="stylesheet";
+                link.type="text/css";
+                link.href=url+window.location.search;
+                link.onload = function() {
+                    resolve();
+                };
+                head.append(link);
+            });
         }
 
         loadTemplate(url) {
             return new Promise(function(resolve, reject) {
-                jquery.get(url, function(data) {
+                jquery.get(url+window.location.search, function(data) {
                     resolve(data);
                 }).fail(function() {
                     reject();
@@ -59,8 +65,10 @@ function(jquery, SysParam, StaticPropertyHelper) {
             var thisClass=this;
             htmlPromise.then(function(html) {
                jquery(rootElm).append(html);
-               thisClass.bindControls();
-               thisClass.onScreenResize();
+               thisClass.cssPromise.then(function() {
+                    thisClass.onScreenResize();
+                    thisClass.bindControls();
+               })
             });
         }
 
@@ -120,11 +128,15 @@ function(jquery, SysParam, StaticPropertyHelper) {
         }
 
         onScreenResize() {
-            var elm=this.rootElm;
-            var w = jquery(elm).width();
-            var h = w / this.aspectRatio;
-            jquery(elm).css("height",h);
-            jquery(elm).css("font-size", h/7);
+            var that=this;
+            this.cssPromise.then(function() {
+                var elm=that.rootElm;
+                var w = jquery(elm).width();
+                that.panel.logger.debug("resize "+ that.constructor.name + " w:"+w);
+                var h = w / that.aspectRatio;
+                jquery(elm).css("height",h);
+                jquery(elm).css("font-size", h/7);
+            });
         }
 
         refreshInstrument()

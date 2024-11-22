@@ -1,0 +1,162 @@
+.a20n-warning
+{
+    width:100%;
+    height:100%;
+    position:relative;
+    font-size: 32%;
+    background-color:#41556d;
+}
+
+.a20n-warning .btn-wrapper
+{
+    position:absolute;
+    width:12.97965085%;
+    height:15.47392435%;
+    border-radius: 7.352941176%;
+    border-color: #c0c0c0;
+    border-width: 0.2em;
+    border-style: solid;
+}
+
+.a20n-warning .btn-atc-msg-wrapper
+{
+    left: 5.279135555%;
+    top:77%;
+}
+
+.a20n-warning .btn-autoland-warning-wrapper
+{
+    left: 30.27913555%;
+    top:77%;
+}
+
+.a20n-warning .btn-master-warn-wrapper
+{
+    left: 55.27913555%;
+    top:40%;
+}
+
+.a20n-warning .btn-master-caution-wrapper
+{
+    left: 55.27913555%;
+    top:77%;
+}
+
+.a20n-warning .btn-capt-ss-wrapper
+{
+    left: 80.27913555%;
+    top:77%;
+}
+
+.a20n-warning .btn-square
+{
+    width:100%;
+    height:100%;
+    border-radius: 7.352941176%;
+    font-size:80%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.a20n-warning .btn-captss.ind-off
+{
+    color:#200000;
+    background-color:black;
+}
+
+.a20n-warning .btn-captss.ind-on
+{
+    color:#e00000;
+    background-color:black;
+}
+
+.a20n-warning .btn-warn.ind-off
+{
+    color:#200000;
+    background-color:black;
+}
+
+.a20n-warning .btn-warn.ind-on
+{
+    color:#e00000;
+    background-color:black;
+}
+
+.a20n-warning .btn-caution.ind-off
+{
+    color:#202000;
+    background-color:black;
+}
+
+.a20n-warning .btn-caution.ind-on
+{
+    color:#e0e000;
+    background-color:black;
+}
+
+.a20n-warning .btn-autoland.ind-off
+{
+    color: black;
+    background-color:#200000;
+}
+
+.a20n-warning .btn-autoland.ind-on
+{
+    color: black;
+    background-color:#e00000;
+}
+
+.a20n-warning .btn-atcmsg.ind-off
+{
+    color: #000030;
+    background-color:black;
+}
+
+.a20n-warning .btn-atcmsg.ind-on
+{
+    color: #0000e0;
+    background-color:black;
+}
+
+.a20n-warning .btn-tapped
+{
+    background-color:yellow !important;
+    opacity: 0.5;
+}
+
+.a20n-warning .btn-chrono-wrapper
+{
+    position:absolute;
+    left:81.27757023076923%;
+    top:40.86740159371848%;
+    width:10.98278148846154%;
+    height:13.73912116256305%;
+}
+
+.a20n-warning .btn-chrono
+{
+    width:100%;
+    height:100%;
+    background-image: url("black-button.png");
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.a20n-warning .lbl
+{
+    position:absolute;
+    color:white;
+}
+
+.a20n-warning .lbl-chrono
+{
+    left:79%;
+    top:34%;
+}
+
+.a20n-warning .lbl-ss-priority
+{
+    text-align: center;
+    left:79%;
+    top:65%;
+}

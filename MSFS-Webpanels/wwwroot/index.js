@@ -20,10 +20,13 @@ function($,sysParam) {
                     return;
                 }
                 var url;
-                if (jsonData.aircraftFolder=="Asobo_A320_NEO") {
+                if (jsonData.aircraftFolder=="Asobo_A320_NEO" || jsonData.aircraftFolder=="FlyByWire_A320_NEO") {
                     url = "a20n/" + "?v="+sysParam.versionCode;
                 } else {
                     url = "c172/" + "?v="+sysParam.versionCode;
+                }
+                if (jsonData.isDebug) {
+                    url = url + "&t="+Date.now();
                 }
                 window.location.replace(url);
             },

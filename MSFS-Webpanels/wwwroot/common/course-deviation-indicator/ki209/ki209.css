@@ -1,0 +1,172 @@
+.ki209
+{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+.ki209 .backplate
+{
+    position: absolute;
+    top: 18.75%;
+    left: 18.75%;
+    width: 62.5%;
+    height: 62.5%;
+    background: url(ki209.png) 72.7272727272727% 0%;
+    background-size: 320% 320%;
+}
+
+.ki209 .vor-backplate
+{
+    position: absolute;
+    width: 47.65625%;
+    height: 46.875%;
+    top: 26.5625%;
+    left: 26.171875%;
+    background: url(ki209.png) 65.6410256410256% 65.3061224489796%;
+    background-size: 419.672131147541% 426.666666666667%;
+}
+
+.ki209 .from-ind
+{
+    position: absolute;
+    width: 10.15625%;
+    height: 9.375%;
+    top: 63.28125%;
+    left: 44.921875%;
+    background: url(ki209.png) 52.6748971193416% 32.7868852459016%;
+    background-size: 1969.23076923077% 2133.33333333333%;
+}
+
+.ki209 .to-ind
+{
+    position: absolute;
+    width: 10.15625%;
+    height: 9.375%;
+    top: 63.28125%;
+    left: 44.921875%;
+    background: url(ki209.png) 52.6748971193416% 37.7049180327869%;
+    background-size: 1969.23076923077% 2133.33333333333%;
+}
+
+.ki209 .gs-ind
+{
+    position: absolute;
+    width: 10.15625%;
+    height: 6.25%;
+    top: 41.9921875%;
+    left: 59.9609375%;
+    background: url(ki209.png) 52.6748971193416% 41.9354838709677%;
+    background-size: 1969.23076923077% 3200%;
+}
+
+.ki209 .nav-needle-motor
+{
+    top:11.1328125%;
+    left:42.578125%;
+    transform:rotate(90deg);
+}
+
+.ki209 .needle-motor
+{
+    position: absolute;
+    width: 14.84375%;
+    height: 14.84375%;
+    background: url(ki209.png) 59.4936708860759% 35.4430379746835%;
+    background-size: 1347.36842105263% 1347.36842105263%;
+}
+
+.ki209 .nav-needle-wrapper
+{
+    position: absolute;
+    width: 3.125%;
+    height: 42.1875%;
+    padding: 54.8828125% 48.4375% 2.9296875% 48.4375%;
+    top: -31.640625%;
+}
+
+.ki209 .nav-needle
+{
+    width:100%;
+    height:100%;
+    background: url(ki209.png) 82.5396825396825% 0%;
+    background-size: 6400% 474.074074074074%;
+}
+
+.ki209 .gs-needle-motor
+{
+    top: 42.578125%;
+    left: 12.109375%;    
+}
+
+.ki209 .gs-needle-wrapper
+{
+    position: absolute;
+    width: 48.4375%;
+    height: 3.125%;
+    padding: 48.4375% 0% 48.4375% 54.296875%;
+    left:-30.46875%;
+}
+
+.ki209 .gs-needle
+{
+    width:100%;
+    height:100%;
+    background: url(ki209.png) 72.680412371134% 31.7460317460317%;
+    background-size: 412.903225806452% 6400%;
+}
+
+.ki209 .az-card
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(ki209.png) 0% 100%;
+    background-size: 200% 200%;
+}
+
+.ki209 .arrow-up
+{
+    position: absolute;
+    width: 7.8125%;
+    height: 8.59375%;
+    top: 19.3359375%;
+    left: 46.09375%;
+    background: url(ki209.png) 54.8780487804878% 45.7142857142857%;
+    background-size: 2560% 2327.27272727273%;
+}
+
+.ki209 .arrow-down
+{
+    position: absolute;
+    width: 5.46875%;
+    height: 4.6875%;
+    top: 77.5390625%;
+    left: 47.265625%;
+    background: url(ki209.png) 51.4056224899598% 44.8%;
+    background-size: 3657.14285714286% 4266.66666666667%;
+}
+
+.ki209 .foreground
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(ki209.png) 0% 0%;
+    background-size: 200% 200%;
+}
+
+.ki209 .knob
+{
+    position: absolute;
+    width: 19.53125%;
+    height: 19.53125%;
+    top: 77.734375%;
+    left: 4.8828125%;
+    background: url(ki209.png) 69.2640692640693% 36.3636363636364%;
+    background-size: 1024% 1024%;
+}
