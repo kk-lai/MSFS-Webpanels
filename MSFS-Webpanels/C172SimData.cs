@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 
 public class C172SimData : SimData
 {
+    private readonly Int32[] FuelSelectorMapTable = { 0, 2, 1, 3 };
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct C172Data 
     {
@@ -163,7 +165,6 @@ public class C172SimData : SimData
         private Int32 hsiGSINeedleValid;
         private float hsiDistance;
 
-
         public float FuelLeftQuantity { get => fuelLeftQuantity; set => fuelLeftQuantity = value; }
         public float FuelRightQuantity { get => fuelRightQuantity; set => fuelRightQuantity = value; }
         public float EngineEGT { get => engineEGT; set => engineEGT = value; }
@@ -292,6 +293,7 @@ public class C172SimData : SimData
         public int HsiCDINeedleValid { get => hsiCDINeedleValid; set => hsiCDINeedleValid = value; }
         public int HsiGSINeedleValid { get => hsiGSINeedleValid; set => hsiGSINeedleValid = value; }
         public float HsiDistance { get => hsiDistance; set => hsiDistance = value; }
+        
     }
     private C172Data c172data = new C172Data();
 
@@ -302,7 +304,7 @@ public class C172SimData : SimData
 
     }
 
-    public static void defineSimVarDefintion(SimConnect simConnect, Enum defId)
+    public static void defineSimVarDefintion(SimConnect simConnect, Enum defId, uint msfsVersion)
     {
         uint fieldId = 0;
         simConnect.AddToDataDefinition(defId, "ATC ID", null, SIMCONNECT_DATATYPE.STRING256, 0, fieldId++);
@@ -336,7 +338,15 @@ public class C172SimData : SimData
         simConnect.AddToDataDefinition(defId, "NAV GSI:1", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
         simConnect.AddToDataDefinition(defId, "TURN COORDINATOR BALL", "Position 128", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-        simConnect.AddToDataDefinition(defId, "ELECTRICAL MAIN BUS VOLTAGE:1", "volts", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+
+        if (msfsVersion == SimConnectClient.MSFS2024)
+        {
+            simConnect.AddToDataDefinition(defId, "ELECTRICAL BUS VOLTAGE:5", "volts", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        } else
+        {
+            simConnect.AddToDataDefinition(defId, "ELECTRICAL MAIN BUS VOLTAGE:1", "volts", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        }        
+
         simConnect.AddToDataDefinition(defId, "TURN INDICATOR RATE", "degrees per second", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "CIRCUIT GENERAL PANEL ON", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
@@ -357,7 +367,15 @@ public class C172SimData : SimData
         simConnect.AddToDataDefinition(defId, "ADF CARD", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "ADF RADIAL:1", "degree", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
-        simConnect.AddToDataDefinition(defId, "GENERAL ENG FUEL PUMP SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        
+        if (msfsVersion == SimConnectClient.MSFS2024)
+        {
+            simConnect.AddToDataDefinition(defId, "FUELSYSTEM PUMP SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        } else
+        {
+            simConnect.AddToDataDefinition(defId, "GENERAL ENG FUEL PUMP SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        }
+        
         simConnect.AddToDataDefinition(defId, "LIGHT BEACON", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "LIGHT LANDING", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "LIGHT TAXI", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
@@ -366,19 +384,35 @@ public class C172SimData : SimData
         simConnect.AddToDataDefinition(defId, "PITOT HEAT SWITCH:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
         simConnect.AddToDataDefinition(defId, "GENERAL ENG MASTER ALTERNATOR:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-        simConnect.AddToDataDefinition(defId, "ELECTRICAL MASTER BATTERY", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
-        simConnect.AddToDataDefinition(defId, "AVIONICS MASTER SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-        simConnect.AddToDataDefinition(defId, "AVIONICS MASTER SWITCH:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-
+        if (msfsVersion == SimConnectClient.MSFS2024)
+        {
+            simConnect.AddToDataDefinition(defId, "ELECTRICAL MASTER BATTERY:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "LINE CONNECTION ON:8", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "LINE CONNECTION ON:14", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        } else
+        {
+            simConnect.AddToDataDefinition(defId, "ELECTRICAL MASTER BATTERY:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "AVIONICS MASTER SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "AVIONICS MASTER SWITCH:2", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        }
+            
         simConnect.AddToDataDefinition(defId, "GENERAL ENG STARTER:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "RECIP ENG LEFT MAGNETO:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "RECIP ENG RIGHT MAGNETO:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
         simConnect.AddToDataDefinition(defId, "FLAPS HANDLE INDEX", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
-        simConnect.AddToDataDefinition(defId, "FUEL TANK SELECTOR:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-        simConnect.AddToDataDefinition(defId, "GENERAL ENG FUEL VALVE:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        if (msfsVersion == SimConnectClient.MSFS2024)
+        {
+            simConnect.AddToDataDefinition(defId, "FUELSYSTEM JUNCTION SETTING:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "FUELSYSTEM VALVE SWITCH:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        } else
+        {
+            simConnect.AddToDataDefinition(defId, "FUEL TANK SELECTOR:1", "Enum", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+            simConnect.AddToDataDefinition(defId, "GENERAL ENG FUEL VALVE:1", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
+        }
+
         simConnect.AddToDataDefinition(defId, "BRAKE PARKING POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
 
         simConnect.AddToDataDefinition(defId, "COM ACTIVE FREQUENCY:1", "Kilohertz", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
@@ -472,7 +506,66 @@ public class C172SimData : SimData
         simConnect.AddToDataDefinition(defId, "HSI GSI NEEDLE", "Number", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "HSI CDI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
         simConnect.AddToDataDefinition(defId, "HSI GSI NEEDLE VALID", "Bool", SIMCONNECT_DATATYPE.INT32, 0, fieldId++);
-        simConnect.AddToDataDefinition(defId, "HSI DISTANCE", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);
+        simConnect.AddToDataDefinition(defId, "HSI DISTANCE", "decinmile", SIMCONNECT_DATATYPE.FLOAT32, 0, fieldId++);        
         simConnect.RegisterDataDefineStruct<C172SimData.C172Data>(defId);
+    }
+
+    public override int processWebrequest(string req, uint[] iparams)
+    {
+        if (MsfsMajorVersion == SimConnectClient.MSFS2024)
+        {
+            string nreq = null;
+            uint[] niparams = new uint[2];
+
+            if (req == "simvar-fuelselectorleft")
+            {
+                nreq = "simvar-fuelselector";
+                niparams[0] = 1;
+                niparams[1] = 1;
+            }
+            else if (req == "simvar-fuelselectorall")
+            {
+                nreq = "simvar-fuelselector";
+                niparams[0] = 1;
+                niparams[1] = 2;
+            }
+            else if (req == "simvar-fuelselectorright")
+            {
+                nreq = "simvar-fuelselector";
+                niparams[0] = 1;
+                niparams[1] = 3;
+            }
+            else if (req == "simvar-switchavionics1")
+            {
+                nreq = "simvar-electlineconset";
+                niparams[0] = 8;
+                niparams[1] = iparams[0];
+            }
+            else if (req == "simvar-switchavionics2")
+            {
+                nreq = "simvar-electlineconset";
+                niparams[0] = 14;
+                niparams[1] = iparams[0];
+            } else if (req == "simvar-switchfuelpump")
+            {
+                nreq = req;
+                niparams[0] = 1;
+            }
+
+            if (nreq!=null)
+            {
+                req = nreq;
+                iparams = niparams;
+            }
+        }
+        return base.processWebrequest(req, iparams);
+    }
+
+    public override void postDataUpdate()
+    {
+        if (MsfsMajorVersion== SimConnectClient.MSFS2024)
+        {
+            this.c172data.FuelSelector = FuelSelectorMapTable[this.c172data.FuelSelector];
+        }
     }
 }

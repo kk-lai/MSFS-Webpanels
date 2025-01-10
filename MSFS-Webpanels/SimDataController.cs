@@ -33,7 +33,7 @@ public class SimDataController: ControllerBase
     [HttpPost]
     public IActionResult SendEvent([FromBody]SimEventMessage msg)
     {
-        if (SimConnectClient.getSimConnectClient().processWebRequest(msg.EventName, msg.IParams)==0)
+        if (SimConnectClient.getSimConnectClient().simData.processWebrequest(msg.EventName, msg.IParams)==0)
         {
             return (IActionResult)Ok();
         }      

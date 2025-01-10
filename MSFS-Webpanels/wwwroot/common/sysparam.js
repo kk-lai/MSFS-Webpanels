@@ -4,7 +4,7 @@ require.config({
 
 define(function() {
     return {
-        versionCode : "1.2.0",
+        versionCode : "1.1.3",
         logLevel: 2,
         isOfflineTest : false,
         defaultCoolDown : 500, // ms

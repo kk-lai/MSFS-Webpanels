@@ -1,10 +1,9 @@
-require.config({
+﻿require.config({
     baseUrl : '.',
     paths : {
         jquery : '../3rdparty/jquery/jquery-1.11.2.min',
         'const' : 'const'
     },
-    urlArgs: "v=1.2.0",
     waitSeconds : 30,
 });
 
@@ -239,12 +238,20 @@ define(['jquery','const'],function(jquery, sysconst) {
             jsonData.simData.warningFuelRight = 0;
             jsonData.simData.warningFuel = 0;
 
+            jsonData.simData.simulationRate = jsonData.simulationRate;
+            if (jsonData.simulationRate < 1) {
+                var idx = Math.abs(Math.log(jsonData.simulationRate) / Math.log(2));
+                var tbl = ["½", "¼", "⅛", "1/16"];
+                jsonData.simData.simulationRate = tbl[idx - 1];
+            }
+            jsonData.simData.simulationRate = "x" + jsonData.simData.simulationRate;
+
             if (jsonData.simData.electricalBusVoltage>0) {
-                if (jsonData.simData.fuelLeftQuantity<8) {
+                if (jsonData.simData.fuelLeftQuantity<5) {
                     jsonData.simData.warningFuelLeft = 1;
                     jsonData.simData.warningFuel = 1;
                 }
-                if (jsonData.simData.fuelRightQuantity < 8) {
+                if (jsonData.simData.fuelRightQuantity < 5) {
                     jsonData.simData.warningFuelRight = 1;
                     jsonData.simData.warningFuel = 1;
                 }
@@ -439,8 +446,8 @@ define(['jquery','const'],function(jquery, sysconst) {
             [93, -27],
             [100, -32.5]
         ],
-        magnetoPositions : [-65,-35,0,35,65],
-        fuelSelectorStates: [1,0,2],
+        magnetoPositions: [-65, -35, 0, 35, 65],        
+        fuelSelectorStates: [1, 0, 2],
         xpdrSwitchText:[
             "OFF",
             "SBY",

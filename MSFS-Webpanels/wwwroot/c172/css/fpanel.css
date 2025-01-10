@@ -1498,3 +1498,15 @@ img
 {
     opacity: 0.5;
 }
+
+
+.disp-simulation-rate {
+    position: absolute;
+    top: 0%;
+    left: 84%;
+    width: 16%;
+    height: 15%;
+    overflow: visible;
+    background-color: black;
+    color: red;
+}

@@ -9,44 +9,12 @@ public class SimData
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct GenericPlaneData
     {
+        private float simulationRate;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         private string aircraftTitle;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        private string atcId;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        private string atcModel;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        private string atcType;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-        private string atcFlightNumber;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        private string atcAirline;
 
-        private float planeLatitude;
-        private float planeLongitude;
-        private float planeAltitude;
-        private float planeGroundSpeed;
-        private float planeTrueHeading;
-        private float planeWingSpan;
-        private int planeOnGround;
-        private int planeEngineType;
-        private int planeNumberOfEngines;
-
-        public string AircraftTitle { get => aircraftTitle; set => aircraftTitle = value; }
-        public float PlaneLatitude { get => planeLatitude; set => planeLatitude = value; }
-        public float PlaneLongitude { get => planeLongitude; set => planeLongitude = value; }
-        public float PlaneAltitude { get => planeAltitude; set => planeAltitude = value; }
-        public float PlaneGroundSpeed { get => planeGroundSpeed; set => planeGroundSpeed = value; }
-        public float PlaneTrueHeading { get => planeTrueHeading; set => planeTrueHeading = value; }
-        public string AtcId { get => atcId; set => atcId = value; }
-        public string AtcModel { get => atcModel; set => atcModel = value; }
-        public string AtcType { get => atcType; set => atcType = value; }
-        public string AtcFlightNumber { get => atcFlightNumber; set => atcFlightNumber = value; }
-        public string AtcAirline { get => atcAirline; set => atcAirline = value; }
-        public float PlaneWingSpan { get => planeWingSpan; set => planeWingSpan = value; }
-        public int PlaneOnGround { get => planeOnGround; set => planeOnGround = value; }
-        public int PlaneEngineType { get => planeEngineType; set => planeEngineType = value; }
-        public int PlaneNumberOfEngines { get => planeNumberOfEngines; set => planeNumberOfEngines = value; }
+        public string AircraftTitle { get => aircraftTitle; set => aircraftTitle = value; }        
+        public float SimulationRate { get => simulationRate; set => simulationRate = value; }
     }
 
     private bool isSimConnected;
@@ -56,6 +24,7 @@ public class SimData
     private bool isDebug;
     private UInt32 msfsMajorVersion;
     private UInt32 msfsMinorVersion;
+    private float simulationRate;
 
     public SimData()
     {
@@ -68,6 +37,9 @@ public class SimData
         this.isSimRunning = data.isSimRunning;
         this.isSimConnected = data.isSimConnected;
         this.aircraftFolder = data.aircraftFolder;
+        this.msfsMajorVersion = data.msfsMajorVersion;
+        this.msfsMinorVersion = data.msfsMinorVersion;
+        this.SimulationRate = data.SimulationRate;
         this.isDebug = data.isDebug;
     }
 
@@ -78,4 +50,15 @@ public class SimData
     public bool IsDebug { get => isDebug; set => isDebug = value; }
     public uint MsfsMajorVersion { get => msfsMajorVersion; set => msfsMajorVersion = value; }
     public uint MsfsMinorVersion { get => msfsMinorVersion; set => msfsMinorVersion = value; }
+    public float SimulationRate { get => simulationRate; set => simulationRate = value; }
+
+    public virtual int processWebrequest(string req, uint[] iparams)
+    {
+        return SimConnectClient.getSimConnectClient().processWebRequest(req, iparams);
+    }
+
+    public virtual void postDataUpdate()
+    {
+
+    }
 }

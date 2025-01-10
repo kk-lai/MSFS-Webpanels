@@ -295,6 +295,7 @@ function(jquery,util,sysconst) {
             }
 
             if (modified) {
+                var otarget = target;
                 jquery(ctl).attr("state",newVal);
                 util.setVariableCooldown(ctl);
                 util.setVariableCooldown("."+target);
@@ -305,6 +306,13 @@ function(jquery,util,sysconst) {
                     target=target+"inc";
                 }
                 updateSimVar(target,0);
+                if (otarget == "simvar-magneto") {
+                    var isheld = 0;
+                    if (newVal == 4) {
+                        isheld = 1;
+                    }
+                    updateSimVar("simvar-setstarter1held", isheld);
+                }
             }
             e.preventDefault();
         });
