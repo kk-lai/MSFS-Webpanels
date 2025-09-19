@@ -8,11 +8,12 @@ When I play MSFS, I face a problem where I need to move the view of the game to 
 
 Prerequisites
 =============
-ASP.NET Core 7.0 Runtime
-https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-aspnetcore-7.0.13-windows-x64-installer
+ASP.NET Core 8.0 Runtime
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-aspnetcore-8.0.20-windows-x64-installer
 
-.NET 7.0 Desktop Runtime (v7.0.13)
-https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.13-windows-x64-installer
+
+.NET 8.0 Desktop Runtime (v8.0.20)
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.20-windows-x64-installer
 
 Installation
 ============
