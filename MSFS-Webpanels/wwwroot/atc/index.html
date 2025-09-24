@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <title>ATC Webpanel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ATC Webpanel">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="apple-touch-icon" href="../common/img/panel-icon.png" />
+    <link rel="icon" type="image/x-icon" href="../common/img/panel-icon.png" />
+    <link id="ui-theme" rel="stylesheet" href="../3rdparty/jquery-ui-themes-1.11.2/themes/smoothness/jquery-ui.min.css" />
+    <link href="../3rdparty/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+    <link href="../3rdparty/fontawesome/css/brands.min.css" rel="stylesheet">
+    <link href="../3rdparty/fontawesome/css/solid.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="wrapper">
+
+    </div>
+</body>
+<script src="../3rdparty/require/require.js"></script>
+<script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var urlArgs = "";
+    if (urlParams.has('v')) {
+        urlArgs = "v=" + urlParams.get('v');
+    }
+    require.config({
+        waitSeconds: 15,
+        urlArgs: urlArgs
+    });
+    require(["./atc"]);
+</script>
+</html>

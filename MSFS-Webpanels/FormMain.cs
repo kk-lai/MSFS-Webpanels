@@ -18,6 +18,8 @@ using System.Text.Encodings.Web;
 using Zen.Barcode;
 
 
+// Get-ChildItem -Path "W:\MSFS-Webpanels-dev" -Recurse| Unblock-File
+
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
 
 namespace MSFS_Webpanels
@@ -25,7 +27,6 @@ namespace MSFS_Webpanels
     public partial class FormMain : Form
     {
         private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
-        private SimConnectClient simConnectClient = SimConnectClient.getSimConnectClient();
         private System.Windows.Forms.Timer timer;
         private String hostAddress = "localhost";
 
@@ -62,41 +63,9 @@ namespace MSFS_Webpanels
             this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion + ")";
         }
 
-
-
-        protected override void DefWndProc(ref Message m)
-        {
-            if (m.Msg == SimConnectClient.WM_USER_SIMCONNECT)
-            {
-                simConnectClient.SimConnectMsgHandler();
-                if (simConnectClient.simData.IsSimConnected)
-                {
-                    buttonStart.Text = "&Disconnect";
-                }
-                else
-                {
-                    buttonStart.Text = "&Connect";
-                }
-            }
-            else
-            {
-                base.DefWndProc(ref m);
-            }
-        }
-
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            if (!simConnectClient.simData.IsSimConnected)
-            {
-                _logger.Info("Start connecting MSFS");
-                simConnectClient.Disconnect();
-                simConnectClient.Connect(this.Handle);
-            }
-            else
-            {
-                _logger.Info("End connecting MSFS");
-                simConnectClient.Disconnect();
-            }
+
         }
 
         private void timerFunc(Object myObject, EventArgs myEventArgs)

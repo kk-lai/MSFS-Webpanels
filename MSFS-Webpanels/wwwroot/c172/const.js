@@ -5,6 +5,6 @@ define(function () {
         refreshPeriod : 50, // ms;
         serverUpdateCooldown :20, // ms  
         simVarUrl: '/api/SimData',
-        versionCode: '1.1.3'
+        versionCode: '1.3.0'
     }
 });
