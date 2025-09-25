@@ -29,32 +29,19 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            buttonStart = new Button();
             label1 = new Label();
             pictureQRcode = new PictureBox();
             linkPanel = new LinkLabel();
-            buttonTest = new Button();
             label3 = new Label();
-            textboxInput = new TextBox();
             buttonAbout = new Button();
+            labelStatus = new Label();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureQRcode).BeginInit();
             SuspendLayout();
             // 
-            // buttonStart
-            // 
-            buttonStart.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonStart.Enabled = false;
-            buttonStart.Location = new Point(402, 320);
-            buttonStart.Name = "buttonStart";
-            buttonStart.Size = new Size(166, 59);
-            buttonStart.TabIndex = 0;
-            buttonStart.Text = "&Connect";
-            buttonStart.UseVisualStyleBackColor = true;
-            buttonStart.Click += buttonStart_Click;
-            // 
             // label1
             // 
-            label1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Font = new Font("Segoe UI", 14F);
             label1.ForeColor = SystemColors.ActiveCaptionText;
             label1.Location = new Point(12, 9);
             label1.Name = "label1";
@@ -76,7 +63,7 @@
             // linkPanel
             // 
             linkPanel.AutoSize = true;
-            linkPanel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            linkPanel.Font = new Font("Segoe UI", 12F);
             linkPanel.Location = new Point(12, 63);
             linkPanel.Name = "linkPanel";
             linkPanel.Size = new Size(53, 21);
@@ -86,40 +73,20 @@
             linkPanel.Visible = false;
             linkPanel.LinkClicked += linkPanel_LinkClicked;
             // 
-            // buttonTest
-            // 
-            buttonTest.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonTest.Location = new Point(395, 77);
-            buttonTest.Name = "buttonTest";
-            buttonTest.Size = new Size(166, 59);
-            buttonTest.TabIndex = 4;
-            buttonTest.Text = "&Test";
-            buttonTest.UseVisualStyleBackColor = true;
-            buttonTest.Visible = false;
-            buttonTest.Click += buttonTest_Click;
-            // 
             // label3
             // 
             label3.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Font = new Font("Segoe UI", 12F);
             label3.Location = new Point(461, 391);
             label3.Name = "label3";
             label3.Size = new Size(107, 21);
             label3.TabIndex = 6;
             label3.Text = "By: Kevin King";
             // 
-            // textboxInput
-            // 
-            textboxInput.Location = new Point(461, 168);
-            textboxInput.Name = "textboxInput";
-            textboxInput.Size = new Size(100, 23);
-            textboxInput.TabIndex = 9;
-            textboxInput.Visible = false;
-            // 
             // buttonAbout
             // 
-            buttonAbout.Location = new Point(402, 243);
+            buttonAbout.Location = new Point(402, 329);
             buttonAbout.Name = "buttonAbout";
             buttonAbout.Size = new Size(166, 59);
             buttonAbout.TabIndex = 10;
@@ -127,19 +94,40 @@
             buttonAbout.UseVisualStyleBackColor = true;
             buttonAbout.Click += buttonAbout_Click;
             // 
+            // labelStatus
+            // 
+            labelStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            labelStatus.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelStatus.ForeColor = SystemColors.ActiveCaptionText;
+            labelStatus.Location = new Point(375, 281);
+            labelStatus.Name = "labelStatus";
+            labelStatus.Size = new Size(193, 30);
+            labelStatus.TabIndex = 11;
+            labelStatus.Text = "Disconnected";
+            // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            label4.Font = new Font("Segoe UI", 14F);
+            label4.ForeColor = SystemColors.ActiveCaptionText;
+            label4.Location = new Point(375, 251);
+            label4.Name = "label4";
+            label4.Size = new Size(140, 30);
+            label4.TabIndex = 12;
+            label4.Text = "Status:";
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(580, 428);
+            Controls.Add(label4);
+            Controls.Add(labelStatus);
             Controls.Add(buttonAbout);
-            Controls.Add(textboxInput);
             Controls.Add(label3);
-            Controls.Add(buttonTest);
             Controls.Add(linkPanel);
             Controls.Add(pictureQRcode);
             Controls.Add(label1);
-            Controls.Add(buttonStart);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(542, 406);
             Name = "FormMain";
@@ -150,14 +138,12 @@
         }
 
         #endregion
-
-        private Button buttonStart;
         private Label label1;
         private PictureBox pictureQRcode;
         private LinkLabel linkPanel;
-        private Button buttonTest;
         private Label label3;
-        private TextBox textboxInput;
         private Button buttonAbout;
+        private Label labelStatus;
+        private Label label4;
     }
 }

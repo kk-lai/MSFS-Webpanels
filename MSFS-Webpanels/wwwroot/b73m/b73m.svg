@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="2048"
+   height="1496"
+   viewBox="0 0 2048 1496"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="b73m.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="0.35945918"
+     inkscape:cx="1083.5723"
+     inkscape:cy="986.20377"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1"
+     showborder="true"
+     labelstyle="default"
+     inkscape:clip-to-page="false"
+     showguides="false"
+     showgrid="false" />
+  <defs
+     id="defs1">
+    <rect
+       x="459.02292"
+       y="573.08316"
+       width="1644.1367"
+       height="200.30091"
+       id="rect3" />
+    <rect
+       x="428.42139"
+       y="548.04555"
+       width="755.02019"
+       height="279.27709"
+       id="rect2" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#4d4d4d;stroke-width:1.12808"
+       id="background"
+       width="2048"
+       height="1496"
+       x="0"
+       y="0" />
+  </g>
+  <g
+     id="error-overlay"
+     inkscape:label="error-overlay"
+     style="opacity:0.805">
+    <rect
+       style="opacity:1;fill:#ffffff"
+       id="rect1"
+       width="2048"
+       height="1496"
+       x="0"
+       y="0" />
+    <text
+       xml:space="preserve"
+       id="error-message"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:100px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect3);display:inline;opacity:1;fill:#ff0000"
+       x="128.74023"
+       y="0"
+       transform="translate(-267.06788,91.804584)"><tspan
+         x="756.70215"
+         y="663.15943"
+         id="tspan1">Webpanel is not started</tspan></text>
+  </g>
+</svg>

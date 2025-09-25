@@ -18,26 +18,50 @@ namespace MSFS_Webpanels
     public class WebpanelController : ControllerBase
     {
         private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+        private SimClient fsSimClient = SimClient.GetInstance();
 
-        [HttpPost("register/{defId}")]
-        public IActionResult RegisterDataRequest(String defId, [FromBody] IDictionary<string, DataRequestEntry> RequestDefinition)
+
+        [HttpPost("register/{regId}")]
+        public IActionResult RegisterDataRequest(String regId, [FromBody] IDictionary<string, RequestDefinitionItem> RequestDefinition)
         {
-            _logger.Debug("RegisterDataRequest triggered:"+defId);
-            return Ok();
+            _logger.Debug("RegisterDataRequest triggered:"+ regId);
+            if (fsSimClient.IsConnected())
+            {
+                fsSimClient.RegisterDataRequest(regId, RequestDefinition);
+                return Ok();
+            }
+            else
+            {
+                return this.Problem("Simualtor Disconnected", statusCode: 500);
+            }
         }
 
-        [HttpGet("get-data/{defId}")]
-        public IActionResult GetData(String defId)
+        [HttpGet("get-data/{regId}")]
+        public IActionResult GetData(String regId)
         {
             _logger.Debug("GetData triggered");
-            return Ok();
+            if (fsSimClient.IsConnected())
+            {
+                IDictionary<string, Object> response = fsSimClient.GetDataResponse(regId);
+                return Ok(response);
+            } else
+            {
+                return this.Problem("Simualtor Disconnected", statusCode: 500);
+            }            
         }
 
         [HttpPost("exec-code")]
         public IActionResult ExecCode(string cmd)
         {
             _logger.Debug("ExecCode triggered");
-            return Ok();
+            if (fsSimClient.IsConnected())
+            {                
+                return Ok();
+            }
+            else
+            {
+                return this.Problem("Simualtor Disconnected", statusCode: 500);
+            }            
         }
     }
 }

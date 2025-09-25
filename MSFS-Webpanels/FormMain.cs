@@ -29,6 +29,7 @@ namespace MSFS_Webpanels
         private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
         private System.Windows.Forms.Timer timer;
         private String hostAddress = "localhost";
+        private SimClient fsSimClient = SimClient.GetInstance();
 
         public FormMain()
         {
@@ -58,20 +59,14 @@ namespace MSFS_Webpanels
                     }
                 }
             }
-            
-
             this.Text = "MSFS-Webpanels (version:" + Application.ProductVersion + ")";
         }
 
-        private void buttonStart_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void timerFunc(Object myObject, EventArgs myEventArgs)
         {
             IWebHost webApp = Program.webHost;
-            if (webApp != null && webApp.ServerFeatures != null)
+            if (!linkPanel.Visible && webApp != null && webApp.ServerFeatures != null)
             {
                 foreach (var address in webApp.ServerFeatures.Get<IServerAddressesFeature>().Addresses)
                 {
@@ -81,21 +76,45 @@ namespace MSFS_Webpanels
                     String webUrl = "http://" + hostAddress + ":" + port + "/?v=" + Application.ProductVersion;
                     linkPanel.Text = webUrl;
                     CodeQrBarcodeDraw qrCode = BarcodeDrawFactory.CodeQr;
-                    pictureQRcode.Image = qrCode.Draw(webUrl, pictureQRcode.Height);
-                    buttonStart.Enabled = true;
+                    pictureQRcode.Image = qrCode.Draw(webUrl, pictureQRcode.Height);                    
                     pictureQRcode.Visible = true;
                     linkPanel.Visible = true;
-                    timer.Stop();
 
                     _logger.Info("Web Server " + webUrl + " Started");
                 }
             }
-
-        }
-
-        private void buttonTest_Click(object sender, EventArgs e)
-        {
-
+            if (fsSimClient.IsConnected())
+            {
+                // ping 
+                UInt32 version =fsSimClient.GetWAServerVersion();
+                if (version==0)
+                {
+                    fsSimClient.Disconnect();
+                } else
+                {
+                    labelStatus.Text = "Connected";
+                }
+            }
+            if (!fsSimClient.IsConnected())
+            {
+                int timerInterval = 3000;
+                labelStatus.Text = "Connecting";
+                CERROR errCode = fsSimClient.Connect();
+                if (errCode == CERROR.FSMISSING)
+                {
+                    labelStatus.Text = "Error Code 1";
+                    fsSimClient.Disconnect();
+                } else if (errCode == CERROR.WASIMMISSING)
+                {
+                    labelStatus.Text = "Error Code 2";
+                    fsSimClient.Disconnect();
+                } else if (errCode == CERROR.NOERR)
+                {
+                    labelStatus.Text = "Connected";
+                    timerInterval = 500;
+                }
+                timer.Interval = timerInterval;
+            }
         }
 
         private void linkPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -107,6 +126,13 @@ namespace MSFS_Webpanels
         {
             AboutBox aboutBox = new AboutBox();
             aboutBox.ShowDialog();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            fsSimClient.Disconnect();
+            fsSimClient.Dispose();
         }
     }
 }

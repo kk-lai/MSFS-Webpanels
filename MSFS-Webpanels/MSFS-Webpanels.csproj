@@ -58,6 +58,9 @@
     </None>
     <None Update="WASimCommander.WASimClient.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="wwwroot\common\img\panel-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>    
   </ItemGroup>
   
@@ -89,7 +92,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\atc\img\" />
     <Folder Include="wwwroot\atc\css\" />
-    <Folder Include="wwwroot\common\js\" />
+    <Folder Include="wwwroot\b73m\" />
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
