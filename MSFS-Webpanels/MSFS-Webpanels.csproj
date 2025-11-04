@@ -81,18 +81,14 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Reference Include="Microsoft.FlightSimulator.SimConnect">
-      <HintPath>C:\MSFS SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
-    </Reference>
-    <Reference Include="WASimCommander.WASimClient">
-      <HintPath>WASimCommander.WASimClient.dll</HintPath>
-    </Reference>
+    <Folder Include="wwwroot\atc\img\" />
+    <Folder Include="wwwroot\atc\css\" />
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="wwwroot\atc\img\" />
-    <Folder Include="wwwroot\atc\css\" />
-    <Folder Include="wwwroot\b73m\" />
+    <Reference Include="WASimCommander.WASimClient">
+      <HintPath>WASimCommander.WASimClient.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

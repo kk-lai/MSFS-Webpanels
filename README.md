@@ -99,3 +99,26 @@ https://www.freepik.com/free-vector/mobile-background-with-qr-code_1023723.htm#q
 
 Monitor (by rawpixel.com)
 https://www.freepik.com/free-vector/monitor_3425242.htm#query=monitor&position=12&from_view=search&track=sph
+
+Knob (by macrovector)
+https://www.freepik.com/free-vector/control-knob-regulators_10603970.htm#fromView=search&page=1&position=10&uuid=7f53d50e-d2c4-4b25-a481-c9a943a95a6f&query=knob
+
+
+Green LED (by freepik)
+https://www.freepik.com/free-vector/gradient-colored-ui-kit-collection_20826488.htm#fromView=search&page=2&position=44&uuid=57841508-4f27-452c-a67f-fbdf2ce097ce&query=Button+green
+
+Jet Engine (by juicy_fish)
+https://www.freepik.com/icon/jet_15128470#fromView=search&page=1&position=14&uuid=99490f7c-a1be-4497-9bf7-ebcca695afa1
+
+Air Icon (by freepik)
+https://www.freepik.com/icon/wind_1057159#fromView=search&page=1&position=13&uuid=97e39256-d172-4025-a1fe-19f0ec1ebab9
+
+FMC (by andinur)
+https://www.freepik.com/icon/interaction_17308023#fromView=search&page=2&position=21&uuid=8f615b59-358c-4ec5-b1f6-572974c2df61
+
+Alarm (by freepik)
+https://www.freepik.com/icon/alarm_469654#fromView=search&page=1&position=76&uuid=1bd3cdf4-8009-4136-90bf-d5ff2631c6dd
+
+7seg fonts
+https://github.com/keshikan/DSEG
+

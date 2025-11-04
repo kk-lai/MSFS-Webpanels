@@ -20,11 +20,10 @@ namespace MSFS_Webpanels
         private readonly log4net.ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
         private SimClient fsSimClient = SimClient.GetInstance();
 
-
         [HttpPost("register/{regId}")]
         public IActionResult RegisterDataRequest(String regId, [FromBody] IDictionary<string, RequestDefinitionItem> RequestDefinition)
         {
-            _logger.Debug("RegisterDataRequest triggered:"+ regId);
+            _logger.Info("RegisterDataRequest triggered:"+ regId);
             if (fsSimClient.IsConnected())
             {
                 fsSimClient.RegisterDataRequest(regId, RequestDefinition);
@@ -51,11 +50,12 @@ namespace MSFS_Webpanels
         }
 
         [HttpPost("exec-code")]
-        public IActionResult ExecCode(string cmd)
+        public IActionResult ExecCode([FromForm] string cmd)
         {
-            _logger.Debug("ExecCode triggered");
+            _logger.Info("ExecCode triggered:"+cmd);
             if (fsSimClient.IsConnected())
-            {                
+            {
+                fsSimClient.SendCommand(cmd);
                 return Ok();
             }
             else

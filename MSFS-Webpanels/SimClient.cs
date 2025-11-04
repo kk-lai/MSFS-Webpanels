@@ -31,6 +31,7 @@ namespace MSFS_Webpanels
         private Dictionary<string, RegistrationRequest> RegistrationRequests = new Dictionary<string, RegistrationRequest>();
         private Dictionary<string, Dictionary<string, Object>> DataResponses = new Dictionary<string, Dictionary<string, Object>>();
         private Dictionary<uint, RegistrationRequest> RequestIdRegistrationMap = new Dictionary<uint, RegistrationRequest>();
+        private DateTime lastSimVarUpdate = DateTime.MinValue;
 
         public static SimClient GetInstance()
         {
@@ -50,7 +51,21 @@ namespace MSFS_Webpanels
         private void FsClient_OnDataReceived(WASimCommander.CLI.Structs.DataRequestRecord r)
         {
             uint requestId = r.requestId;
-            _logger.Info("OnDataReceived:"+requestId);
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in r.data)
+            {
+                sb.Append(b.ToString("X2")); // "X2" formats as two-digit uppercase hex
+                sb.Append(",");
+            }
+            string hex = sb.ToString();
+
+            _logger.Debug("OnDataReceived:" + requestId + "," +r.nameOrCode +","+ hex);
+            if (requestId==0)
+            {
+                lastSimVarUpdate = DateTime.Now;
+                return;
+            }
+
             RegistrationRequest req = RequestIdRegistrationMap[requestId];
             if (req != null)
             {
@@ -72,7 +87,8 @@ namespace MSFS_Webpanels
                     r.tryConvert<int>(out int i);
                     val = i;
                 }
-                DataResponses[req.ReqistrationId][key] = val;                
+                DataResponses[req.ReqistrationId][key] = val;
+                _logger.Debug("OnDataReceived:" + key + "," + val);
             }
         }
 
@@ -84,26 +100,32 @@ namespace MSFS_Webpanels
             }
             _logger.Info("Connecting Simulator");
             HR hr;
+
             if ((hr = fsClient.connectSimulator()) != HR.OK)
             {
-                _logger.Info("Cannot connect flight simulator");
+                this.Disconnect();
+                _logger.Error("Cannot connect flight simulator");
                 return CERROR.FSMISSING;
             }
             _logger.Info("Get Server Version");
             UInt32 version = fsClient.pingServer();
             if (version == 0)
             {
-                _logger.Info("Unable to Get Server Version");
+                this.Disconnect();
+                _logger.Error("Unable to Get Server Version");
                 return CERROR.WASIMMISSING;
             }
             _logger.Info("Connecting Server");
             if ((hr = fsClient.connectServer()) != HR.OK)
             {
-                _logger.Info("Server Connection Error");
+                this.Disconnect();
+                _logger.Error("Server Connection Error");
                 return CERROR.WASIMMISSING;
             }
             _logger.Info("Connection Successful");
-            UnregisterRegistrationRequests();
+            //UnregisterRegistrationRequests();
+            lastSimVarUpdate = DateTime.Now;
+            fsClient.saveDataRequestAsync(new WASimCommander.CLI.Structs.DataRequest(0, CalcResultType.Integer, "(E:SIMULATION TIME, Seconds)", 4, UpdatePeriod.Millisecond, 3000, 0));
             foreach (KeyValuePair<string, RegistrationRequest> entry in RegistrationRequests)
             {
                 RegisterRegistrationRequest(entry.Value);
@@ -113,14 +135,17 @@ namespace MSFS_Webpanels
 
         public void Disconnect()
         {
-            if (IsConnected())
-            {
-                _logger.Info("Disconnect Start");
-                fsClient.disconnectServer();
-                fsClient.disconnectSimulator();
-                UnregisterRegistrationRequests();
-                _logger.Info("Disconnect End");
-            }
+            _logger.Info("Disconnect Start");
+            fsClient.disconnectServer();
+            fsClient.disconnectSimulator();
+            _logger.Info("Disconnect End");            
+        }
+
+        public void Dispose()
+        {
+            _logger.Info("Dispose");
+            Disconnect();
+            fsClient.Dispose();            
         }
 
         public UInt32 GetWAServerVersion()
@@ -129,32 +154,37 @@ namespace MSFS_Webpanels
             {
                 return 0;
             }
-            return fsClient.pingServer();            
+            UInt32 version = fsClient.pingServer();
+            if (version==0)
+            {
+                Disconnect();
+            }
+            return version;
         }
 
         public bool IsConnected()
         {
+            if (fsClient==null)
+            {
+                return false;
+            }
             return fsClient.isInitialized() && fsClient.isConnected();
         }
 
-        public void Dispose()
+        public bool IsConnectionLost()
         {
-            Disconnect();
-            fsClient.Dispose();
-        }
-
-        private void UnregisterRegistrationRequests()
-        {
-            foreach (KeyValuePair<string, RegistrationRequest> entry in RegistrationRequests)
+            if (IsConnected())
             {
-                entry.Value.IsRegistered = false;
-                entry.Value.SimRequestIdStart = 0;
+                double timeElapsed = (DateTime.Now - lastSimVarUpdate).TotalSeconds;
+                if (timeElapsed < 5)
+                {
+                    return false;
+                }
             }
-            MaxRequestId = 0;
-            RequestIdRegistrationMap = new Dictionary<uint, RegistrationRequest>();
+            return true;
         }
 
-        private void RegisterRegistrationRequest( RegistrationRequest req)
+        private void RegisterRegistrationRequest(RegistrationRequest req)
         {
             if (req.IsRegistered)
             {
@@ -170,7 +200,7 @@ namespace MSFS_Webpanels
                     
                     string defKey = req.RequestDefinition.ElementAt(i).Key;
                     RequestDefinitionItem item = req.RequestDefinition.ElementAt(i).Value;
-                    _logger.Info("register:" + defKey+","+item.Cmd);
+                    _logger.Debug("register:" + defKey+","+item.Cmd+":"+(MaxRequestId+1));
                     CalcResultType resultType = CalcResultType.Double;
                     if (item.Type!=null) 
                     {
@@ -230,6 +260,12 @@ namespace MSFS_Webpanels
         public IDictionary<string, Object> GetDataResponse(string registrationId)
         {
             return DataResponses[registrationId];
+        }
+
+        public void SendCommand(string cmd)
+        {
+            _logger.Info("Send Command:" + cmd);
+            fsClient.executeCalculatorCode(cmd);
         }
     }
 }

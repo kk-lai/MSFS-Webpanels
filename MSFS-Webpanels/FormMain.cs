@@ -72,8 +72,16 @@ namespace MSFS_Webpanels
                 {
                     var uri = new Uri(address);
                     var port = uri.Port;
+                    var arg = "/?v="+Application.ProductVersion;
 
+#if DEBUG
+                    Random rnd = new Random();
+                    int num = rnd.Next(0, 10000);
+                    String webUrl = "http://" + hostAddress + ":" + port + "/b73m/index.html?t=" + num;
+#else
                     String webUrl = "http://" + hostAddress + ":" + port + "/?v=" + Application.ProductVersion;
+#endif
+//                    String webUrl = "http://" + hostAddress + ":" + port + "/?v=" + Application.ProductVersion;
                     linkPanel.Text = webUrl;
                     CodeQrBarcodeDraw qrCode = BarcodeDrawFactory.CodeQr;
                     pictureQRcode.Image = qrCode.Draw(webUrl, pictureQRcode.Height);                    
@@ -85,14 +93,10 @@ namespace MSFS_Webpanels
             }
             if (fsSimClient.IsConnected())
             {
-                // ping 
-                UInt32 version =fsSimClient.GetWAServerVersion();
-                if (version==0)
+                if (fsSimClient.IsConnectionLost())
                 {
+                    _logger.Error("Connection Lost");
                     fsSimClient.Disconnect();
-                } else
-                {
-                    labelStatus.Text = "Connected";
                 }
             }
             if (!fsSimClient.IsConnected())
@@ -102,16 +106,14 @@ namespace MSFS_Webpanels
                 CERROR errCode = fsSimClient.Connect();
                 if (errCode == CERROR.FSMISSING)
                 {
-                    labelStatus.Text = "Error Code 1";
-                    fsSimClient.Disconnect();
+                    labelStatus.Text = "Error Code 1";                    
                 } else if (errCode == CERROR.WASIMMISSING)
                 {
                     labelStatus.Text = "Error Code 2";
-                    fsSimClient.Disconnect();
                 } else if (errCode == CERROR.NOERR)
                 {
                     labelStatus.Text = "Connected";
-                    timerInterval = 500;
+                    timerInterval = 5000;
                 }
                 timer.Interval = timerInterval;
             }
@@ -130,9 +132,9 @@ namespace MSFS_Webpanels
 
         protected override void OnClosed(EventArgs e)
         {
-            base.OnClosed(e);
-            fsSimClient.Disconnect();
+            timer.Stop();
             fsSimClient.Dispose();
+            base.OnClosed(e);            
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <head>
     <meta charset="utf-8" />
-    <title>ATC Webpanel</title>
+    <title>Boeing 737 max - BL Forward Overhead Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,26 +12,69 @@
     <meta http-equiv="Expires" content="0" />
     <link rel="apple-touch-icon" href="../common/img/panel-icon.png" />
     <link rel="icon" type="image/x-icon" href="../common/img/panel-icon.png" />
-    <link id="ui-theme" rel="stylesheet" href="../3rdparty/jquery-ui-themes-1.11.2/themes/smoothness/jquery-ui.min.css" />
     <link href="../3rdparty/fontawesome/css/fontawesome.min.css" rel="stylesheet">
     <link href="../3rdparty/fontawesome/css/brands.min.css" rel="stylesheet">
     <link href="../3rdparty/fontawesome/css/solid.min.css" rel="stylesheet">
     <style>
         body {
-            padding: 0;
-            margin: 0;
+            -webkit-user-select: none !important;
+            -khtml-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            touch-action: manipulation !important;
+            margin: 0px;
             overflow-y: hidden;
             overflow-x: hidden;
-        }        
+            z-index: 1;
+            position: fixed;
+        }
+
+        .container {
+            overflow-y: hidden;
+            overflow-x: hidden;
+            z-index: 2;
+            margin: auto;
+            position: fixed;
+        }
+
+        #debug-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50vw;
+            height: 50vh;
+            background-color: #D0D0D0;
+            display: none;
+        }
+
+        @font-face {
+            font-family: 'DSEG7 Classic';
+            font-style: 'normal';
+            src: url('../3rdparty/DSEG/DSEG7Classic-Regular.woff2') format('woff2'), url('3rdparty/DSEG/DSEG7Classic-Regular.woff') format('woff'), url('3rdparty/DSEG/DSEG7Classic-Regular.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'DSEG7 Classic';
+            font-style: 'italic';
+            src: url('../3rdparty/DSEG/DSEG7Classic-Italic.woff2') format('woff2'), url('3rdpartyDSEG//DSEG7Classic-Italic.woff') format('woff'), url('3rdparty/DSEG/DSEG7Classic-Italic.ttf') format('truetype');
+        }
     </style>
 </head>
 <body>
     <div id="svg-container" class="container">
 
     </div>
+    <!-- <div id="debug-container">
+    </div> -->
 </body>
 <script src="../3rdparty/require/require.js"></script>
 <script>
+    window.onerror = function (message, source, lineno, colno, error) {
+        var dbg = document.getElementById('debug-container');
+        dbg.innerHTML += `<pre style="color:red;">Error: ${message} at ${source}:${lineno}:${colno}</pre>`;
+    };
+
     var urlParams = new URLSearchParams(window.location.search);
     var urlArgs = "";
     if (urlParams.has('v')) {
