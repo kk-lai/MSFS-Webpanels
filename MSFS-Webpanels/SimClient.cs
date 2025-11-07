@@ -28,6 +28,7 @@ namespace MSFS_Webpanels
         protected static SimClient instance = null;
         protected WASimClient fsClient = null;
         protected uint MaxRequestId = 0;
+        protected bool isConnected = false;
         private Dictionary<string, RegistrationRequest> RegistrationRequests = new Dictionary<string, RegistrationRequest>();
         private Dictionary<string, Dictionary<string, Object>> DataResponses = new Dictionary<string, Dictionary<string, Object>>();
         private Dictionary<uint, RegistrationRequest> RequestIdRegistrationMap = new Dictionary<uint, RegistrationRequest>();
@@ -46,6 +47,20 @@ namespace MSFS_Webpanels
         {
             fsClient = new WASimClient(0x57454250); // WEBP
             fsClient.OnDataReceived += FsClient_OnDataReceived;
+            fsClient.OnClientEvent += FsClient_OnClientEvent;
+        }
+
+        private void FsClient_OnClientEvent(WASimCommander.CLI.Structs.ClientEvent evt)
+        {
+            _logger.Info("OnClientEvent:"+evt.ToString());
+            if (evt.eventType==ClientEventType.ServerDisconnected || evt.eventType == ClientEventType.SimDisconnected)
+            {
+                this.isConnected = false;
+            }
+            if (evt.eventType==ClientEventType.ServerConnected)
+            {
+                this.isConnected = true;
+            }            
         }
 
         private void FsClient_OnDataReceived(WASimCommander.CLI.Structs.DataRequestRecord r)
@@ -163,25 +178,8 @@ namespace MSFS_Webpanels
         }
 
         public bool IsConnected()
-        {
-            if (fsClient==null)
-            {
-                return false;
-            }
-            return fsClient.isInitialized() && fsClient.isConnected();
-        }
-
-        public bool IsConnectionLost()
-        {
-            if (IsConnected())
-            {
-                double timeElapsed = (DateTime.Now - lastSimVarUpdate).TotalSeconds;
-                if (timeElapsed < 5)
-                {
-                    return false;
-                }
-            }
-            return true;
+        {            
+            return this.isConnected;
         }
 
         private void RegisterRegistrationRequest(RegistrationRequest req)

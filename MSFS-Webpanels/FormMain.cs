@@ -77,7 +77,7 @@ namespace MSFS_Webpanels
 #if DEBUG
                     Random rnd = new Random();
                     int num = rnd.Next(0, 10000);
-                    String webUrl = "http://" + hostAddress + ":" + port + "/b73m/index.html?t=" + num;
+                    String webUrl = "http://" + hostAddress + ":" + port + "/b38m/index.html?t=" + num;
 #else
                     String webUrl = "http://" + hostAddress + ":" + port + "/?v=" + Application.ProductVersion;
 #endif
@@ -89,14 +89,6 @@ namespace MSFS_Webpanels
                     linkPanel.Visible = true;
 
                     _logger.Info("Web Server " + webUrl + " Started");
-                }
-            }
-            if (fsSimClient.IsConnected())
-            {
-                if (fsSimClient.IsConnectionLost())
-                {
-                    _logger.Error("Connection Lost");
-                    fsSimClient.Disconnect();
                 }
             }
             if (!fsSimClient.IsConnected())
@@ -132,6 +124,7 @@ namespace MSFS_Webpanels
 
         protected override void OnClosed(EventArgs e)
         {
+            _logger.Info("MSFS-Webpanels End");
             timer.Stop();
             fsSimClient.Dispose();
             base.OnClosed(e);            

@@ -26,14 +26,16 @@ define([
                 this.requestDef = {};
                 this.cmdDef = {};
                 this.queue = [];
-                this.lock = Promise.resolve();
+                this._lock = Promise.resolve();
                 this.isProcessing = false;
                 this.page = 1;
                 this.step = 0;
                 this.repeatTimer = null;
                 this.repeatTriggerTime = null;
-                this.repeatTime1 = 500; // 500ms
-                this.repeatTime2 = 50; // 250
+                this.repeatStage1Time = 500; 
+                this.repeatStage2Time = 2000;
+                this.repeatStage3Time = 5000;
+                this.repeatTimeRecurring = 100; //
 
                 this.touchDevice = ('ontouchstart' in document.documentElement);
                 if (this.touchDevice) {
@@ -213,7 +215,7 @@ define([
             timerFunc(self) {
                 if (self.debugUI) {                    
                     jquery.ajax({
-                        url: "b73m.json",
+                        url: "b38m.json",
                         method: "GET",
                         success: function (jsonData, textStatus, jqXHR) {
                             self.setConnectionState(true);
@@ -283,58 +285,88 @@ define([
                 jquery("#svg-container svg").attr("height", fh);
             }
 
+            runSingleInstance(task) {
+                var release;
+                const nextLock = new Promise(function (resolve) {
+                    release = resolve;
+                });
+
+                const previousLock = this._lock;
+                this._lock = nextLock;
+
+                return previousLock
+                    .then(function () {
+                        return task();
+                    })
+                    .finally(function () {
+                        release();
+                    });
+            }
+
             sendCommand(self, ui, val, removeDuplicate = false) {
                 console.log("sendCommand:" + ui + ":" + val);
                 if (self.debugUI) {
                     return;
                 }
-                return new Promise(function (resolve, reject) {
-                    var cmd = val + " " + self.cmdDef[ui];
-                    var itm = {
-                        "ui": ui,
-                        "cmd": cmd,
-                        "isSkip": false,
-                        "resolve": resolve,
-                        "reject": reject
-                    };
-                    if (removeDuplicate) {
-                        self.queue.forEach(function (itm) {
-                            if (itm.ui == ui) {
-                                itm.isSkip = true;
-                            }
-                        });
-                    }
-                    self.queue.push(itm);
-                    self.processSendQueue();
-                });
+                var cmd = self.cmdDef[ui].replace("?", val.toString());
+                var itm = {
+                    "ui": ui,
+                    "cmd": cmd,
+                    "isSkip": false
+                };
+                if (removeDuplicate) {
+                    self.queue.forEach(function (itm) {
+                        if (itm.ui == ui) {
+                            itm.isSkip = true;
+                        }
+                    });
+                }
+                self.queue.push(itm);
+                self.processSendQueue();
             }
 
-            processSendQueue() {
+
+            async processSendQueue() {
+                if (this.queue.length === 0) return;
+
                 var self = this;
-                if (this.isProcessing || self.queue.length == 0) {
-                    return;
-                }
-                this.isProcessing = true;
-                var qitm = this.queue.shift();
-                if (qitm.isSkip) {
-                    qitem.resolve();
-                }
-                console.log("ajax:" + this.apiRoot + "/exec-code => " + qitm.cmd);
-                jquery.ajax({
-                    url: this.apiRoot + "/exec-code",
-                    method: "POST",
-                    data: { cmd: qitm.cmd },
-                    success: function (response) {
-                        self.setConnectionState(true);
-                        self.isProcessing = false;
-                        qitm.resolve(response);
-                    },
-                    error: function (xhr, status, error) {
-                        self.setConnectionState(false);
-                        self.isProcessing = false;
-                        qitm.reject(error);
-                    },
-                    cache: false
+
+                await this.runSingleInstance(async function() {
+                    self.isProcessing = true;
+                    var qitm = null;
+                    while (self.queue.length > 0) {
+                        qitm = self.queue.shift();
+                        if (!qitm.isSkip) {
+                            break;
+                        }
+                        console.log("skip:" + qitm.cmd);
+                    }
+                    if (qitm != null && !qitm.isSkip) {
+                        console.log("ajax:" + self.apiRoot + "/exec-code => " + qitm.cmd);
+                        return new Promise(function (resolve, reject) {
+                            jquery.ajax({
+                                url: self.apiRoot + "/exec-code",
+                                method: "POST",
+                                data: { cmd: qitm.cmd },
+                                success: function (response) {
+                                    self.setConnectionState(true);
+                                    self.isProcessing = false;
+                                    resolve();
+                                },
+                                error: function (xhr, status, error) {
+                                    self.setConnectionState(false);
+                                    self.isProcessing = false;
+                                    resolve();
+                                },
+                                cache: false
+                            });
+                        }).then(function () {
+                            if (self.queue.length > 0) {
+                                self.processSendQueue();
+                            }
+
+                        });
+                    }                    
                 });
             }
 
@@ -365,11 +397,28 @@ define([
 
             onKnobRotate(self, ctl, dir) {
                 var ui = jquery(ctl).attr("ctl");
-                var minVal = parseInt(jquery(ctl).attr("min"));
-                var maxVal = parseInt(jquery(ctl).attr("max"));
-                var adj = dir * parseInt(jquery(ctl).attr("step"));
-                var dt = Date.now() - this.repeatTriggerTime;
-                var oVal = parseInt(jquery(ctl).attr("value"));
+                var minVal = parseFloat(jquery(ctl).attr("min"));
+                var maxVal = parseFloat(jquery(ctl).attr("max"));
+                var dt = Date.now() - self.repeatTriggerTime;
+                var oVal = parseFloat(jquery(ctl).attr("value"));
+                var step = parseFloat(jquery(ctl).attr("step"));
+
+                if (dt > self.repeatStage2Time) {
+                    var step2 = jquery(ctl).attr("step2");
+                    if (typeof step2 !== "undefined" && step2 !== false) {
+                        step = step2;
+                    }
+                }
+
+                if (dt > self.repeatStage3Time) {
+                    var step3 = jquery(ctl).attr("step3");
+                    if (typeof step3 !== "undefined" && step3 !== false) {
+                        step = step3;
+                    }
+                }
+
+                var adj = dir * step;
+                console.log("Adj:" + adj+",val:"+oVal);
                 var nVal = oVal + adj;
                 var isCircular = jquery(ctl).hasClass("ctl-knob-circular");
 
@@ -390,11 +439,11 @@ define([
                 }
                 
                 if (nVal != oVal) {
-                    self.sendCommand(self, ui, nVal);
+                    self.sendCommand(self, ui, nVal, true);
                     self.updateUI(self, ui, nVal, false);
-                    var rtime = self.repeatTime2;
-                    if (dt < self.repeatTime1) {
-                        rtime = self.repeatTime1;                        
+                    var rtime = self.repeatTimeRecurring;
+                    if (dt < self.repeatStage1Time) {
+                        rtime = self.repeatStage1Time;
                     }
                     self.repeatTimer = setTimeout(self.onKnobRotate, rtime, self, ctl, dir);
                 }
