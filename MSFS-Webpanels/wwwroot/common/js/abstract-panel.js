@@ -449,10 +449,18 @@ define([
                 }
             }
 
-            onButtonTapped(self, ev) {
+            onButtonTapped(self, ev) {                
                 var ctl = jquery(ev.target).parent();
                 var ui = ctl.attr("ctl");
+                if (jquery(ctl).hasClass("btn-internal")) {
+                    self.onInternalButtonTapped(self,ui, ev);
+                    return;
+                }
                 self.sendCommand(self, ui, 1, false);
+            }
+
+            onInternalButtonTapped(self, ui, ev) {
+
             }
         }
     });

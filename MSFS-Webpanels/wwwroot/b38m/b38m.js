@@ -15,6 +15,21 @@ require([
     class B38MPanel extends AbstractPanel {
         constructor() {
             super('b38m');
+            this.isInitNav = false;
+            this.NavMode = {
+                "ILS": 0,
+                "VOR": 1
+            };
+            this.NavModeLbl = ["ILS", "VOR"];            
+            this.navActFreq = ['110.50', '110.50'];
+            this.navStbyFreq = ['110.70', '110.70'];
+            this.navInputFreq = ['110.70', '110.70'];
+            this.navActNavMode = [this.NavMode.ILS, this.NavMode.ILS];
+            this.navStbyNavMode = [this.NavMode.ILS, this.NavMode.ILS];
+            this.navCursorLocation = [0, 0];
+            this.navEditMode = [false, false];
+            this.navInputNavMode = [this.NavMode.ILS, this.NavMode.ILS];
+
             this.requestDef = {
                 "seatbeltsSwitch": { "Cmd": "(B:PASSENGER_FASTEN_BELTS, Number)", "Delta": 0, "Type": "Integer" },
                 "noSmokingSwitch": { "Cmd": "(B:PASSENGER_NO_SMOKING, Number)", "Delta": 0, "Type": "Integer" },
@@ -109,6 +124,16 @@ require([
 
                 "fireWarnBtn": { "Cmd": "(L:1:XMLVAR_INDICATOR_Warning_FIRE_WARN)", "Delta": 0, "Type": "Integer" },
                 "masterCautionBtn": { "Cmd": "(L:1:XMLVAR_INDICATOR_Info_Master_Caution_1)", "Delta": 0, "Type": "Integer" },
+                "vorAdfSelector1Switch": { "Cmd": "(B:EFIS_VOR_ADF_1_1, Number)", "Delta": 0, "Type": "Integer" },
+                "vorAdfSelector2Switch": { "Cmd": "(B:EFIS_VOR_ADF_2_1, Number)", "Delta": 0, "Type": "Integer" },
+                "fuelFlowSwitch": { "Cmd": "(B:FWD_PDSTL_FUEL_FLOW, Number)", "Delta": 0, "Type": "Integer" },
+                "autobrakeKnob": { "Cmd": "(B:FWD_PDSTL_AUTOBRAKE, Number)", "Delta": 0, "Type": "Integer" },
+
+                "xpndrSysSelecKnob": { "Cmd": "(B:XPDR_PANEL_SYS_SELEC, Number)", "Delta": 0, "Type": "Integer" },
+                "xpndrAltSrcKnob": { "Cmd": "(B:XPDR_PANEL_ALT_SOURCE, Number)", "Delta": 0, "Type": "Integer" },
+                "xpndrModeKnob": { "Cmd": "(B:XPDR_PANEL_XPDR_MODE, Number)", "Delta": 0, "Type": "Integer" },
+                "xpndrOperModeKnob": { "Cmd": "(B:XPDR_PANEL_XPDR_OPERATING_MODE, Number)", "Delta": 0, "Type": "Integer" },
+                "tcasTrafficSelecSwitch": { "Cmd": "(B:XPDR_PANEL_ORIENTATION, Number)", "Delta": 0, "Type": "Integer" },
 
                 // indicators
                 "groundPowerInd": { "Cmd": "(A:EXTERNAL POWER AVAILABLE:1, Bool)", "Delta": 0, "Type": "Integer" },
@@ -211,6 +236,13 @@ require([
                 "cautionOverheadInd": { "Cmd": "(L:1:XMLVAR_INDICATOR_Caution_OVERHEAD)", "Delta": 0, "Type": "Integer" },
                 "cautionAirCondInd": { "Cmd": "(L:1:XMLVAR_INDICATOR_Caution_AIR_COND)", "Delta": 0, "Type": "Integer" },
 
+                "tirePressureInd": { "Cmd": "(L:1:XMLVAR_INDICATOR_Caution_TIRE_PRESSURE)", "Delta": 0, "Type": "Integer" },
+                "brakeTempInd": { "Cmd": "(L:1:XMLVAR_INDICATOR_Caution_BRAKE_TEMP)", "Delta": 0, "Type": "Integer" },
+                "antiSkidInopInd": { "Cmd": "(L:1:XMLVAR_INDICATOR_Caution_ANTI_SKID_INOP)", "Delta": 0, "Type": "Integer" },
+                "autobrakeDisarmInd": { "Cmd": "(L:1:XMLVAR_INDICATOR_Caution_AUTO_BRAKE_DISARM)", "Delta": 0, "Type": "Integer" },
+
+                "xpndrFailInd": { "Cmd": "(L:1:XMLVAR_INDICATOR_Caution_XPDR_FAIL)", "Delta": 0, "Type": "Integer" },
+
                 // label
                 "fuelTempLbl": { "Cmd": "(L:1:XMLVAR_FUEL_TEMPERATURE, celsius)", "Delta": 0, "Type": "Double" },
                 "flightAltitudeKnob": { "Cmd": "(L:1:XMLVAR_PRESSURIZATION_ALTITUDE_FLIGHT, Number)", "Delta": 0, "Type": "Double" },
@@ -219,7 +251,15 @@ require([
                 "courseSelector1Knob": { "Cmd": "(A:NAV OBS:1, degrees)", "Delta": 0, "Type": "Integer" },
                 "headingSelectorKnob": { "Cmd": "(A:AUTOPILOT HEADING LOCK DIR, degrees)", "Delta": 0, "Type": "Integer" },
                 "altitudeSelectorKnob": { "Cmd": "(A:AUTOPILOT ALTITUDE LOCK VAR:3, feet)", "Delta": 0, "Type": "Integer" },
-                "verticalSpeedKnob": { "Cmd": "(AUTOPILOT VERTICAL HOLD VAR:1, feet per minute)", "Delta": 0, "Type": "Double" },
+                "verticalSpeedKnob": { "Cmd": "(A:AUTOPILOT VERTICAL HOLD VAR:1, feet per minute)", "Delta": 0, "Type": "Double" },
+
+                "xpndrCode1Lbl": { "Cmd": "(A:TRANSPONDER CODE:1, Number)", "Delta": 0, "Type": "Integer" },
+                "xpndrCode2Lbl": { "Cmd": "(A:TRANSPONDER CODE:2, Number)", "Delta": 0, "Type": "Integer" },
+
+                "nav1ActFreqLbl": { "Cmd": "(A:NAV ACTIVE FREQUENCY:1, MHz)", "Delta": 0, "Type": "Double" },
+                "nav2ActFreqLbl": { "Cmd": "(A:NAV ACTIVE FREQUENCY:2, MHz)", "Delta": 0, "Type": "Double" },
+                "nav1StbyFreqLbl": { "Cmd": "(A:NAV STANDBY FREQUENCY:1, MHz)", "Delta": 0, "Type": "Double" },
+                "nav2StbyFreqLbl": { "Cmd": "(A:NAV STANDBY FREQUENCY:2, MHz)", "Delta": 0, "Type": "Double" },
 
                 // others
                 "iasSelectorLbl": { "Cmd": "(A:AUTOPILOT AIRSPEED HOLD VAR:1, knots)", "Delta": 0, "Type": "Integer" },
@@ -236,6 +276,7 @@ require([
 
                 "baroPreselectLbl": { "Cmd": "(L:XMLVAR_Baro1_SavedPressure, Number)", "Delta": 0, "Type": "Integer" },
                 "baroIsStd": { "Cmd": "(L:XMLVAR_Baro1_ForcedToSTD, Bool)", "Delta": 0, "Type": "Integer" }
+
             }
             this.cmdDef = {
                 "noSmokingSwitch": "? (>B:PASSENGER_NO_SMOKING_Set, Number)",
@@ -334,6 +375,7 @@ require([
                 "apSpeedBtn": "? (>B:FCC_SPEED_Set, Bool)",
                 "apN1Btn": "? (>B:FCC_N1_Set, Bool)",
                 "bankAngleSelectorKnob": "? (>B:FCC_BANK_ANGLE_SEL_Set, Number)",
+                "verticalSpeedKnob": "? (B:FCC_VERTICAL_SPEED_SEL_Set, Number)",
 
                 "spdChangeOverBtn": "? (>B:FCC_CHANGEOVER_Set, Bool)",
                 "spdIntvBtn": "? (>B:FCC_SPEED_INTERVENTION_Set, Bool)",
@@ -373,7 +415,66 @@ require([
                 "recallCaptCautionBtn": "1 (>B:ANNUNCIATION_RECALL_1_PUSH, Number)",
                 "recallFOCautionBtn": "1 (>B:ANNUNCIATION_RECALL_2_PUSH, Number)",
                 "fireWarnBtn": "1 (>B:ANNUNCIATION_FIRE_WARN_1_PUSH, Number)",                
-                "masterCautionBtn": "1 (>B:ANNUNCIATION_MASTER_CAUTION_1_PUSH, Number)"
+                "masterCautionBtn": "1 (>B:ANNUNCIATION_MASTER_CAUTION_1_PUSH, Number)",
+                "vorAdfSelector1Switch": "? (>B:EFIS_VOR_ADF_1_1_Set, Number)",
+                "vorAdfSelector2Switch": "? (>B:EFIS_VOR_ADF_2_1_Set, Number)",
+                "clockBtn": "1 (>B:BEHIND_YOKE_CLOCK_1_TOGGLE)",
+
+                "fuelFlowSwitch": "? (>B:FWD_PDSTL_FUEL_FLOW_Set, Number)",
+                "autobrakeKnob": "? (>B:FWD_PDSTL_AUTOBRAKE_Set, Number)",
+                "mfdEngBtn": "1 (>B:FWD_PDSTL_ENG_PUSH)",
+                "mfdInfoBtn": "1 (>B:FWD_PDSTL_INFO_PUSH)",
+                "mfdSysBtn": "1 (>B:FWD_PDSTL_SYS_PUSH)",
+                "mfdCRBtn": "1 (>B:FWD_PDSTL_CR_PUSH)",
+                "mfdEngTfrBtn": "1 (>B:FWD_PDSTL_TRANSFER_PUSH)",
+
+                "xpndrNum1Btn": "1 (>B:XPDR_PANEL_XPDR_1_PUSH)",
+                "xpndrNum2Btn": "1 (>B:XPDR_PANEL_XPDR_2_PUSH)",
+                "xpndrNum3Btn": "1 (>B:XPDR_PANEL_XPDR_3_PUSH)",
+                "xpndrNum4Btn": "1 (>B:XPDR_PANEL_XPDR_4_PUSH)",
+                "xpndrNum5Btn": "1 (>B:XPDR_PANEL_XPDR_5_PUSH)",
+                "xpndrNum6Btn": "1 (>B:XPDR_PANEL_XPDR_6_PUSH)",
+                "xpndrNum7Btn": "1 (>B:XPDR_PANEL_XPDR_7_PUSH)",
+                "xpndrNum0Btn": "1 (>B:XPDR_PANEL_XPDR_0_PUSH)",
+                "xpndrNumClrBtn": "1 (>B:XPDR_PANEL_XPDR_CLR_PUSH)",
+                "xpndrIdentBtn": "1 (>B:XPDR_PANEL_XPDR_IDENT_PUSH)",
+
+                "xpndrSysSelecKnob": "? (>B:XPDR_PANEL_SYS_SELEC_Set, Number)",
+                "xpndrAltSrcKnob": "? (>B:XPDR_PANEL_ALT_SOURCE_Set, Number)",
+                "xpndrModeKnob": "? (>B:XPDR_PANEL_XPDR_MODE_Set, Number)",
+                "xpndrOperModeKnob": "? (>B:XPDR_PANEL_XPDR_OPERATING_MODE_Set, Number)",
+                "tcasTrafficSelecSwitch": "? (>B:XPDR_PANEL_ORIENTATION_Set, Number)",
+
+                "nav1SwapBtn": "1 (>K:NAV1_RADIO_SWAP)",
+                "nav2SwapBtn": "1 (>K:NAV2_RADIO_SWAP)",
+                "nav1TestBtn": "1 (>B:NAV_PANEL_NAV_TEST_1_PUSH)",
+                "nav2TestBtn": "1 (>B:NAV_PANEL_NAV_TEST_2_PUSH)",
+                "nav1StbyFreqLbl": "? (>K:NAV1_STBY_SET, Number)",
+                "nav2StbyFreqLbl": "? (>K:NAV2_STBY_SET, Number)",
+
+                "atcOption1Btn": "1 (>K:ATC_MENU_1, Number)",
+                "atcOption2Btn": "1 (>K:ATC_MENU_2, Number)",
+                "atcOption3Btn": "1 (>K:ATC_MENU_3, Number)",
+                "atcOption4Btn": "1 (>K:ATC_MENU_4, Number)",
+                "atcOption5Btn": "1 (>K:ATC_MENU_5, Number)",
+                "atcOption6Btn": "1 (>K:ATC_MENU_6, Number)",
+                "atcOption7Btn": "1 (>K:ATC_MENU_7, Number)",
+                "atcOption8Btn": "1 (>K:ATC_MENU_8, Number)",
+                "atcOption9Btn": "1 (>K:ATC_MENU_9, Number)",
+                "atcOption0Btn": "1 (>K:ATC_MENU_0, Number)",
+                
+                "camera1Btn": "1 (>K:VIEW_CAMERA_SELECT_1, Number)",
+                "camera2Btn": "1 (>K:VIEW_CAMERA_SELECT_2, Number)",
+                "camera3Btn": "1 (>K:VIEW_CAMERA_SELECT_3, Number)",
+                "camera4Btn": "1 (>K:VIEW_CAMERA_SELECT_4, Number)",
+                "camera5Btn": "1 (>K:VIEW_CAMERA_SELECT_5, Number)",
+                "camera6Btn": "1 (>K:VIEW_CAMERA_SELECT_6, Number)",
+                "camera7Btn": "1 (>K:VIEW_CAMERA_SELECT_7, Number)",
+                "camera8Btn": "1 (>K:VIEW_CAMERA_SELECT_8, Number)",
+                "camera9Btn": "1 (>K:VIEW_CAMERA_SELECT_9, Number)",
+                "camera0Btn": "1 (>K:VIEW_CAMERA_SELECT_0, Number)"
+
+                
             }
         } // constructor
 
@@ -404,6 +505,15 @@ require([
                     json.efisBaroPressureSelectorKnob = json.baroInHgLbl;
                 }
             }
+
+            self.setNavLbl(1, json);
+            self.setNavLbl(2, json);
+
+            var xpndrSrc = json.xpndrSysSelecKnob + 1;
+            var k = "xpndrCode" + xpndrSrc + "Lbl";
+           
+            var xpndrCode = json[k];
+            json.xpndrCodeLbl = xpndrCode;
             this.simData = json;
             super.updatePanel(self, json);
         }
@@ -419,7 +529,9 @@ require([
                 } else {
                     value = "";
                 }
-            }            
+            } else if (ui == "xpndrCodeLbl") {
+                value = value.toString().padStart(4, "0");
+            }
             super.updateUI(self, ui, value, skipHot);
         }
 
@@ -453,6 +565,10 @@ require([
                 jquery(ctl).attr("min", min);
                 jquery(ctl).attr("max", max);
                 jquery(ctl).attr("step", step);
+            } else if (ui == "verticalSpeedKnob") {
+                if (!self.simData.isVSActiveLbl) {
+                    return;
+                }
             }
             super.onKnobRotate(self, ctl, dir);
         }
@@ -478,9 +594,9 @@ require([
                     val = val * 33.8639;
                 }
                 if (self.simData.baroIsStd) {
-                    ui = "baroPreselectLbl";                    
+                    ui = "baroPreselectLbl";
                 } else {
-                    ui = "baroMbLbl";                    
+                    ui = "baroMbLbl";
                 }
                 val = Math.round(val * 16);
             }
@@ -501,6 +617,139 @@ require([
                 }
             }
             return svalue;
+        }
+
+        onInternalButtonTapped(self, ui, ev) {
+            if (ui.startsWith("nav") && ui.endsWith("Btn")) {
+                var key = ui.substring(4, ui.length - 3);
+                var idx = parseInt(ui.charAt(3));
+
+                self.onNavKeyPressed(idx, key);
+            }
+            super.onInternalButtonTapped(self, ui, ev);
+        }
+
+        getNavMode(freq) {
+            var sfreq = freq.toFixed(2);
+            var digit4 = parseInt(sfreq.charAt(4));
+            if (freq >= 108.1 && freq <= 111.95 && (digit4 % 2 === 1)) {
+                return this.NavMode.ILS;
+            } else if (freq >= 108.0 && freq <= 117.95) {
+                return this.NavMode.VOR;
+            } 
+        }
+
+        setNavLbl(idx, json) {
+            var ni = idx - 1;
+            var kNavActFreq = "nav" + idx + "ActFreqLbl";
+            var kNavActFreqMode = "nav" + idx + "ActFreqModeLbl";
+            var kNavStbyFreq = "nav" + idx + "StbyFreqLbl";
+            var kNavStbyFreqMode = "nav" + idx +"StbyFreqModeLbl"
+            var navActFreq = json[kNavActFreq];
+            var navStbyFreq = json[kNavStbyFreq];
+
+            if (navStbyFreq == 0) {
+                navStbyFreq = 110.70;
+            }
+
+            this.navActNavMode[ni] = this.getNavMode(navActFreq);
+            json[kNavActFreqMode] = this.NavModeLbl[this.navActNavMode[ni]];
+            json[kNavActFreq] = navActFreq.toFixed(2);
+
+            if (this.navEditMode[ni]) {
+                json[kNavStbyFreqMode] = this.NavModeLbl[this.navInputNavMode[ni]];
+                json[kNavStbyFreq] = this.navInputFreq[ni];
+            } else {
+                this.navStbyNavMode[ni] = this.getNavMode(navStbyFreq);
+                json[kNavStbyFreqMode] = this.NavModeLbl[this.navStbyNavMode[ni]];
+                json[kNavStbyFreq] = navStbyFreq.toFixed(2);
+                this.navInputFreq[ni] = json[kNavStbyFreq];
+                this.navInputNavMode[ni] = this.navStbyNavMode[ni];
+            }            
+        }
+
+        onNavKeyPressed(idx, key) {
+            var ni = idx - 1;
+
+            if (key == "Clr") {
+                this.navCursorLocation[ni] = 0;
+                this.navEditMode[ni] = false;
+            } else if (key == "Swap") {
+                if (!this.navEditMode[ni]) {
+                    this.sendCommand(this, "nav"+idx+"SwapBtn", 1, false);
+                }
+            } else if (key == "ModeDec") {
+                if (this.navInputNavMode[ni] > 0) {
+                    this.navInputNavMode[ni]--;
+                    this.navEditMode[ni] = true;
+                    if (this.navCursorLocation[ni] == 0) {
+                        this.navCursorLocation[ni] = 6;
+                    }                    
+                }
+            } else if (key == "ModeInc") {
+                if (this.navInputNavMode[ni] < this.NavModeLbl.length) {
+                    this.navInputNavMode[ni]++;
+                    this.navEditMode[ni] = true;
+                    if (this.navCursorLocation[ni] == 0) {
+                        this.navCursorLocation[ni] = 6;
+                    }
+                }
+            } else {
+                // num keys
+                var num = parseInt(key.replace("Num", ""));
+                var cursor = this.navCursorLocation[ni];
+                if (cursor == 6) {
+                    cursor = 0;
+                }
+                var digits = this.navInputFreq[ni].split("");
+                digits[cursor] = num.toString();
+                cursor++;
+                if (cursor == 3) {
+                    cursor++;
+                }
+                this.navCursorLocation[ni] = cursor;
+                for (var ci = cursor; ci < 6; ci++) {
+                    if (ci == 3) {
+                        '.';
+                    } else {
+                        digits[ci] = '_';
+                    }                    
+                }
+                this.navInputFreq[ni] = digits.join("");
+                this.navEditMode[ni] = true
+            }
+            if (this.navEditMode[ni] && this.navCursorLocation[ni] == 6) {
+                var sfreq = this.navInputFreq[ni];
+                var digits = sfreq.split("");
+                var navMode = this.navInputNavMode[ni];
+                var ffreq = parseFloat(sfreq);
+                var maxFreq = (navMode == this.NavMode.ILS) ? 112.0 : 118.0;
+                
+
+                if (ffreq >= 108.0 && ffreq < maxFreq) {
+                    if (digits[5] == "0" || digits[5] == "5") {
+                        if ((ffreq >= 112 && navMode == this.NavMode.VOR) ||
+                            (ffreq < 112 && navMode == this.NavMode.ILS && (parseInt(digits[4]) % 2) == 1) ||
+                            (ffreq < 112 && navMode == this.NavMode.VOR && (parseInt(digits[4]) % 2) == 0)) 
+                         { 
+                            // valid freq
+                            var value = 0;
+                            for (var i = 0; i < 6; i++) {
+                                if (i == 3) {
+                                    i++;
+                                }
+                                value = value * 16;
+                                value = value + parseInt(digits[i]);
+                            }
+                            this.sendCommand(this, "nav" + idx + "StbyFreqLbl", value, false);
+                            this.navEditMode[ni] = false;
+                            this.navCursorLocation[ni] = 0;
+                            this.updateUI(this, "nav" + idx + "StbyFreqLbl", sfreq, false);
+                            this.updateUI(this, "nav" + idx + "StbyFreqModeLbl", this.NavModeLbl[navMode], false);
+                        }
+                    }
+                }
+            }
         }
     }
 

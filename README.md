@@ -122,3 +122,5 @@ https://www.freepik.com/icon/alarm_469654#fromView=search&page=1&position=76&uui
 7seg fonts
 https://github.com/keshikan/DSEG
 
+Radio Icon (Febrian Hidayat)
+https://www.freepik.com/icon/radio_5940760#fromView=search&page=2&position=31&uuid=842ece1b-373a-43cb-8e8c-0c2aee1cfa68
